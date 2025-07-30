@@ -30,22 +30,54 @@ const PublicProfile = () => {
       }
 
       try {
+        // First try to get from cloud
         const publicProfile = await CloudProfileManager.getPublicProfile(profileId);
         
-        if (!publicProfile) {
-          setError('Profil nie został znaleziony lub jest prywatny');
+        if (publicProfile) {
+          setProfile(publicProfile);
+          
+          // Track the view (don't fail if this doesn't work)
+          try {
+            await CloudProfileManager.trackProfileView(profileId, referrerSource || 'direct');
+          } catch (trackError) {
+            console.warn('Could not track profile view:', trackError);
+          }
+          
           setLoading(false);
           return;
         }
 
-        setProfile(publicProfile);
+        // If cloud fails, try to load from localStorage as fallback
+        const localProfiles = JSON.parse(localStorage.getItem('cosmoflow_profiles') || '[]') as UserProfile[];
+        const localProfile = localProfiles.find((p: UserProfile) => p.id === profileId);
         
-        // Track the view
-        await CloudProfileManager.trackProfileView(profileId, referrerSource || 'direct');
+        if (localProfile && (localProfile as any).isPublic !== false) {
+          setProfile(localProfile);
+          setLoading(false);
+          return;
+        }
+
+        // If neither works, show error
+        setError('Profil nie został znaleziony lub jest prywatny');
         
       } catch (err) {
         console.error('Error loading public profile:', err);
-        setError('Wystąpił błąd podczas ładowania profilu');
+        
+        // Try localStorage fallback on any error
+        try {
+          const localProfiles = JSON.parse(localStorage.getItem('cosmoflow_profiles') || '[]') as UserProfile[];
+          const localProfile = localProfiles.find((p: UserProfile) => p.id === profileId);
+          
+          if (localProfile && (localProfile as any).isPublic !== false) {
+            setProfile(localProfile);
+            setLoading(false);
+            return;
+          }
+        } catch (localError) {
+          console.error('Error loading from localStorage:', localError);
+        }
+        
+        setError('Funkcja publicznych profili jest obecnie niedostępna. Spróbuj ponownie później.');
       } finally {
         setLoading(false);
       }
