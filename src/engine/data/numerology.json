@@ -1,0 +1,77 @@
+
+{
+  "lifePathNumber": {
+    "1": {
+      "title": "Pionier",
+      "description": "Niezależny, ambitny i pełen inicjatywy. Twoją drogą jest przywództwo i przecieranie nowych szlaków.",
+      "lightEnergies": ["niezależność", "przywództwo", "innowacja", "odwaga"],
+      "shadowEnergies": ["arogancja", "upór", "samotność", "egoizm"]
+    },
+    "2": {
+      "title": "Dyplomata",
+      "description": "Współpracujący, wrażliwy i taktowny. Twoją drogą jest budowanie harmonii i relacji.",
+      "lightEnergies": ["współpraca", "empatia", "harmonia", "cierpliwość"],
+      "shadowEnergies": ["niezdecydowanie", "nadwrażliwość", "uległość", "zależność"]
+    },
+    "3": {
+      "title": "Kreator",
+      "description": "Kreatywny, komunikatywny i pełen optymizmu. Twoją drogą jest wyrażanie siebie i inspirowanie innych.",
+      "lightEnergies": ["kreatywność", "komunikacja", "radość", "optymizm"],
+      "shadowEnergies": ["powierzchowność", "rozproszenie", "nietolerancja", "pesymizm"]
+    },
+    "4": {
+      "title": "Budowniczy",
+      "description": "Praktyczny, zdyscyplinowany i godny zaufania. Twoją drogą jest tworzenie stabilnych fundamentów.",
+      "lightEnergies": ["stabilność", "dyscyplina", "ciężka praca", "uczciwość"],
+      "shadowEnergies": ["sztywność", "ograniczenie", "pracoholizm", "brak elastyczności"]
+    },
+    "5": {
+      "title": "Podróżnik",
+      "description": "Wolny, żądny przygód i wszechstronny. Twoją drogą jest doświadczanie zmiany i wolności.",
+      "lightEnergies": ["wolność", "przygoda", "wszechstronność", "ciekawość"],
+      "shadowEnergies": ["niestabilność", "nieodpowiedzialność", "uzależnienia", "chaos"]
+    },
+    "6": {
+      "title": "Opiekun",
+      "description": "Odpowiedzialny, opiekuńczy i harmonijny. Twoją drogą jest służenie innym i dbanie o rodzinę.",
+      "lightEnergies": ["odpowiedzialność", "opieka", "miłość", "harmonia"],
+      "shadowEnergies": ["nadopiekuńczość", "poczucie winy", "męczennictwo", "wtrącanie się"]
+    },
+    "7": {
+      "title": "Mędrzec",
+      "description": "Analityczny, introspektywny i duchowy. Twoją drogą jest poszukiwanie wiedzy i prawdy.",
+      "lightEnergies": ["mądrość", "introspekcja", "duchowość", "analiza"],
+      "shadowEnergies": ["izolacja", "sceptycyzm", "tajemniczość", "chłód emocjonalny"]
+    },
+    "8": {
+      "title": "Władca",
+      "description": "Ambitny, potężny i zorientowany na sukces. Twoją drogą jest mistrzostwo w świecie materialnym.",
+      "lightEnergies": ["sukces", "obfitość", "władza", "ambicja"],
+      "shadowEnergies": ["materializm", "chciwość", "dominacja", "brak skrupułów"]
+    },
+    "9": {
+      "title": "Humanista",
+      "description": "Współczujący, idealistyczny i bezinteresowny. Twoją drogą jest służenie ludzkości.",
+      "lightEnergies": ["współczucie", "humanitaryzm", "bezinteresowność", "tolerancja"],
+      "shadowEnergies": ["utopia", "rozdawanie siebie", "fanatyzm", "smutek"]
+    },
+    "11": {
+      "title": "Inspirator",
+      "description": "Intuicyjny, wizjonerski i natchniony. Jesteś kanałem dla wyższych wibracji i duchowego przewodnictwa.",
+      "lightEnergies": ["intuicja", "wizjonerstwo", "duchowość", "idealizm"],
+      "shadowEnergies": ["napięcie nerwowe", "oderwanie od rzeczywistości", "fanatyzm", "niepraktyczność"]
+    },
+    "22": {
+      "title": "Mistrz Budowniczy",
+      "description": "Potężny, praktyczny i zdolny do manifestacji wielkich idei w formie materialnej. Budujesz dla ludzkości.",
+      "lightEnergies": ["manifestacja", "praktyczny idealizm", "moc", "dyscyplina"],
+      "shadowEnergies": ["stres", "używanie mocy dla ego", "frustracja", "chciwość"]
+    },
+    "33": {
+      "title": "Mistrz Nauczyciel",
+      "description": "Pełen współczucia, oddania i miłości. Twoją drogą jest uzdrawianie i nauczanie ludzkości poprzez służbę.",
+      "lightEnergies": ["uniwersalna miłość", "służba", "współczucie", "nauczycielstwo"],
+      "shadowEnergies": ["męczennictwo", "nadodpowiedzialność", "zaniedbywanie siebie", "perfekcjonizm"]
+    }
+  }
+}

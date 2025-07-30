@@ -1,0 +1,23 @@
+{
+  "animals": [
+    { "yearOffset": 0, "name": "Szczur", "icon": "🐀" },
+    { "yearOffset": 1, "name": "Wół", "icon": "🐂" },
+    { "yearOffset": 2, "name": "Tygrys", "icon": "🐅" },
+    { "yearOffset": 3, "name": "Królik", "icon": "🐇" },
+    { "yearOffset": 4, "name": "Smok", "icon": "🐉" },
+    { "yearOffset": 5, "name": "Wąż", "icon": "🐍" },
+    { "yearOffset": 6, "name": "Koń", "icon": "🐎" },
+    { "yearOffset": 7, "name": "Koza", "icon": "🐐" },
+    { "yearOffset": 8, "name": "Małpa", "icon": "🐒" },
+    { "yearOffset": 9, "name": "Kogut", "icon": "🐓" },
+    { "yearOffset": 10, "name": "Pies", "icon": "🐕" },
+    { "yearOffset": 11, "name": "Świnia", "icon": "🐖" }
+  ],
+  "elements": [
+    { "name": "Drewno", "startYear": 1904 },
+    { "name": "Ogień", "startYear": 1906 },
+    { "name": "Ziemia", "startYear": 1908 },
+    { "name": "Metal", "startYear": 1910 },
+    { "name": "Woda", "startYear": 1912 }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "elements": [
+    {
+      "name": "Drewno",
+      "associations": {
+        "direction": "Wschód",
+        "season": "Wiosna",
+        "color": "Zielony",
+        "emotion": "Gniew",
+        "organ": "Wątroba",
+        "personalityTraits": ["Kreatywność", "Elastyczność", "Wzrost", "Inicjatywa"]
+      }
+    },
+    {
+      "name": "Ogień",
+      "associations": {
+        "direction": "Południe",
+        "season": "Lato",
+        "color": "Czerwony",
+        "emotion": "Radość",
+        "organ": "Serce",
+        "personalityTraits": ["Pasja", "Entuzjazm", "Przywództwo", "Ekspansja"]
+      }
+    },
+    {
+      "name": "Ziemia",
+      "associations": {
+        "direction": "Centrum",
+        "season": "Późne Lato",
+        "color": "Żółty",
+        "emotion": "Zmartwienie",
+        "organ": "Śledziona",
+        "personalityTraits": ["Stabilność", "Uziemienie", "Praktyczność", "Wsparcie"]
+      }
+    },
+    {
+      "name": "Metal",
+      "associations": {
+        "direction": "Zachód",
+        "season": "Jesień",
+        "color": "Biały",
+        "emotion": "Smutek",
+        "organ": "Płuca",
+        "personalityTraits": ["Precyzja", "Organizacja", "Sprawiedliwość", "Dyscyplina"]
+      }
+    },
+    {
+      "name": "Woda",
+      "associations": {
+        "direction": "Północ",
+        "season": "Zima",
+        "color": "Czarny",
+        "emotion": "Strach",
+        "organ": "Nerki",
+        "personalityTraits": ["Mądrość", "Intuicja", "Elastyczność", "Głębia"]
+      }
+    }
+  ],
+  "elementalMappings": {
+    "chineseZodiac": {
+      "Metal": [0, 1], "Water": [2, 3], "Wood": [4, 5], "Fire": [6, 7], "Earth": [8, 9]
+    },
+    "astrology": {
+      "Baran": "Ogień", "Lew": "Ogień", "Strzelec": "Ogień",
+      "Byk": "Ziemia", "Panna": "Ziemia", "Koziorożec": "Ziemia",
+      "Bliźnięta": "Powietrze", "Waga": "Powietrze", "Wodnik": "Powietrze",
+      "Rak": "Woda", "Skorpion": "Woda", "Ryby": "Woda"
+    }
+  }
+}
