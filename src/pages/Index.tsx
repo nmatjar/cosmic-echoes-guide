@@ -51,35 +51,63 @@ const Index = ({ currentProfile, onLogout }: IndexProps) => {
                 ⚡ {currentProfile?.analysis.humanDesign?.type || 'Human Design'}
               </Badge>
               <Badge variant="outline" className="bg-cosmic-blue/20 border-cosmic-blue/30 text-cosmic-blue px-4 py-2">
-            ️ {currentProfile?.analysis.mayan?.sign ||'Majowie'}
-          </Badge>
-          <Badge variant="outline" className="bg-cosmic-purple/20 border-cosmic-purple/30 text-cosmic-purple px-4 py-2">
-            🧬⏰ Bio-Rytmy
-          </Badge>
-          <Badge variant="outline" className="bg-cosmic-gold/20 border-cosmic-gold/30 text-cosmic-gold px-4 py-2">
-            ☯️🌳 Żywioły
-          </Badge>
+                🏛️ {currentProfile?.analysis.mayan?.sign || 'Majowie'}
+              </Badge>
+              <Badge variant="outline" className="bg-cosmic-purple/20 border-cosmic-purple/30 text-cosmic-purple px-4 py-2">
+                🧬⏰ Bio-Rytmy
+              </Badge>
+              <Badge variant="outline" className="bg-cosmic-gold/20 border-cosmic-gold/30 text-cosmic-gold px-4 py-2">
+                ☯️🌳 Żywioły
+              </Badge>
+            </div>
+          </div>
         </div>
       </div>
-      </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <DailyInsightsSection profile={currentProfile} />
-        <NumerologySection profile={currentProfile} />
-        <AstrologicalSection profile={currentProfile} />
-        <ChineseZodiacSection profile={currentProfile} />
-        <HumanDesignSection profile={currentProfile} />
-        <MayanSection profile={currentProfile} />
-        <BioRhythmSection profile={currentProfile} />
-        <ElementalBalanceSection profile={currentProfile} />
-      </div>
+      {/* Main Content Container */}
+      <div className="container mx-auto px-4 py-8 space-y-8">
+        {/* Profile Header */}
+        {currentProfile && (
+          <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center gap-3">
+              <User className="h-6 w-6 text-cosmic-gold" />
+              <h2 className="text-2xl font-bold text-cosmic-gold">
+                {currentProfile.name}
+              </h2>
+            </div>
+            <Button 
+              onClick={onLogout}
+              variant="outline"
+              className="border-cosmic-purple/30 text-cosmic-purple hover:bg-cosmic-purple/20"
+            >
+              <LogOut className="h-4 w-4 mr-2" />
+              Wyloguj
+            </Button>
+          </div>
+        )}
+
+        {/* Main Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <DailyInsightsSection profile={currentProfile} />
+          <NumerologySection profile={currentProfile} />
+          <AstrologicalSection profile={currentProfile} />
+          <ChineseZodiacSection profile={currentProfile} />
+          <HumanDesignSection profile={currentProfile} />
+          <MayanSection profile={currentProfile} />
+          <BioRhythmSection profile={currentProfile} />
+          <ElementalBalanceSection profile={currentProfile} />
+        </div>
+        
+        {/* Guide Personas */}
         <div data-section="guides">
           <GuidePersonas />
         </div>
         
-        {/* New Enhanced Features */}
-        <SmartPromptGenerator />
-        <ExportHub />
+        {/* Enhanced Features - Full Width */}
+        <div className="space-y-8">
+          <SmartPromptGenerator />
+          <ExportHub />
+        </div>
         
         {/* Footer */}
         <CosmicCard className="text-center">
