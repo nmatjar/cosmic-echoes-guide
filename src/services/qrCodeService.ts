@@ -71,8 +71,8 @@ export class QRCodeService {
    * Generate QR code for profile sharing
    */
   static async generateProfileQR(profileId?: string, options?: QRCodeOptions): Promise<string> {
-    const baseUrl = window.location.origin + window.location.pathname;
-    const profileUrl = profileId ? `${baseUrl}?profile=${profileId}` : baseUrl;
+    const baseUrl = window.location.origin;
+    const profileUrl = profileId ? `${baseUrl}/profile/${profileId}?ref=qr` : baseUrl;
     
     return this.generateQRCode(profileUrl, {
       ...options,

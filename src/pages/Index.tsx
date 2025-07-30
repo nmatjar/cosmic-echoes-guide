@@ -10,6 +10,7 @@ import { GuidePersonas } from "@/components/GuidePersonas";
 import { SmartPromptGenerator } from "@/components/SmartPromptGenerator";
 import { SmartNavigation } from "@/components/SmartNavigation";
 import { ExportHub } from "@/components/ExportHub";
+import { ProfilePrivacySettings } from "@/components/ProfilePrivacySettings";
 import { CosmicCard } from "@/components/ui/cosmic-card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -107,6 +108,7 @@ const Index = ({ currentProfile, onLogout }: IndexProps) => {
         <div className="space-y-8">
           <SmartPromptGenerator />
           <ExportHub currentProfile={currentProfile} />
+          <ProfilePrivacySettings currentProfile={currentProfile} />
         </div>
         
         {/* Footer */}

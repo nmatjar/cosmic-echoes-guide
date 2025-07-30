@@ -177,15 +177,16 @@ Pozdrawiam kosmicznie,
         setExportProgress(i);
       }
 
-      // Generate actual QR code
+      // Generate actual QR code for public profile
       const profileId = currentProfile?.id;
       const qrDataUrl = await QRCodeService.generateProfileQR(profileId);
       setQrCodeData(qrDataUrl);
       setExportProgress(100);
 
-      // Download QR code
+      // Download QR code with public profile URL
+      const publicProfileUrl = profileId ? `${window.location.origin}/profile/${profileId}?ref=qr` : window.location.href;
       const filename = `CosmoFlow-QR-${currentProfile?.name || 'Profile'}-${new Date().toISOString().split('T')[0]}`;
-      await QRCodeService.downloadQRCode(window.location.href, filename, {
+      await QRCodeService.downloadQRCode(publicProfileUrl, filename, {
         size: 400,
         color: {
           dark: '#FFD700', // Cosmic gold

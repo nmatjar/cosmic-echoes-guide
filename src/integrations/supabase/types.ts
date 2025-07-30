@@ -22,9 +22,11 @@ export type Database = {
           birth_time: string | null
           created_at: string
           id: string
+          is_public: boolean
           name: string
           updated_at: string
           user_id: string
+          view_count: number
         }
         Insert: {
           analysis_results?: Json | null
@@ -33,9 +35,11 @@ export type Database = {
           birth_time?: string | null
           created_at?: string
           id?: string
+          is_public?: boolean
           name: string
           updated_at?: string
           user_id: string
+          view_count?: number
         }
         Update: {
           analysis_results?: Json | null
@@ -44,18 +48,61 @@ export type Database = {
           birth_time?: string | null
           created_at?: string
           id?: string
+          is_public?: boolean
           name?: string
           updated_at?: string
           user_id?: string
+          view_count?: number
         }
         Relationships: []
+      }
+      profile_views: {
+        Row: {
+          id: string
+          profile_id: string
+          viewed_at: string
+          referrer_source: string | null
+          ip_address: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          id?: string
+          profile_id: string
+          viewed_at?: string
+          referrer_source?: string | null
+          ip_address?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          id?: string
+          profile_id?: string
+          viewed_at?: string
+          referrer_source?: string | null
+          ip_address?: string | null
+          user_agent?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profile_views_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          }
+        ]
       }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      increment_profile_views: {
+        Args: {
+          profile_uuid: string
+          ref_source?: string
+        }
+        Returns: void
+      }
     }
     Enums: {
       [_ in never]: never

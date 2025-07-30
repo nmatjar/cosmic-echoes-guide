@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
+import PublicProfile from "./pages/PublicProfile";
 import { CosmicWelcome } from "./components/CosmicWelcome";
 import { CosmicLogin } from "./components/CosmicLogin";
 import { UserProfile } from "@/engine/userProfile";
@@ -208,7 +209,7 @@ const App = () => {
     );
   }
 
-  // Main app with current profile
+  // Main app with routing
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
@@ -224,6 +225,10 @@ const App = () => {
                   onLogout={handleLogout}
                 />
               } 
+            />
+            <Route 
+              path="/profile/:profileId" 
+              element={<PublicProfile />} 
             />
             <Route path="*" element={<NotFound />} />
           </Routes>

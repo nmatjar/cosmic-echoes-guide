@@ -10,6 +10,8 @@ export interface CloudProfile {
   birth_time?: string;
   birth_place?: string;
   analysis_results?: ComprehensiveAnalysis;
+  is_public: boolean;
+  view_count: number;
   created_at: string;
   updated_at: string;
 }
@@ -164,6 +166,144 @@ export class CloudProfileManager {
       return await this.fetchUserProfile();
     } catch (error) {
       console.error('Error syncing with cloud:', error);
+      return null;
+    }
+  }
+
+  /**
+   * Get public profile by ID (no authentication required)
+   */
+  static async getPublicProfile(profileId: string): Promise<UserProfile | null> {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', profileId)
+        .eq('is_public', true)
+        .maybeSingle();
+
+      if (error) {
+        console.error('Error fetching public profile:', error);
+        return null;
+      }
+
+      if (!data) {
+        return null;
+      }
+
+      // Convert CloudProfile to UserProfile format (excluding sensitive data)
+      const userProfile: UserProfile = {
+        id: data.id,
+        name: data.name,
+        birthData: {
+          date: data.birth_date,
+          time: data.birth_time || undefined,
+          place: data.birth_place || undefined,
+        },
+        analysis: (data.analysis_results as ComprehensiveAnalysis) || {},
+        pin: '', // Never expose PIN
+        createdAt: data.created_at,
+        updatedAt: data.updated_at,
+      };
+
+      return userProfile;
+    } catch (error) {
+      console.error('Error in getPublicProfile:', error);
+      return null;
+    }
+  }
+
+  /**
+   * Track profile view and increment counter
+   */
+  static async trackProfileView(profileId: string, referrerSource?: string): Promise<void> {
+    try {
+      const { error } = await supabase.rpc('increment_profile_views', {
+        profile_uuid: profileId,
+        ref_source: referrerSource || null
+      });
+
+      if (error) {
+        console.error('Error tracking profile view:', error);
+      }
+    } catch (error) {
+      console.error('Error in trackProfileView:', error);
+    }
+  }
+
+  /**
+   * Update profile visibility setting
+   */
+  static async updateProfileVisibility(isPublic: boolean): Promise<boolean> {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        throw new Error('User not authenticated');
+      }
+
+      const { error } = await supabase
+        .from('profiles')
+        .update({ is_public: isPublic })
+        .eq('user_id', user.id);
+
+      if (error) {
+        console.error('Error updating profile visibility:', error);
+        return false;
+      }
+
+      return true;
+    } catch (error) {
+      console.error('Error in updateProfileVisibility:', error);
+      return false;
+    }
+  }
+
+  /**
+   * Get profile analytics (for profile owner)
+   */
+  static async getProfileAnalytics(): Promise<{
+    viewCount: number;
+    recentViews: Array<{ viewed_at: string; referrer_source?: string }>;
+  } | null> {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        throw new Error('User not authenticated');
+      }
+
+      // Get profile with view count and ID
+      const { data: profile, error: profileError } = await supabase
+        .from('profiles')
+        .select('id, view_count')
+        .eq('user_id', user.id)
+        .maybeSingle();
+
+      if (profileError || !profile) {
+        console.error('Error fetching profile analytics:', profileError);
+        return null;
+      }
+
+      // Get recent views
+      const { data: views, error: viewsError } = await supabase
+        .from('profile_views')
+        .select('viewed_at, referrer_source')
+        .eq('profile_id', profile.id)
+        .order('viewed_at', { ascending: false })
+        .limit(50);
+
+      if (viewsError) {
+        console.error('Error fetching recent views:', viewsError);
+        return { viewCount: profile.view_count, recentViews: [] };
+      }
+
+      return {
+        viewCount: profile.view_count,
+        recentViews: views || []
+      };
+    } catch (error) {
+      console.error('Error in getProfileAnalytics:', error);
       return null;
     }
   }
