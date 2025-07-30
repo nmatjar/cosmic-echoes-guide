@@ -161,7 +161,7 @@ const App = () => {
       <div className="min-h-screen flex items-center justify-center bg-gradient-cosmic">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-cosmic-purple mx-auto mb-4"></div>
-          <p className="text-cosmic-gold text-lg">Ładowanie Kosmicznego Portretu...</p>
+          <p className="text-cosmic-gold text-lg">Inicjalizacja CosmoFlow...</p>
         </div>
       </div>
     );

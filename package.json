@@ -1,8 +1,11 @@
 {
-  "name": "vite_react_shadcn_ts",
+  "name": "cosmoflow-by-arcanum",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
+  "description": "CosmoFlow by ARCĀNUM - Ancient wisdom meets AI insights for personal discovery",
+  "author": "ARCĀNUM",
+  "keywords": ["CosmoFlow", "ARCĀNUM", "numerology", "astrology", "Human Design", "self-discovery", "AI insights"],
   "scripts": {
     "dev": "vite",
     "build": "vite build",

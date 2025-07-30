@@ -66,8 +66,8 @@ export function CosmicWelcome({ onProfileCreated }: CosmicWelcomeProps) {
     setIsGenerating(false);
     onProfileCreated(newProfile);
     
-    toast.success("🌟 Twój Kosmiczny Portret został utworzony!", {
-      description: `Witaj ${newProfile.name}! Twoja duchowa podróż się rozpoczyna.`,
+    toast.success("🌟 Twój CosmoFlow Profil został utworzony!", {
+      description: `Witaj ${newProfile.name}! Odkryj swój unikalny rytm życia.`,
       duration: 4000
     });
   };
@@ -83,10 +83,10 @@ export function CosmicWelcome({ onProfileCreated }: CosmicWelcomeProps) {
               <Sparkles className="h-8 w-8 text-white" />
             </div>
             <CardTitle className="text-2xl text-cosmic-gold">
-              ✨ Witaj w Kosmosie ✨
+              🌟 CosmoFlow by ARCĀNUM
             </CardTitle>
             <CardDescription className="text-cosmic-starlight">
-              Odkryj swój unikalny Portret Duszy przez pryzmat starożytnych systemów mądrości
+              Find Your Life's Rhythm - Odkryj swój unikalny rytm życia przez starożytną mądrość i AI
             </CardDescription>
           </CardHeader>
           
@@ -120,7 +120,7 @@ export function CosmicWelcome({ onProfileCreated }: CosmicWelcomeProps) {
               onClick={() => setStep('birth-data')}
               className="w-full bg-gradient-to-r from-cosmic-purple to-cosmic-pink hover:from-cosmic-pink hover:to-cosmic-purple transition-all duration-300"
             >
-              🚀 Rozpocznij Kosmiczną Podróż
+              🌟 Odkryj Swój Rytm Życia
             </Button>
           </CardContent>
         </Card>
