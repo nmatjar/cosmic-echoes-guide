@@ -8,7 +8,7 @@ interface ElementalBalanceSectionProps {
 }
 
 export function ElementalBalanceSection({ profile }: ElementalBalanceSectionProps) {
-  if (!profile || !profile.analysis.elementalBalance) {
+  if (!profile || !profile.analysis?.elementalBalance) {
     return (
       <CosmicCard variant="aurora" className="space-y-6">
         <h2 className="text-2xl font-bold text-foreground">Równowaga Żywiołów</h2>
@@ -17,7 +17,8 @@ export function ElementalBalanceSection({ profile }: ElementalBalanceSectionProp
     );
   }
 
-  const { fire, earth, metal, water, wood, dominantElements, weakElements } = profile.analysis.elementalBalance;
+  const elementalBalance = profile.analysis.elementalBalance as any;
+  const { fire, earth, metal, water, wood, dominantElements, weakElements } = elementalBalance;
 
   const elementsWithScores = [
     { name: "Ogień", score: fire, icon: "🔥" },

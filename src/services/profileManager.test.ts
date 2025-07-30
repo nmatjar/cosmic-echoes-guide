@@ -42,6 +42,7 @@ describe('profileManager', () => {
         name: 'Test User 1',
         birthData: { date: new Date().toISOString() },
         analysis: { numerology: { lifePathNumber: 1 } },
+        pin: '1234',
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       },
@@ -54,7 +55,7 @@ describe('profileManager', () => {
     const initialProfiles = getProfiles();
     expect(initialProfiles.length).toBe(0);
 
-    const newProfile = createProfile('New User', new Date(), { numerology: { lifePathNumber: 5 } });
+    const newProfile = createProfile('New User', new Date(), { numerology: { lifePathNumber: 5 } }, '1234');
 
     expect(newProfile.name).toBe('New User');
     expect(newProfile.id).toBe('mock-uuid-1');
@@ -66,8 +67,8 @@ describe('profileManager', () => {
   });
 
   it('updateProfile should modify an existing profile', () => {
-    const profile1 = createProfile('User One', new Date(), { numerology: { lifePathNumber: 1 } });
-    const profile2 = createProfile('User Two', new Date(), { numerology: { lifePathNumber: 2 } });
+    const profile1 = createProfile('User One', new Date(), { numerology: { lifePathNumber: 1 } }, '1234');
+    const profile2 = createProfile('User Two', new Date(), { numerology: { lifePathNumber: 2 } }, '5678');
 
     const updatedName = 'Updated User One';
     const updatedProfile = { ...profile1, name: updatedName };
@@ -80,8 +81,8 @@ describe('profileManager', () => {
   });
 
   it('deleteProfile should remove a profile', () => {
-    const profile1 = createProfile('User One', new Date(), { numerology: { lifePathNumber: 1 } });
-    const profile2 = createProfile('User Two', new Date(), { numerology: { lifePathNumber: 2 } });
+    const profile1 = createProfile('User One', new Date(), { numerology: { lifePathNumber: 1 } }, '1234');
+    const profile2 = createProfile('User Two', new Date(), { numerology: { lifePathNumber: 2 } }, '5678');
 
     expect(getProfiles().length).toBe(2);
 
