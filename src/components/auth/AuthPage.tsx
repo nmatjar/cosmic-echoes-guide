@@ -109,7 +109,7 @@ export default function AuthPage({ onAuthSuccess }: AuthPageProps) {
         <CardHeader className="text-center">
           <div className="flex items-center justify-center mb-4">
             <Stars className="w-8 h-8 text-primary mr-2" />
-            <CardTitle className="text-2xl">Cosmic Echoes Guide</CardTitle>
+            <CardTitle className="text-2xl">CosmoFlow by ARCĀNUM</CardTitle>
           </div>
           <CardDescription>
             Zaloguj się lub zarejestruj, aby synchronizować swój profil w chmurze
