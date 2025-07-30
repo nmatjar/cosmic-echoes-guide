@@ -8,40 +8,65 @@ import { toast } from "sonner";
 import { Download, Share2, Mail, MessageCircle, QrCode, FileText, FileJson, Code2 } from "lucide-react";
 import { getProfiles } from "@/services/profileManager";
 import { exportProfileCoder34ToFile } from "@/services/profileCoderExport";
+import { PDFExportService } from "@/services/pdfExportService";
+import { QRCodeService } from "@/services/qrCodeService";
+import { UserProfile } from "@/engine/userProfile";
 
-export function ExportHub() {
+interface ExportHubProps {
+  currentProfile?: UserProfile | null;
+}
+
+export function ExportHub({ currentProfile }: ExportHubProps) {
   const [isExporting, setIsExporting] = useState(false);
   const [exportProgress, setExportProgress] = useState(0);
   const [exportType, setExportType] = useState<string>("");
+  const [qrCodeData, setQrCodeData] = useState<string>("");
 
   const generatePDF = async () => {
+    if (!currentProfile) {
+      toast.error("Brak profilu do eksportu", {
+        description: "Najpierw stwórz profil, aby móc go wyeksportować.",
+      });
+      return;
+    }
+
     setIsExporting(true);
     setExportType("PDF");
     setExportProgress(0);
 
-    // Simulate PDF generation with progress
-    const steps = [
-      { progress: 20, message: "Przygotowywanie cosmic layout..." },
-      { progress: 40, message: "Renderowanie sekcji astrologicznych..." },
-      { progress: 60, message: "Dodawanie numerologii i Human Design..." },
-      { progress: 80, message: "Finalizowanie cosmic design..." },
-      { progress: 100, message: "PDF gotowy do pobrania!" }
-    ];
+    try {
+      // Progress simulation with real steps
+      const steps = [
+        { progress: 20, message: "Przygotowywanie cosmic layout..." },
+        { progress: 40, message: "Renderowanie sekcji astrologicznych..." },
+        { progress: 60, message: "Dodawanie numerologii i Human Design..." },
+        { progress: 80, message: "Finalizowanie cosmic design..." },
+        { progress: 100, message: "PDF gotowy do pobrania!" }
+      ];
 
-    for (const step of steps) {
-      await new Promise(resolve => setTimeout(resolve, 800));
-      setExportProgress(step.progress);
-      toast.info(step.message, { duration: 1000 });
+      for (const step of steps) {
+        await new Promise(resolve => setTimeout(resolve, 600));
+        setExportProgress(step.progress);
+        toast.info(step.message, { duration: 800 });
+      }
+
+      // Generate actual PDF
+      await PDFExportService.generateProfilePDF(currentProfile);
+
+      toast.success("🌟 Kosmiczny Portret Duszy został zapisany jako PDF!", {
+        description: "Plik zawiera wszystkie sekcje z cosmic design",
+        duration: 4000
+      });
+
+    } catch (error) {
+      console.error('PDF generation error:', error);
+      toast.error("Błąd generowania PDF", {
+        description: error instanceof Error ? error.message : "Nieznany błąd",
+      });
+    } finally {
+      setIsExporting(false);
+      setExportProgress(0);
     }
-
-    // Here would be actual PDF generation with jsPDF
-    toast.success("🌟 Kosmiczny Portret Duszy został zapisany jako PDF!", {
-      description: "Plik zawiera wszystkie sekcje z cosmic design",
-      duration: 4000
-    });
-
-    setIsExporting(false);
-    setExportProgress(0);
   };
 
   const exportProfileToJson = () => {
@@ -145,20 +170,43 @@ Pozdrawiam kosmicznie,
     setExportType("QR");
     setExportProgress(0);
 
-    // Simulate QR generation
-    for (let i = 0; i <= 100; i += 25) {
-      await new Promise(resolve => setTimeout(resolve, 300));
-      setExportProgress(i);
+    try {
+      // Progress simulation
+      for (let i = 0; i <= 80; i += 20) {
+        await new Promise(resolve => setTimeout(resolve, 200));
+        setExportProgress(i);
+      }
+
+      // Generate actual QR code
+      const profileId = currentProfile?.id;
+      const qrDataUrl = await QRCodeService.generateProfileQR(profileId);
+      setQrCodeData(qrDataUrl);
+      setExportProgress(100);
+
+      // Download QR code
+      const filename = `CosmoFlow-QR-${currentProfile?.name || 'Profile'}-${new Date().toISOString().split('T')[0]}`;
+      await QRCodeService.downloadQRCode(window.location.href, filename, {
+        size: 400,
+        color: {
+          dark: '#FFD700', // Cosmic gold
+          light: '#1a1a2e'  // Dark background
+        }
+      });
+
+      toast.success("📱 QR Code wygenerowany i pobrany!", {
+        description: "Kod prowadzi do Twojego cosmic profilu",
+        duration: 3000
+      });
+
+    } catch (error) {
+      console.error('QR generation error:', error);
+      toast.error("Błąd generowania QR Code", {
+        description: error instanceof Error ? error.message : "Nieznany błąd",
+      });
+    } finally {
+      setIsExporting(false);
+      setExportProgress(0);
     }
-
-    // Here would be actual QR code generation
-    toast.success("📱 QR Code wygenerowany!", {
-      description: "Kod prowadzi do Twojego cosmic profilu",
-      duration: 3000
-    });
-
-    setIsExporting(false);
-    setExportProgress(0);
   };
 
   const copyLink = () => {
