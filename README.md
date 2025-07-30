@@ -85,20 +85,43 @@ npm run dev
 
 ## 🔧 Konfiguracja
 
-1. **Zmienne środowiskowe:**
+### Szybki start
+
+1. **Klonowanie i instalacja:**
    ```bash
-   cp .env.example .env
+   git clone https://github.com/nmatjar/cosmic-echoes-guide.git
+   cd cosmic-echoes-guide
+   npm install
    ```
 
-2. **Konfiguracja Supabase:**
-   - Skonfiguruj zmienne `VITE_SUPABASE_URL` i `VITE_SUPABASE_ANON_KEY`
-   - Uruchom migracje bazy danych
+2. **Konfiguracja zmiennych środowiskowych:**
+   ```bash
+   cp .env.example .env.local
+   # Edytuj .env.local z właściwymi kluczami Supabase
+   ```
 
 3. **Uruchomienie aplikacji:**
    ```bash
    npm run dev
    ```
-   Aplikacja będzie dostępna pod `http://localhost:8080/`
+   Aplikacja będzie dostępna pod `http://localhost:8083/`
+
+### 📚 Szczegółowa konfiguracja
+
+**Przeczytaj [CONFIGURATION.md](./CONFIGURATION.md)** dla kompletnych instrukcji dotyczących:
+- 🗄️ Konfiguracji bazy danych Supabase
+- 🔐 Zmiennych środowiskowych i bezpieczeństwa
+- 🔑 Uwierzytelniania i OAuth
+- 🚀 Deployment na Vercel/Netlify
+- 🔧 Troubleshooting i debugging
+
+### ⚠️ Wymagane zmienne środowiskowe
+
+```bash
+# Minimalna konfiguracja w .env.local
+VITE_SUPABASE_URL=https://your-project-id.supabase.co
+VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
 
 ## 🧪 Testowanie
 
