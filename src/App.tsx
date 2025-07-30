@@ -9,45 +9,117 @@ import NotFound from "./pages/NotFound";
 import { CosmicWelcome } from "./components/CosmicWelcome";
 import { CosmicLogin } from "./components/CosmicLogin";
 import { UserProfile } from "@/engine/userProfile";
+import { useAuth } from "@/hooks/useAuth";
+import AuthPage from "@/components/auth/AuthPage";
+import { CloudProfileManager } from "@/services/cloudProfileManager";
+import { useToast } from "@/hooks/use-toast";
 
-import { getProfiles, createProfile } from "@/services/profileManager";
+import { getProfiles, createProfile, saveProfiles } from "@/services/profileManager";
 
 const queryClient = new QueryClient();
 
-type AppState = 'loading' | 'welcome' | 'login' | 'app';
+type AppState = 'loading' | 'auth' | 'welcome' | 'login' | 'app';
 
 const App = () => {
   const [appState, setAppState] = useState<AppState>('loading');
   const [profiles, setProfiles] = useState<UserProfile[]>([]);
   const [currentProfile, setCurrentProfile] = useState<UserProfile | null>(null);
+  const { user, loading: authLoading, signOut } = useAuth();
+  const { toast } = useToast();
 
-  // Load profiles from localStorage on app start
+  // Handle auth state and profile loading
   useEffect(() => {
-    const loadProfiles = () => {
-      const savedProfiles = getProfiles();
-      if (savedProfiles.length > 0) {
-        setProfiles(savedProfiles);
-        setAppState('login');
+    if (authLoading) return;
+
+    const initializeApp = async () => {
+      if (user) {
+        // User is authenticated - try to load cloud profile
+        try {
+          const cloudProfile = await CloudProfileManager.fetchUserProfile();
+          if (cloudProfile) {
+            setCurrentProfile(cloudProfile);
+            setAppState('app');
+          } else {
+            // No cloud profile - check local profiles or go to welcome
+            const localProfiles = getProfiles();
+            if (localProfiles.length > 0) {
+              setProfiles(localProfiles);
+              setAppState('login');
+            } else {
+              setAppState('welcome');
+            }
+          }
+        } catch (error) {
+          console.error('Error loading cloud profile:', error);
+          toast({
+            title: "Błąd synchronizacji",
+            description: "Nie udało się załadować profilu z chmury.",
+            variant: "destructive",
+          });
+          // Fallback to local profiles
+          const localProfiles = getProfiles();
+          if (localProfiles.length > 0) {
+            setProfiles(localProfiles);
+            setAppState('login');
+          } else {
+            setAppState('welcome');
+          }
+        }
       } else {
-        setAppState('welcome');
+        // Not authenticated - check for local profiles
+        const localProfiles = getProfiles();
+        if (localProfiles.length > 0) {
+          setProfiles(localProfiles);
+          setAppState('auth'); // Redirect to auth to sync profiles
+        } else {
+          setAppState('auth'); // Go to auth first
+        }
       }
     };
 
-    // Simulate loading
-    setTimeout(loadProfiles, 1000);
-  }, []);
+    // Add a small delay for better UX
+    setTimeout(initializeApp, 1000);
+  }, [user, authLoading, toast]);
 
-  const handleProfileCreated = (profile: UserProfile) => {
-    // The profile is already created and saved by profileManager
-    // We just need to update the state
+  const handleProfileCreated = async (profile: UserProfile) => {
+    // Save locally first
     const allProfiles = getProfiles();
     setProfiles(allProfiles);
     setCurrentProfile(profile);
+
+    // If user is authenticated, sync to cloud
+    if (user) {
+      try {
+        await CloudProfileManager.saveUserProfile(profile);
+        toast({
+          title: "Profil zsynchronizowany",
+          description: "Twój profil został zapisany w chmurze.",
+        });
+      } catch (error) {
+        console.error('Error syncing profile to cloud:', error);
+        toast({
+          title: "Błąd synchronizacji",
+          description: "Profil zapisano lokalnie, ale nie udało się zsynchronizować z chmurą.",
+          variant: "destructive",
+        });
+      }
+    }
+
     setAppState('app');
   };
 
-  const handleProfileSelected = (profile: UserProfile) => {
+  const handleProfileSelected = async (profile: UserProfile) => {
     setCurrentProfile(profile);
+
+    // If user is authenticated, sync selected profile to cloud
+    if (user) {
+      try {
+        await CloudProfileManager.saveUserProfile(profile);
+      } catch (error) {
+        console.error('Error syncing profile to cloud:', error);
+      }
+    }
+
     setAppState('app');
   };
 
@@ -55,16 +127,33 @@ const App = () => {
     setAppState('welcome');
   };
 
-  const handleDeleteProfile = (profileId: string) => {
+  const handleDeleteProfile = async (profileId: string) => {
     setProfiles(prev => prev.filter(p => p.id !== profileId));
+    
+    // If user is authenticated and this is the current profile, delete from cloud
+    if (user && currentProfile?.id === profileId) {
+      try {
+        await CloudProfileManager.deleteUserProfile();
+      } catch (error) {
+        console.error('Error deleting profile from cloud:', error);
+      }
+    }
+
     if (profiles.length === 1) {
       setAppState('welcome');
     }
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    if (user) {
+      await signOut();
+    }
     setCurrentProfile(null);
-    setAppState(profiles.length > 0 ? 'login' : 'welcome');
+    setAppState(profiles.length > 0 ? 'login' : 'auth');
+  };
+
+  const handleAuthSuccess = () => {
+    setAppState('loading'); // Trigger re-initialization
   };
 
   if (appState === 'loading') {
@@ -75,6 +164,18 @@ const App = () => {
           <p className="text-cosmic-gold text-lg">Ładowanie Kosmicznego Portretu...</p>
         </div>
       </div>
+    );
+  }
+
+  if (appState === 'auth') {
+    return (
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <AuthPage onAuthSuccess={handleAuthSuccess} />
+        </TooltipProvider>
+      </QueryClientProvider>
     );
   }
 
