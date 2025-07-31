@@ -3,7 +3,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import PublicProfile from "./pages/PublicProfile";
@@ -21,15 +21,26 @@ const queryClient = new QueryClient();
 
 type AppState = 'loading' | 'auth' | 'welcome' | 'login' | 'app';
 
-const App = () => {
+// Component to handle main app logic
+const AppContent = () => {
   const [appState, setAppState] = useState<AppState>('loading');
   const [profiles, setProfiles] = useState<UserProfile[]>([]);
   const [currentProfile, setCurrentProfile] = useState<UserProfile | null>(null);
   const { user, loading: authLoading, signOut } = useAuth();
   const { toast } = useToast();
+  const location = useLocation();
+
+  // Check if current route is a public profile
+  const isPublicProfile = location.pathname.startsWith('/profile/');
 
   // Handle auth state and profile loading
   useEffect(() => {
+    // If it's a public profile route, skip app initialization and go directly to app state
+    if (isPublicProfile) {
+      setAppState('app');
+      return;
+    }
+
     if (authLoading) return;
 
     const initializeApp = async () => {
@@ -80,7 +91,7 @@ const App = () => {
 
     // Add a small delay for better UX
     setTimeout(initializeApp, 1000);
-  }, [user, authLoading, toast]);
+  }, [user, authLoading, toast, isPublicProfile]);
 
   const handleProfileCreated = async (profile: UserProfile) => {
     // Save locally first
@@ -209,29 +220,35 @@ const App = () => {
     );
   }
 
-  // Main app with routing
+  // Main app with routing - always render router for public profiles
+  return (
+    <Routes>
+      <Route 
+        path="/" 
+        element={
+          <Index 
+            currentProfile={currentProfile} 
+            onLogout={handleLogout}
+          />
+        } 
+      />
+      <Route 
+        path="/profile/:profileId" 
+        element={<PublicProfile />} 
+      />
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  );
+};
+
+const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <Routes>
-            <Route 
-              path="/" 
-              element={
-                <Index 
-                  currentProfile={currentProfile} 
-                  onLogout={handleLogout}
-                />
-              } 
-            />
-            <Route 
-              path="/profile/:profileId" 
-              element={<PublicProfile />} 
-            />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+          <AppContent />
         </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>

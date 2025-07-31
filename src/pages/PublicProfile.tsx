@@ -6,8 +6,10 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { Share2, Eye, Calendar, MapPin, Clock, Sparkles, Heart, Users } from 'lucide-react';
+import { Progress } from '@/components/ui/progress';
+import { Share2, Eye, Calendar, MapPin, Clock, Sparkles, Heart, Users, Star, Zap, Moon, Sun, Crown, Flame, Waves, Mountain } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import ViralPublicProfile from '@/components/ViralPublicProfile';
 
 const PublicProfile = () => {
   const { profileId } = useParams<{ profileId: string }>();
@@ -51,7 +53,7 @@ const PublicProfile = () => {
         const localProfiles = JSON.parse(localStorage.getItem('cosmoflow_profiles') || '[]') as UserProfile[];
         const localProfile = localProfiles.find((p: UserProfile) => p.id === profileId);
         
-        if (localProfile && (localProfile as any).isPublic !== false) {
+        if (localProfile && (localProfile as UserProfile & { isPublic?: boolean }).isPublic !== false) {
           setProfile(localProfile);
           setLoading(false);
           return;
@@ -68,7 +70,7 @@ const PublicProfile = () => {
           const localProfiles = JSON.parse(localStorage.getItem('cosmoflow_profiles') || '[]') as UserProfile[];
           const localProfile = localProfiles.find((p: UserProfile) => p.id === profileId);
           
-          if (localProfile && (localProfile as any).isPublic !== false) {
+          if (localProfile && (localProfile as UserProfile & { isPublic?: boolean }).isPublic !== false) {
             setProfile(localProfile);
             setLoading(false);
             return;
@@ -219,110 +221,13 @@ const PublicProfile = () => {
         </div>
       </div>
 
-      {/* Key Insights */}
+      {/* Viral Public Profile Content */}
       <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-          <Card className="bg-cosmic-dark/90 border-cosmic-purple/30">
-            <CardContent className="p-6 text-center">
-              <div className="text-3xl mb-2">♈</div>
-              <h3 className="text-cosmic-gold font-semibold mb-1">Znak Zodiaku</h3>
-              <p className="text-cosmic-light">{getZodiacSign()}</p>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-cosmic-dark/90 border-cosmic-purple/30">
-            <CardContent className="p-6 text-center">
-              <div className="text-3xl mb-2">🔢</div>
-              <h3 className="text-cosmic-gold font-semibold mb-1">Liczba Życia</h3>
-              <p className="text-cosmic-light">{getLifePathNumber()}</p>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-cosmic-dark/90 border-cosmic-purple/30">
-            <CardContent className="p-6 text-center">
-              <div className="text-3xl mb-2">🐉</div>
-              <h3 className="text-cosmic-gold font-semibold mb-1">Zodiak Chiński</h3>
-              <p className="text-cosmic-light">{getChineseZodiac()}</p>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-cosmic-dark/90 border-cosmic-purple/30">
-            <CardContent className="p-6 text-center">
-              <div className="text-3xl mb-2">⚡</div>
-              <h3 className="text-cosmic-gold font-semibold mb-1">Human Design</h3>
-              <p className="text-cosmic-light">{getHumanDesignType()}</p>
-            </CardContent>
-          </Card>
-        </div>
-
-        <Separator className="bg-cosmic-purple/30 mb-12" />
-
-        {/* Call to Action */}
-        <div className="text-center space-y-8">
-          <div className="max-w-2xl mx-auto">
-            <h2 className="text-3xl font-bold text-cosmic-gold mb-4">
-              Odkryj swój własny kosmiczny portret
-            </h2>
-            <p className="text-cosmic-light text-lg mb-6">
-              Poznaj tajemnice swojej osobowości poprzez analizę astrologiczną, numerologię, 
-              Human Design i wiele więcej. Stwórz swój unikalny profil już dziś!
-            </p>
-            
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button 
-                onClick={handleCreateProfile}
-                size="lg"
-                className="bg-cosmic-purple hover:bg-cosmic-purple/80 text-white"
-              >
-                <Sparkles className="w-5 h-5 mr-2" />
-                Stwórz swój profil
-              </Button>
-              
-              <Button 
-                onClick={handleShare}
-                size="lg"
-                variant="outline"
-                className="border-cosmic-gold/50 text-cosmic-gold hover:bg-cosmic-gold/10"
-              >
-                <Heart className="w-5 h-5 mr-2" />
-                Poleć znajomym
-              </Button>
-            </div>
-          </div>
-
-          {/* Features */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
-            <div className="text-center space-y-2">
-              <div className="w-12 h-12 bg-cosmic-purple/20 rounded-full flex items-center justify-center mx-auto">
-                <Sparkles className="w-6 h-6 text-cosmic-purple" />
-              </div>
-              <h3 className="text-cosmic-gold font-semibold">Kompleksowa Analiza</h3>
-              <p className="text-cosmic-light text-sm">
-                Astrologia, numerologia, Human Design i więcej systemów w jednym miejscu
-              </p>
-            </div>
-
-            <div className="text-center space-y-2">
-              <div className="w-12 h-12 bg-cosmic-purple/20 rounded-full flex items-center justify-center mx-auto">
-                <Share2 className="w-6 h-6 text-cosmic-purple" />
-              </div>
-              <h3 className="text-cosmic-gold font-semibold">Łatwe Udostępnianie</h3>
-              <p className="text-cosmic-light text-sm">
-                Udostępniaj swój profil znajomym przez QR kod, link lub social media
-              </p>
-            </div>
-
-            <div className="text-center space-y-2">
-              <div className="w-12 h-12 bg-cosmic-purple/20 rounded-full flex items-center justify-center mx-auto">
-                <Users className="w-6 h-6 text-cosmic-purple" />
-              </div>
-              <h3 className="text-cosmic-gold font-semibold">Społeczność</h3>
-              <p className="text-cosmic-light text-sm">
-                Porównuj profile z znajomymi i odkrywaj kosmiczne połączenia
-              </p>
-            </div>
-          </div>
-        </div>
+        <ViralPublicProfile 
+          profile={profile}
+          onShare={handleShare}
+          onCreateProfile={handleCreateProfile}
+        />
       </div>
 
       {/* Footer */}

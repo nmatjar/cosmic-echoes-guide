@@ -175,6 +175,8 @@ export class CloudProfileManager {
    */
   static async getPublicProfile(profileId: string): Promise<UserProfile | null> {
     try {
+      console.log('Fetching public profile for ID:', profileId);
+      
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
@@ -182,14 +184,24 @@ export class CloudProfileManager {
         .eq('is_public', true)
         .maybeSingle();
 
+      console.log('Supabase response:', { data, error });
+
       if (error) {
-        console.error('Error fetching public profile:', error);
+        console.error('Supabase error details:', {
+          message: error.message,
+          details: error.details,
+          hint: error.hint,
+          code: error.code
+        });
         return null;
       }
 
       if (!data) {
+        console.log('No public profile found for ID:', profileId);
         return null;
       }
+
+      console.log('Found public profile:', data);
 
       // Convert CloudProfile to UserProfile format (excluding sensitive data)
       const userProfile: UserProfile = {
