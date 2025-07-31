@@ -5,6 +5,20 @@
     "low": "Niska energia, czas na odpoczynek i regenerację.",
     "critical": "Punkt zwrotny, zwiększona wrażliwość, wymagana ostrożność."
   },
+  "cycleDescriptions": {
+    "physical": {
+      "name": "Fizyczny (23 dni)",
+      "description": "Wpływa na siłę, wytrzymałość, koordynację i ogólne samopoczucie fizyczne."
+    },
+    "emotional": {
+      "name": "Emocjonalny (28 dni)",
+      "description": "Reguluje nastrój, wrażliwość, kreatywność i relacje z innymi."
+    },
+    "intellectual": {
+      "name": "Intelektualny (33 dni)",
+      "description": "Oddziałuje na zdolności analityczne, pamięć, koncentrację i szybkość uczenia się."
+    }
+  },
   "cycleLengths": {
     "physical": 23,
     "emotional": 28,

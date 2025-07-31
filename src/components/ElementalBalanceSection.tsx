@@ -2,6 +2,7 @@ import { CosmicCard } from "@/components/ui/cosmic-card";
 import { Badge } from "@/components/ui/badge";
 import { UserProfile } from "@/engine/userProfile";
 import elementalData from "@/engine/data/elementalBalance.json";
+import { CopyButton } from "./ui/copy-button";
 
 interface ElementalBalanceSectionProps {
   profile: UserProfile | null;
@@ -26,11 +27,10 @@ export function ElementalBalanceSection({ profile }: ElementalBalanceSectionProp
     { name: "Metal", score: metal, icon: "⚙️" },
     { name: "Woda", score: water, icon: "💧" },
     { name: "Drewno", score: wood, icon: "🌳" },
-  ].sort((a, b) => b.score - a.score); // Sort by score descending
+  ].sort((a, b) => b.score - a.score);
 
-  const getElementAssociations = (elementName: string) => {
-    const element = elementalData.elements.find(e => e.name === elementName);
-    return element ? element.associations : null;
+  const getElementData = (elementName: string) => {
+    return elementalData.elements.find(e => e.name === elementName);
   };
 
   return (
@@ -40,7 +40,7 @@ export function ElementalBalanceSection({ profile }: ElementalBalanceSectionProp
       </h2>
 
       <div className="space-y-4">
-        <h3 className="text-xl font-bold text-cosmic-gold">Twoje Żywioły</h3>
+        <h3 className="text-xl font-bold text-cosmic-gold">Twoja Punktacja Żywiołów</h3>
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
           {elementsWithScores.map((el) => (
             <Badge
@@ -55,51 +55,32 @@ export function ElementalBalanceSection({ profile }: ElementalBalanceSectionProp
         </div>
       </div>
 
-      {dominantElements.length > 0 && (
-        <div className="space-y-4">
-          <h3 className="text-xl font-bold text-cosmic-gold">Dominujące Żywioły</h3>
-          <div className="flex flex-wrap gap-2">
-            {dominantElements.map((elementName) => {
-              const associations = getElementAssociations(elementName);
-              return associations ? (
-                <Badge key={elementName} variant="outline" className="bg-cosmic-gold/20 border-cosmic-gold/30 text-cosmic-gold p-3">
-                  <span className="font-semibold">{elementName}</span>
-                  <ul className="text-xs mt-1 list-disc list-inside">
-                    <li>Kierunek: {associations.direction}</li>
-                    <li>Pora roku: {associations.season}</li>
-                    <li>Emocja: {associations.emotion}</li>
-                    <li>Organy: {associations.organ}</li>
-                    <li>Cechy: {associations.personalityTraits.join(', ')}</li>
-                  </ul>
-                </Badge>
-              ) : null;
-            })}
+      <div className="grid md:grid-cols-2 gap-6">
+        {dominantElements.length > 0 && (
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-semibold text-cosmic-gold">Dominujący Żywioł: {dominantElements.join(', ')}</h3>
+              <CopyButton text={getElementData(dominantElements[0])?.interpretations.dominant || ''} label="Dominujący Żywioł" />
+            </div>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              {getElementData(dominantElements[0])?.interpretations.dominant}
+            </p>
           </div>
-        </div>
-      )}
+        )}
 
-      {weakElements.length > 0 && (
-        <div className="space-y-4">
-          <h3 className="text-xl font-bold text-cosmic-gold">Słabe Żywioły</h3>
-          <div className="flex flex-wrap gap-2">
-            {weakElements.map((elementName) => {
-              const associations = getElementAssociations(elementName);
-              return associations ? (
-                <Badge key={elementName} variant="outline" className="bg-cosmic-pink/20 border-cosmic-pink/30 text-cosmic-pink p-3">
-                  <span className="font-semibold">{elementName}</span>
-                  <ul className="text-xs mt-1 list-disc list-inside">
-                    <li>Kierunek: {associations.direction}</li>
-                    <li>Pora roku: {associations.season}</li>
-                    <li>Emocja: {associations.emotion}</li>
-                    <li>Organy: {associations.organ}</li>
-                    <li>Cechy: {associations.personalityTraits.join(', ')}</li>
-                  </ul>
-                </Badge>
-              ) : null;
-            })}
+        {weakElements.length > 0 && (
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-semibold text-cosmic-pink">Słaby Żywioł: {weakElements.join(', ')}</h3>
+              <CopyButton text={getElementData(weakElements[0])?.interpretations.weak || ''} label="Słaby Żywioł" />
+            </div>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              {getElementData(weakElements[0])?.interpretations.weak}
+            </p>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </CosmicCard>
   );
 }
+

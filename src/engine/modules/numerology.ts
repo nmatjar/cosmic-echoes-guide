@@ -24,13 +24,12 @@ const calculateLifePathNumber = (date: Date): number => {
   const month = date.getMonth() + 1; // getMonth() jest 0-indeksowane
   const year = date.getFullYear();
 
-  const reducedDay = reduceToSingleDigit(day);
-  const reducedMonth = reduceToSingleDigit(month);
-  const reducedYear = reduceToSingleDigit(year);
+  const allDigits = `${day}${month}${year}`;
+  const initialSum = allDigits
+    .split('')
+    .reduce((acc, digit) => acc + parseInt(digit, 10), 0);
 
-  const finalSum = reducedDay + reducedMonth + reducedYear;
-  
-  return reduceToSingleDigit(finalSum);
+  return reduceToSingleDigit(initialSum);
 };
 
 export interface NumerologyResult extends AnalysisResult {

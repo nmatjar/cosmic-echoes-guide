@@ -1,23 +1,100 @@
 {
   "animals": [
-    { "yearOffset": 0, "name": "Szczur", "icon": "🐀" },
-    { "yearOffset": 1, "name": "Wół", "icon": "🐂" },
-    { "yearOffset": 2, "name": "Tygrys", "icon": "🐅" },
-    { "yearOffset": 3, "name": "Królik", "icon": "🐇" },
-    { "yearOffset": 4, "name": "Smok", "icon": "🐉" },
-    { "yearOffset": 5, "name": "Wąż", "icon": "🐍" },
-    { "yearOffset": 6, "name": "Koń", "icon": "🐎" },
-    { "yearOffset": 7, "name": "Koza", "icon": "🐐" },
-    { "yearOffset": 8, "name": "Małpa", "icon": "🐒" },
-    { "yearOffset": 9, "name": "Kogut", "icon": "🐓" },
-    { "yearOffset": 10, "name": "Pies", "icon": "🐕" },
-    { "yearOffset": 11, "name": "Świnia", "icon": "🐖" }
-  ],
-  "elements": [
-    { "name": "Drewno", "startYear": 1904 },
-    { "name": "Ogień", "startYear": 1906 },
-    { "name": "Ziemia", "startYear": 1908 },
-    { "name": "Metal", "startYear": 1910 },
-    { "name": "Woda", "startYear": 1912 }
+    {
+      "yearOffset": 0,
+      "name": "Szczur",
+      "icon": "🐀",
+      "description": "Inteligentny, zaradny i czarujący. Szczur potrafi znaleźć rozwiązanie w każdej sytuacji. Jest towarzyski, ale też skryty, chroniąc swoje prawdziwe emocje. Ceni rodzinę i bliskich przyjaciół.",
+      "strengths": ["Zaradność", "Inteligencja", "Dowcip", "Oszczędność"],
+      "weaknesses": ["Skąpstwo", "Podejrzliwość", "Manipulacja", "Nerwowość"]
+    },
+    {
+      "yearOffset": 1,
+      "name": "Wół",
+      "icon": "🐂",
+      "description": "Pracowity, niezawodny i cierpliwy. Wół jest symbolem siły i determinacji. Kiedy postawi sobie cel, nic nie jest w stanie go zatrzymać. Ceni tradycję i jest niezwykle lojalny.",
+      "strengths": ["Pracowitość", "Niezawodność", "Cierpliwość", "Uczciwość"],
+      "weaknesses": ["Upór", "Brak elastyczności", "Konserwatyzm", "Małomówność"]
+    },
+    {
+      "yearOffset": 2,
+      "name": "Tygrys",
+      "icon": "🐅",
+      "description": "Odważny, namiętny i nieprzewidywalny. Tygrys to urodzony przywódca, pełen magnetyzmu i pewności siebie. Kocha wyzwania i zawsze walczy o to, w co wierzy.",
+      "strengths": ["Odwaga", "Pewność siebie", "Charyzma", "Sprawiedliwość"],
+      "weaknesses": ["Buntowniczość", "Impulsywność", "Arogancja", "Niepokój"]
+    },
+    {
+      "yearOffset": 3,
+      "name": "Królik",
+      "icon": "🐇",
+      "description": "Uprzejmy, taktowny i wrażliwy. Królik ceni spokój, harmonię i dobre towarzystwo. Ma doskonały gust i wrodzone poczucie dyplomacji, unikając konfliktów za wszelką cenę.",
+      "strengths": ["Dyplomacja", "Wrażliwość", "Spokój", "Elegancja"],
+      "weaknesses": ["Niezdecydowanie", "Unikanie problemów", "Powierzchowność", "Lękliwość"]
+    },
+    {
+      "yearOffset": 4,
+      "name": "Smok",
+      "icon": "🐉",
+      "description": "Charyzmatyczny, ambitny i pełen energii. Smok to najpotężniejszy znak w chińskim zodiaku, symbol szczęścia i władzy. Jest urodzonym liderem, który marzy o wielkich rzeczach.",
+      "strengths": ["Ambicja", "Charyzma", "Odwaga", "Szczodrość"],
+      "weaknesses": ["Dominacja", "Nietolerancja", "Arogancja", "Porywczość"]
+    },
+    {
+      "yearOffset": 5,
+      "name": "Wąż",
+      "icon": "🐍",
+      "description": "Mądry, tajemniczy i intuicyjny. Wąż jest głębokim myślicielem, który polega na własnej intuicji. Jest elegancki i czarujący, ale zawsze zachowuje pewien dystans.",
+      "strengths": ["Mądrość", "Intuicja", "Spokój", "Determinacja"],
+      "weaknesses": ["Podejrzliwość", "Zazdrość", "Skrytość", "Lenistwo"]
+    },
+    {
+      "yearOffset": 6,
+      "name": "Koń",
+      "icon": "🐎",
+      "description": "Energiczny, niezależny i kochający wolność. Koń jest zawsze w ruchu, poszukując nowych przygód i doświadczeń. Jest towarzyski, dowcipny i uwielbia być w centrum uwagi.",
+      "strengths": ["Energia", "Optymizm", "Niezależność", "Poczucie humoru"],
+      "weaknesses": ["Niecierpliwość", "Nietolerancja", "Egoizm", "Brak stałości"]
+    },
+    {
+      "yearOffset": 7,
+      "name": "Koza",
+      "icon": "🐐",
+      "description": "Kreatywna, łagodna i pełna współczucia. Koza jest artystą zodiaku, ceniącym piękno i harmonię. Jest marzycielska i potrzebuje wsparcia bliskich, aby czuć się bezpiecznie.",
+      "strengths": ["Kreatywność", "Empatia", "Łagodność", "Hojność"],
+      "weaknesses": ["Niezdecydowanie", "Pesymizm", "Zależność", "Niepraktyczność"]
+    },
+    {
+      "yearOffset": 8,
+      "name": "Małpa",
+      "icon": "🐒",
+      "description": "Inteligentna, sprytna i pełna humoru. Małpa to mistrz rozwiązywania problemów i improwizacji. Jest ciekawska, towarzyska i potrafi oczarować każdego swoim dowcipem.",
+      "strengths": ["Inteligencja", "Spryt", "Innowacyjność", "Optymizm"],
+      "weaknesses": ["Złośliwość", "Próżność", "Niecierpliwość", "Brak skrupułów"]
+    },
+    {
+      "yearOffset": 9,
+      "name": "Kogut",
+      "icon": "🐓",
+      "description": "Pewny siebie, pracowity i spostrzegawczy. Kogut jest perfekcjonistą, który dba o każdy szczegół. Jest odważny i szczery, choć czasem jego bezpośredniość może ranić.",
+      "strengths": ["Pracowitość", "Odwaga", "Szczerość", "Lojalność"],
+      "weaknesses": ["Arogancja", "Krytycyzm", "Przechwalanie się", "Brak taktu"]
+    },
+    {
+      "yearOffset": 10,
+      "name": "Pies",
+      "icon": "🐕",
+      "description": "Lojalny, uczciwy i opiekuńczy. Pies jest najlepszym przyjacielem człowieka, zawsze gotowym do pomocy. Ceni sprawiedliwość i jest niezwykle oddany tym, których kocha.",
+      "strengths": ["Lojalność", "Uczciwość", "Wierność", "Sprawiedliwość"],
+      "weaknesses": ["Pesymizm", "Niepokój", "Upartość", "Cynizm"]
+    },
+    {
+      "yearOffset": 11,
+      "name": "Świnia",
+      "icon": "🐖",
+      "description": "Szczera, hojna i towarzyska. Świnia kocha życie i jego przyjemności. Jest uczciwa i dobroduszna, a jej dom jest zawsze otwarty dla przyjaciół. Ceni spokój i harmonię.",
+      "strengths": ["Hojność", "Uczciwość", "Optymizm", "Towarzyskość"],
+      "weaknesses": ["Naiwność", "Lenistwo", "Pobłażanie sobie", "Brak ambicji"]
+    }
   ]
 }

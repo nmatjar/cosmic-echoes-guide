@@ -1,9 +1,42 @@
 
 import { CosmicCard } from "@/components/ui/cosmic-card";
-import { CopyButton } from "@/components/ui/copy-button";
 import { Badge } from "@/components/ui/badge";
 import { UserProfile } from "@/engine/userProfile";
 import numerologyData from "@/engine/data/numerology.json";
+import { createAIPrompt } from "@/lib/prompts";
+import { Button } from "./ui/button";
+import { Copy, Check } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
+
+interface CopyPromptButtonProps {
+  promptText: string;
+}
+
+function CopyPromptButton({ promptText }: CopyPromptButtonProps) {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(promptText);
+    setCopied(true);
+    toast.success("✨ Prompt skopiowany do schowka!", {
+      description: "Wklej go do swojego ulubionego AI.",
+    });
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <Button
+      variant="outline"
+      size="icon"
+      onClick={handleCopy}
+      className="h-8 w-8 bg-cosmic-purple/20 border-cosmic-purple/30 hover:bg-cosmic-purple/30 text-cosmic-starlight"
+    >
+      {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+    </Button>
+  );
+}
+
 
 interface NumerologySectionProps {
   profile: UserProfile | null;
@@ -53,7 +86,7 @@ export function NumerologySection({ profile }: NumerologySectionProps) {
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <h4 className="text-lg font-semibold text-cosmic-gold">📜 Znaczenie</h4>
-            <CopyButton text={description} label={`Droga Życia ${lifePathNumber}`} />
+            <CopyPromptButton promptText={createAIPrompt({ mainContent: description, userProfile: profile, promptType: 'NUMEROLOGY_DESCRIPTION' })} />
           </div>
           <p className="text-sm text-muted-foreground leading-relaxed">
             {description}
@@ -64,7 +97,7 @@ export function NumerologySection({ profile }: NumerologySectionProps) {
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <h4 className="text-md font-semibold text-cosmic-teal">☀️ Energie Światła</h4>
-              <CopyButton text={lightEnergies.join(', ')} label="Światło" />
+              <CopyPromptButton promptText={createAIPrompt({ mainContent: lightEnergies.join(', '), userProfile: profile, promptType: 'NUMEROLOGY_LIGHT_ENERGIES' })} />
             </div>
             <div className="flex flex-wrap gap-2">
               {lightEnergies.map((energy: string, index: number) => (
@@ -78,7 +111,7 @@ export function NumerologySection({ profile }: NumerologySectionProps) {
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <h4 className="text-md font-semibold text-cosmic-pink">🌑 Energie Cienia</h4>
-              <CopyButton text={shadowEnergies.join(', ')} label="Cień" />
+              <CopyPromptButton promptText={createAIPrompt({ mainContent: shadowEnergies.join(', '), userProfile: profile, promptType: 'NUMEROLOGY_SHADOW_ENERGIES' })} />
             </div>
             <div className="flex flex-wrap gap-2">
               {shadowEnergies.map((energy: string, index: number) => (
@@ -93,3 +126,4 @@ export function NumerologySection({ profile }: NumerologySectionProps) {
     </CosmicCard>
   );
 }
+

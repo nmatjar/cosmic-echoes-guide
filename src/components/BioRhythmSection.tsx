@@ -29,7 +29,6 @@ export function BioRhythmSection({ profile }: BioRhythmSectionProps) {
     return null;
   };
 
-  // Effect for real-time current day update
   useEffect(() => {
     const updateCurrentBioRhythms = async () => {
       const result = await calculateAndSetBioRhythms(new Date());
@@ -38,13 +37,12 @@ export function BioRhythmSection({ profile }: BioRhythmSectionProps) {
       }
     };
 
-    updateCurrentBioRhythms(); // Initial call
-    const interval = setInterval(updateCurrentBioRhythms, 60 * 1000); // Update every minute
+    updateCurrentBioRhythms();
+    const interval = setInterval(updateCurrentBioRhythms, 60 * 1000);
 
     return () => clearInterval(interval);
   }, [profile]);
 
-  // Effect for chart data update based on chartMonth
   useEffect(() => {
     const generateChartData = async () => {
       if (!profile?.birthData.date) return;
@@ -53,11 +51,11 @@ export function BioRhythmSection({ profile }: BioRhythmSectionProps) {
       const startOfMonth = new Date(chartMonth.getFullYear(), chartMonth.getMonth(), 1);
       const endOfMonth = new Date(chartMonth.getFullYear(), chartMonth.getMonth() + 1, 0);
 
-      for (let d = startOfMonth; d <= endOfMonth; d.setDate(d.getDate() + 1)) {
-        const result = await calculateAndSetBioRhythms(d);
+      for (let d = new Date(startOfMonth.getTime()); d <= endOfMonth; d.setDate(d.getDate() + 1)) {
+        const result = await calculateAndSetBioRhythms(new Date(d.getTime()));
         if (result) {
           data.push({
-            name: format(d, 'dd.MM'),
+            name: format(d, 'dd'),
             physical: result.physical.cycle,
             emotional: result.emotional.cycle,
             intellectual: result.intellectual.cycle,
@@ -71,13 +69,8 @@ export function BioRhythmSection({ profile }: BioRhythmSectionProps) {
     generateChartData();
   }, [profile, chartMonth]);
 
-  const handlePrevMonth = () => {
-    setChartMonth(prev => subMonths(prev, 1));
-  };
-
-  const handleNextMonth = () => {
-    setChartMonth(prev => addMonths(prev, 1));
-  };
+  const handlePrevMonth = () => setChartMonth(prev => subMonths(prev, 1));
+  const handleNextMonth = () => setChartMonth(prev => addMonths(prev, 1));
 
   if (!profile || !profile.birthData.date) {
     return (
@@ -97,6 +90,22 @@ export function BioRhythmSection({ profile }: BioRhythmSectionProps) {
     }
   };
 
+  const renderCycleInfo = (cycleName: 'physical' | 'emotional' | 'intellectual', icon: string) => {
+    if (!currentBioRhythms) return null;
+    const cycleData = currentBioRhythms[cycleName];
+    const cycleDesc = biorhythmData.cycleDescriptions[cycleName];
+    return (
+      <div className="p-4 rounded-lg bg-background/50">
+        <h4 className="text-lg font-semibold text-cosmic-gold flex items-center gap-2">{icon} {cycleDesc.name}</h4>
+        <p className="text-sm text-muted-foreground mt-1">{cycleDesc.description}</p>
+        <Badge className={`mt-2 ${getPhaseColor(cycleData.phase)}`}>
+          Faza: {cycleData.phase}
+        </Badge>
+        <p className="text-xs text-muted-foreground mt-2">{biorhythmData.phases[cycleData.phase]}</p>
+      </div>
+    );
+  };
+
   return (
     <CosmicCard variant="default" className="space-y-6">
       <h2 className="text-2xl font-bold text-foreground flex items-center gap-2">
@@ -107,68 +116,37 @@ export function BioRhythmSection({ profile }: BioRhythmSectionProps) {
         <div className="space-y-4">
           <h3 className="text-xl font-bold text-cosmic-gold">Dzisiejsze Wpływy ({format(new Date(), 'dd.MM.yyyy')})</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Badge className={`flex flex-col items-center justify-center p-4 h-auto ${getPhaseColor(currentBioRhythms.physical.phase)}`}>
-              <span className="text-lg font-semibold">Fizyczny</span>
-              <span className="text-sm">{biorhythmData.phases[currentBioRhythms.physical.phase]}</span>
-            </Badge>
-            <Badge className={`flex flex-col items-center justify-center p-4 h-auto ${getPhaseColor(currentBioRhythms.emotional.phase)}`}>
-              <span className="text-lg font-semibold">Emocjonalny</span>
-              <span className="text-sm">{biorhythmData.phases[currentBioRhythms.emotional.phase]}</span>
-            </Badge>
-            <Badge className={`flex flex-col items-center justify-center p-4 h-auto ${getPhaseColor(currentBioRhythms.intellectual.phase)}`}>
-              <span className="text-lg font-semibold">Intelektualny</span>
-              <span className="text-sm">{biorhythmData.phases[currentBioRhythms.intellectual.phase]}</span>
-            </Badge>
+            {renderCycleInfo('physical', '💪')}
+            {renderCycleInfo('emotional', '❤️')}
+            {renderCycleInfo('intellectual', '🧠')}
           </div>
         </div>
       )}
 
       <div className="space-y-4">
-        <h3 className="text-xl font-bold text-cosmic-gold">Wykres Bio-Rytmów ({format(chartMonth, 'MMMM yyyy')})</h3>
         <div className="flex justify-between items-center mb-4">
           <Button variant="outline" size="sm" onClick={handlePrevMonth}>
-            <ArrowLeft className="h-4 w-4" /> Poprzedni
+            <ArrowLeft className="h-4 w-4 mr-2" /> Poprzedni
           </Button>
           <span className="text-lg font-semibold text-foreground">{format(chartMonth, 'MMMM yyyy', { locale: pl })}</span>
           <Button variant="outline" size="sm" onClick={handleNextMonth}>
-            Następny <ArrowRight className="h-4 w-4" />
+            Następny <ArrowRight className="h-4 w-4 ml-2" />
           </Button>
         </div>
         <ResponsiveContainer width="100%" height={300}>
           <LineChart data={chartData}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#333" />
+            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255, 255, 255, 0.1)" />
             <XAxis dataKey="name" stroke="#888" />
             <YAxis domain={[-1, 1]} stroke="#888" />
-            <Tooltip
-              content={({ active, payload, label }) => {
-                if (active && payload && payload.length) {
-                  const dataPoint = chartData.find(d => d.name === label);
-                  return (
-                    <div className="bg-cosmic-dark p-2 border border-cosmic-purple rounded-md text-sm">
-                      <p className="font-bold text-cosmic-gold">{label} {dataPoint?.isToday && '(Dziś)'}</p>
-                      {payload.map((entry, index) => (
-                        <p key={`item-${index}`} style={{ color: entry.color }}>
-                          {entry.name}: {biorhythmData.phases[dataPoint?.[entry.name]?.phase || 'medium']}
-                        </p>
-                      ))}
-                    </div>
-                  );
-                }
-                return null;
-              }}
-            />
-            <Line type="monotone" dataKey="physical" stroke="#8884d8" dot={({ cx, cy, stroke, key, payload }) => (
-              <circle key={key} cx={cx} cy={cy} r={payload.isToday ? 6 : 3} fill={payload.isToday ? '#FFD700' : stroke} />
-            )} />
-            <Line type="monotone" dataKey="emotional" stroke="#82ca9d" dot={({ cx, cy, stroke, key, payload }) => (
-              <circle key={key} cx={cx} cy={cy} r={payload.isToday ? 6 : 3} fill={payload.isToday ? '#FFD700' : stroke} />
-            )} />
-            <Line type="monotone" dataKey="intellectual" stroke="#ffc658" dot={({ cx, cy, stroke, key, payload }) => (
-              <circle key={key} cx={cx} cy={cy} r={payload.isToday ? 6 : 3} fill={payload.isToday ? '#FFD700' : stroke} />
-            )} />
+            <Tooltip contentStyle={{ backgroundColor: '#1a1a1a', border: '1px solid #4A90E2' }} />
+            <Line type="monotone" dataKey="physical" name="Fizyczny" stroke="#8884d8" dot={false} />
+            <Line type="monotone" dataKey="emotional" name="Emocjonalny" stroke="#82ca9d" dot={false} />
+            <Line type="monotone" dataKey="intellectual" name="Intelektualny" stroke="#ffc658" dot={false} />
+            {chartData.map(d => d.isToday && <YAxis key="today-line" yAxisId="today" orientation="left" stroke="gold" />)}
           </LineChart>
         </ResponsiveContainer>
       </div>
     </CosmicCard>
   );
 }
+

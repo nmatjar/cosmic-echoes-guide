@@ -1,27 +1,184 @@
 {
   "signs": [
-    "Czerwony Smok",
-    "Biały Wiatr",
-    "Niebieska Noc",
-    "Żółte Nasienie",
-    "Czerwony Wąż",
-    "Biały Łącznik Światów",
-    "Niebieska Ręka",
-    "Żółta Gwiazda",
-    "Czerwony Księżyc",
-    "Biały Pies",
-    "Niebieska Małpa",
-    "Żółty Człowiek",
-    "Czerwony Wędrowiec Nieba",
-    "Biały Mag",
-    "Niebieski Orzeł",
-    "Żółty Wojownik",
-    "Czerwona Ziemia",
-    "Białe Zwierciadło",
-    "Niebieski Huragan",
-    "Żółte Słońce"
+    {
+      "name": "Czerwony Smok (Imix)",
+      "description": "Symbolizuje pierwotne zaufanie, źródło życia i boskie pożywienie. Jesteś inicjatorem, pełnym energii do rozpoczynania nowych projektów. Twoją siłą jest wiara w obfitość wszechświata.",
+      "keywords": ["Początek", "Zaufanie", "Narodziny", "Opieka"]
+    },
+    {
+      "name": "Biały Wiatr (Ik)",
+      "description": "Reprezentuje ducha, oddech i komunikację. Jesteś kanałem dla inspiracji i prawdy. Twoja siła leży w słowach i zdolności do przekazywania idei, które poruszają serca i umysły.",
+      "keywords": ["Duch", "Komunikacja", "Inspiracja", "Prawda"]
+    },
+    {
+      "name": "Niebieska Noc (Akbal)",
+      "description": "Symbolizuje sen, intuicję i obfitość. Masz dostęp do głębokiej, wewnętrznej mądrości i potrafisz znaleźć światło w ciemności. Twoją siłą jest introspekcja i zaufanie do snów.",
+      "keywords": ["Intuicja", "Sen", "Tajemnica", "Obfitość"]
+    },
+    {
+      "name": "Żółte Nasienie (Kan)",
+      "description": "Reprezentuje potencjał, wzrost i świadome tworzenie. Masz w sobie moc manifestowania idei i celów. Twoją siłą jest precyzyjne sadzenie intencji i cierpliwe dbanie o ich wzrost.",
+      "keywords": ["Potencjał", "Kwitnienie", "Cel", "Świadomość"]
+    },
+    {
+      "name": "Czerwony Wąż (Chicchan)",
+      "description": "Symbolizuje siłę życiową, instynkt i przetrwanie. Jesteś pełen pasji i witalności, z silnym połączeniem z ciałem. Twoją siłą jest pierwotna energia i zdolność do transformacji.",
+      "keywords": ["Siła życiowa", "Instynkt", "Pasja", "Ciało"]
+    },
+    {
+      "name": "Biały Łącznik Światów (Cimi)",
+      "description": "Reprezentuje transformację, śmierć i odrodzenie. Jesteś mostem między światami, potrafisz odpuszczać to, co stare, by zrobić miejsce na nowe. Twoją siłą jest akceptacja cykli życia.",
+      "keywords": ["Transformacja", "Równowaga", "Odpuszczenie", "Szansa"]
+    },
+    {
+      "name": "Niebieska Ręka (Manik)",
+      "description": "Symbolizuje uzdrawianie, wiedzę i realizację. Masz dar do urzeczywistniania idei i niesienia pomocy innym. Twoją siłą jest aktywne działanie i praktyczna mądrość.",
+      "keywords": ["Uzdrowienie", "Wiedza", "Realizacja", "Działanie"]
+    },
+    {
+      "name": "Żółta Gwiazda (Lamat)",
+      "description": "Reprezentuje harmonię, piękno i elegancję. Masz naturalne poczucie estetyki i dążysz do tworzenia harmonii wokół siebie. Twoją siłą jest sztuka i zdolność do upiększania świata.",
+      "keywords": ["Harmonia", "Piękno", "Sztuka", "Elegancja"]
+    },
+    {
+      "name": "Czerwony Księżyc (Muluc)",
+      "description": "Symbolizuje emocje, oczyszczenie i przepływ. Jesteś w głębokim kontakcie ze swoimi uczuciami i masz zdolność do oczyszczania emocjonalnych blokad. Twoją siłą jest płynięcie z prądem życia.",
+      "keywords": ["Emocje", "Przepływ", "Oczyszczenie", "Pamięć"]
+    },
+    {
+      "name": "Biały Pies (Oc)",
+      "description": "Reprezentuje miłość, lojalność i serce. Jesteś wiernym towarzyszem i przewodnikiem, a Twoje relacje są oparte na bezwarunkowej miłości. Twoją siłą jest oddanie i szczerość uczuć.",
+      "keywords": ["Miłość", "Lojalność", "Relacje", "Odwaga"]
+    },
+    {
+      "name": "Niebieska Małpa (Chuen)",
+      "description": "Symbolizuje magię, zabawę i iluzję. Masz w sobie wewnętrzne dziecko, które potrafi dostrzec humor i lekkość w każdej sytuacji. Twoją siłą jest kreatywność i spontaniczność.",
+      "keywords": ["Zabawa", "Magia", "Kreatywność", "Spontaniczność"]
+    },
+    {
+      "name": "Żółty Człowiek (Eb)",
+      "description": "Reprezentuje wolną wolę, mądrość i wpływ. Jesteś świadomym twórcą swojego losu, zdolnym do podejmowania mądrych decyzji. Twoją siłą jest dojrzałość i odpowiedzialność.",
+      "keywords": ["Wolna wola", "Mądrość", "Wpływ", "Dojrzałość"]
+    },
+    {
+      "name": "Czerwony Wędrowiec Nieba (Ben)",
+      "description": "Symbolizuje eksplorację, przestrzeń i czujność. Jesteś odważnym podróżnikiem, który łączy niebo z ziemią. Twoją siłą jest poszerzanie horyzontów i przełamywanie granic.",
+      "keywords": ["Eksploracja", "Przestrzeń", "Odwaga", "Przewodnictwo"]
+    },
+    {
+      "name": "Biały Mag (Ix)",
+      "description": "Reprezentuje ponadczasowość, magię i serce. Masz dostęp do wyższej wiedzy i potrafisz manifestować swoje intencje. Twoją siłą jest życie w teraźniejszości i zaufanie do serca.",
+      "keywords": ["Magia", "Ponadczasowość", "Urok", "Wizja"]
+    },
+    {
+      "name": "Niebieski Orzeł (Men)",
+      "description": "Symbolizuje wizję, umysł i kreatywność. Masz zdolność do patrzenia na świat z szerszej perspektywy i tworzenia globalnych wizji. Twoją siłą jest potęga umysłu i niezależność.",
+      "keywords": ["Wizja", "Umysł", "Perspektywa", "Nadzieja"]
+    },
+    {
+      "name": "Żółty Wojownik (Cib)",
+      "description": "Reprezentuje inteligencję, odwagę i kwestionowanie. Jesteś nieustraszonym wojownikiem prawdy, który potrafi zadawać trafne pytania. Twoją siłą jest analityczny umysł i wewnętrzna siła.",
+      "keywords": ["Odwaga", "Inteligencja", "Strategia", "Pytanie"]
+    },
+    {
+      "name": "Czerwona Ziemia (Caban)",
+      "description": "Symbolizuje ewolucję, nawigację i synchronię. Jesteś w harmonii z rytmami Ziemi i potrafisz odnaleźć się w każdym momencie. Twoją siłą jest podążanie za znakami i zaufanie do życia.",
+      "keywords": ["Ewolucja", "Synchronia", "Nawigacja", "Uziemienie"]
+    },
+    {
+      "name": "Białe Zwierciadło (Etznab)",
+      "description": "Reprezentuje prawdę, odbicie i porządek. Masz zdolność do widzenia rzeczy takimi, jakie są, bez iluzji. Twoją siłą jest klarowność, prawda i zdolność do odcinania tego, co zbędne.",
+      "keywords": ["Prawda", "Odbicie", "Klarowność", "Porządek"]
+    },
+    {
+      "name": "Niebieski Huragan (Cauac)",
+      "description": "Symbolizuje transformację, energię i odnowę. Jesteś katalizatorem zmian, który przynosi intensywną energię oczyszczenia. Twoją siłą jest zdolność do regeneracji i inicjowania przemian.",
+      "keywords": ["Transformacja", "Energia", "Odnowa", "Wolność"]
+    },
+    {
+      "name": "Żółte Słońce (Ahau)",
+      "description": "Reprezentuje oświecenie, uniwersalną miłość i życie. Jesteś ucieleśnieniem światła i bezwarunkowej miłości. Twoją siłą jest świadomość, mądrość i zdolność do oświecania innych.",
+      "keywords": ["Oświecenie", "Miłość", "Świadomość", "Jedność"]
+    }
   ],
   "tones": [
-    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
+    {
+      "number": 1,
+      "name": "Magnetyczny",
+      "description": "Określa cel i przyciąga energię do jego realizacji. To ton jedności i początku.",
+      "keywords": ["Cel", "Jedność", "Przyciąganie"]
+    },
+    {
+      "number": 2,
+      "name": "Księżycowy",
+      "description": "Identyfikuje wyzwania i stabilizuje energię. To ton polaryzacji i dualizmu.",
+      "keywords": ["Wyzwanie", "Polaryzacja", "Stabilizacja"]
+    },
+    {
+      "number": 3,
+      "name": "Elektryczny",
+      "description": "Aktywuje służbę i łączy energie. To ton rytmu i ruchu.",
+      "keywords": ["Aktywacja", "Służba", "Więź"]
+    },
+    {
+      "number": 4,
+      "name": "Samoistny",
+      "description": "Definiuje formę i porządkuje energię. To ton miary i stabilności.",
+      "keywords": ["Forma", "Definicja", "Porządek"]
+    },
+    {
+      "number": 5,
+      "name": "Centralny",
+      "description": "Nadaje moc i gromadzi zasoby. To ton centrum i promienności.",
+      "keywords": ["Moc", "Centrum", "Zarządzanie"]
+    },
+    {
+      "number": 6,
+      "name": "Rytmiczny",
+      "description": "Organizuje równowagę i wprowadza rytm. To ton organicznej harmonii.",
+      "keywords": ["Równowaga", "Rytm", "Organizacja"]
+    },
+    {
+      "number": 7,
+      "name": "Rezonansowy",
+      "description": "Dostraja energię i inspiruje. To ton mistycznego połączenia i kanałowania.",
+      "keywords": ["Inspiracja", "Dostrojenie", "Kanałowanie"]
+    },
+    {
+      "number": 8,
+      "name": "Galaktyczny",
+      "description": "Harmonizuje i modeluje integralność. To ton całości i zgodności z wyższym wzorcem.",
+      "keywords": ["Harmonia", "Integralność", "Modelowanie"]
+    },
+    {
+      "number": 9,
+      "name": "Słoneczny",
+      "description": "Pulsuje intencją i realizuje cel. To ton woli i determinacji.",
+      "keywords": ["Intencja", "Realizacja", "Puls"]
+    },
+    {
+      "number": 10,
+      "name": "Planetarny",
+      "description": "Manifestuje i udoskonala. To ton urzeczywistnienia i produkcji.",
+      "keywords": ["Manifestacja", "Udoskonalenie", "Produkcja"]
+    },
+    {
+      "number": 11,
+      "name": "Spektralny",
+      "description": "Uwalnia i rozpuszcza blokady. To ton wyzwolenia i zmiany.",
+      "keywords": ["Uwolnienie", "Rozpuszczenie", "Wyzwolenie"]
+    },
+    {
+      "number": 12,
+      "name": "Krystaliczny",
+      "description": "Współpracuje i uniwersalizuje. To ton kooperacji i dzielenia się.",
+      "keywords": ["Współpraca", "Uniwersalizacja", "Dzielenie się"]
+    },
+    {
+      "number": 13,
+      "name": "Kosmiczny",
+      "description": "Przetrwa i transcenduje. To ton obecności i lotu magicznego.",
+      "keywords": ["Transcendencja", "Obecność", "Wytrwałość"]
+    }
   ]
 }

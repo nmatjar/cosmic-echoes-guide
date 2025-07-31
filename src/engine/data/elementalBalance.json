@@ -9,6 +9,10 @@
         "emotion": "Gniew",
         "organ": "Wątroba",
         "personalityTraits": ["Kreatywność", "Elastyczność", "Wzrost", "Inicjatywa"]
+      },
+      "interpretations": {
+        "dominant": "Masz w sobie ogromną energię wzrostu i inicjatywy. Jesteś kreatywny i elastyczny, ale uważaj na tendencję do niecierpliwości i gniewu, gdy sprawy nie idą po Twojej myśli.",
+        "weak": "Możesz odczuwać brak kierunku lub trudności z rozpoczynaniem nowych projektów. Warto pracować nad asertywnością i elastycznością, aby swobodniej płynąć z prądem zmian."
       }
     },
     {
@@ -20,6 +24,10 @@
         "emotion": "Radość",
         "organ": "Serce",
         "personalityTraits": ["Pasja", "Entuzjazm", "Przywództwo", "Ekspansja"]
+      },
+      "interpretations": {
+        "dominant": "Jesteś pełen pasji, entuzjazmu i naturalnej charyzmy. Twoja energia inspiruje innych. Uważaj jednak na wypalenie i tendencję do dramatyzowania.",
+        "weak": "Może brakować Ci spontaniczności, radości życia i pewności siebie. Warto pracować nad otwarciem serca i wyrażaniem swoich uczuć, aby wpuścić więcej ciepła do swojego życia."
       }
     },
     {
@@ -31,6 +39,10 @@
         "emotion": "Zmartwienie",
         "organ": "Śledziona",
         "personalityTraits": ["Stabilność", "Uziemienie", "Praktyczność", "Wsparcie"]
+      },
+      "interpretations": {
+        "dominant": "Jesteś osobą stabilną, praktyczną i godną zaufania. Dajesz innym poczucie bezpieczeństwa. Uważaj na tendencję do zamartwiania się i oporu przed zmianami.",
+        "weak": "Możesz czuć się niestabilnie, bez gruntu pod nogami. Trudno Ci zadbać o siebie i innych. Praca nad rutyną i dbaniem o swoje ciało pomoże Ci odzyskać równowagę."
       }
     },
     {
@@ -42,6 +54,10 @@
         "emotion": "Smutek",
         "organ": "Płuca",
         "personalityTraits": ["Precyzja", "Organizacja", "Sprawiedliwość", "Dyscyplina"]
+      },
+      "interpretations": {
+        "dominant": "Masz analityczny umysł, cenisz porządek, dyscyplinę i sprawiedliwość. Potrafisz dostrzec esencję rzeczy. Uważaj na nadmierny krytycyzm i sztywność myślenia.",
+        "weak": "Może brakować Ci struktury i dyscypliny. Trudno Ci kończyć sprawy i odpuszczać to, co już Ci nie służy. Praca nad organizacją i poczuciem własnej wartości jest kluczowa."
       }
     },
     {
@@ -53,13 +69,14 @@
         "emotion": "Strach",
         "organ": "Nerki",
         "personalityTraits": ["Mądrość", "Intuicja", "Elastyczność", "Głębia"]
+      },
+      "interpretations": {
+        "dominant": "Posiadasz głęboką mądrość, silną intuicję i zdolność adaptacji. Jesteś jak woda - potrafisz pokonać każdą przeszkodę. Uważaj na tendencję do izolacji i lęku.",
+        "weak": "Możesz odczuwać brak sił witalnych i strach przed nieznanym. Trudno Ci zaufać swojej intuicji. Praca nad odpoczynkiem i medytacją pomoże Ci odzyskać wewnętrzną siłę."
       }
     }
   ],
   "elementalMappings": {
-    "chineseZodiac": {
-      "Metal": [0, 1], "Water": [2, 3], "Wood": [4, 5], "Fire": [6, 7], "Earth": [8, 9]
-    },
     "astrology": {
       "Baran": "Ogień", "Lew": "Ogień", "Strzelec": "Ogień",
       "Byk": "Ziemia", "Panna": "Ziemia", "Koziorożec": "Ziemia",

@@ -1,29 +1,85 @@
 {
   "types": [
-    "Generator",
-    "Manifestor",
-    "Projector",
-    "Reflektor"
+    {
+      "name": "Generator",
+      "description": "Twoją życiową siłą jest Centrum Sakralne, które daje Ci stały dostęp do energii do pracy i tworzenia. Twoja strategia to reagowanie na to, co przynosi życie, a nie inicjowanie. Kiedy robisz to, co kochasz, Twoja energia jest zaraźliwa i inspirująca.",
+      "strategy": "Czekaj na odpowiedź"
+    },
+    {
+      "name": "Manifestujący Generator",
+      "description": "Łączysz w sobie energię Generatora z inicjującą mocą Manifestora. Jesteś stworzony do wielozadaniowości i szybkiego działania. Twoja strategia to informowanie innych o swoich zamiarach przed podjęciem działania, po uprzednim zareagowaniu na impuls.",
+      "strategy": "Informuj po odpowiedzi"
+    },
+    {
+      "name": "Projektor",
+      "description": "Twoim darem jest głębokie widzenie i rozumienie innych. Nie masz stałego dostępu do energii Sakralnej, więc Twoja rola to przewodnictwo i kierowanie energią innych. Twoja strategia to czekanie na zaproszenie do dzielenia się swoją mądrością.",
+      "strategy": "Czekaj na zaproszenie"
+    },
+    {
+      "name": "Manifestor",
+      "description": "Jesteś urodzonym inicjatorem, jedynym typem stworzonym do samodzielnego rozpoczynania działań. Twoja energia ma potężny wpływ na otoczenie. Twoja strategia to informowanie innych o swoich planach, aby zmniejszyć opór i uzyskać wsparcie.",
+      "strategy": "Informuj przed działaniem"
+    },
+    {
+      "name": "Reflektor",
+      "description": "Jesteś lustrem dla społeczności, w której żyjesz. Wszystkie Twoje centra są otwarte, co czyni Cię niezwykle wrażliwym na otoczenie. Twoja strategia to czekanie pełnego cyklu księżycowego (ok. 28 dni) przed podjęciem ważnych decyzji.",
+      "strategy": "Czekaj na cykl księżycowy"
+    }
   ],
   "profiles": [
-    "1/3",
-    "1/4",
-    "2/4",
-    "2/5",
-    "3/5",
-    "3/6",
-    "4/6",
-    "5/1",
-    "5/2",
-    "6/2",
-    "6/3"
+    {
+      "name": "1/3 Badacz/Męczennik",
+      "description": "Masz w sobie potrzebę dogłębnego badania i dochodzenia do sedna sprawy (1), połączoną z uczeniem się poprzez metodę prób i błędów (3). Twoje życie to eksperyment, a Twoja mądrość rodzi się z doświadczenia."
+    },
+    {
+      "name": "2/4 Pustelnik/Oportunista",
+      "description": "Potrzebujesz czasu w samotności, aby rozwijać swoje naturalne talenty (2), ale Twoje przeznaczenie realizuje się poprzez sieć kontaktów i przyjaźni (4). Twoje dary są odkrywane przez innych."
+    },
+    {
+      "name": "3/5 Męczennik/Heretyk",
+      "description": "Uczysz się przez doświadczenie i błędy (3), a inni widzą w Tobie potencjalnego wybawcę i projektują na Ciebie swoje oczekiwania (5). Twoim zadaniem jest znalezienie praktycznych rozwiązań w chaosie."
+    },
+    {
+      "name": "4/6 Oportunista/Wzór do naśladowania",
+      "description": "Twoje życie opiera się na budowaniu solidnych relacji (4), a z czasem, po wielu doświadczeniach, stajesz się obiektywnym obserwatorem i wzorem do naśladowania dla innych (6)."
+    },
+    {
+      "name": "5/1 Heretyk/Badacz",
+      "description": "Inni widzą w Tobie lidera i projektują na Ciebie swoje nadzieje (5), podczas gdy Ty potrzebujesz solidnych podstaw i dogłębnej wiedzy (1), aby czuć się pewnie. Twoim zadaniem jest dostarczanie praktycznych rozwiązań."
+    },
+    {
+      "name": "6/2 Wzór do naśladowania/Pustelnik",
+      "description": "Dążysz do bycia autentycznym wzorem do naśladowania (6), ale potrzebujesz czasu w odosobnieniu, aby zintegrować swoją mądrość i rozwijać swoje naturalne talenty (2). Twoja mądrość jest cicha i głęboka."
+    }
   ],
   "authorities": [
-    "Emocjonalny",
-    "Sakralny",
-    "Śledzionowy",
-    "Ego",
-    "Samoprojektujący",
-    "Księżycowy"
+    {
+      "name": "Emocjonalny",
+      "description": "Twoje decyzje muszą być podejmowane na przestrzeni czasu, po przejściu przez całą falę emocjonalną. Nigdy nie podejmuj decyzji pod wpływem chwili. Klarowność przychodzi ze spokojem."
+    },
+    {
+      "name": "Sakralny",
+      "description": "Twoje ciało odpowiada na pytania 'tak/nie' poprzez dźwięki i odczucia z brzucha (np. 'aha', 'un-un'). Ufaj tej pierwotnej reakcji. To jest Twoja prawda w danej chwili."
+    },
+    {
+      "name": "Śledzionowy",
+      "description": "Twoja intuicja jest cichym, jednorazowym szeptem w teraźniejszości. To instynktowne przeczucie dotyczące tego, co jest dla Ciebie zdrowe i bezpieczne. Ufaj pierwszemu impulsowi."
+    },
+    {
+      "name": "Ego (Serca)",
+      "description": "Decyzje podejmujesz na podstawie tego, czy masz siłę woli i serce, aby się w coś zaangażować. Zapytaj siebie: 'Czego ja tak naprawdę chcę? Czy mam na to energię?'."
+    },
+    {
+      "name": "Samoprojektujący (G)",
+      "description": "Twoje decyzje muszą być zgodne z Twoją tożsamością i kierunkiem w życiu. Rozmawianie o decyzji z zaufanymi osobami pomaga Ci usłyszeć własną prawdę w tym, co mówisz."
+    },
+    {
+      "name": "Mentalny (Środowiskowy)",
+      "description": "Nie masz wewnętrznego autorytetu. Twoja mądrość polega na obserwowaniu i dyskutowaniu z innymi w odpowiednim dla Ciebie otoczeniu. Klarowność przychodzi poprzez rozmowę."
+    },
+    {
+      "name": "Księżycowy",
+      "description": "Jako Reflektor, musisz poczekać pełen cykl księżycowy (ok. 28 dni), aby uzyskać jasność w ważnych decyzjach. Obserwuj, jak Twoje odczucia zmieniają się w tym czasie."
+    }
   ]
 }

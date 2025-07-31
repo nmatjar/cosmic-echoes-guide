@@ -106,7 +106,7 @@ const Index = ({ currentProfile, onLogout }: IndexProps) => {
         
         {/* Enhanced Features - Full Width */}
         <div className="space-y-8">
-          <SmartPromptGenerator />
+          <SmartPromptGenerator currentProfile={currentProfile} />
           <ExportHub currentProfile={currentProfile} />
           <ProfilePrivacySettings currentProfile={currentProfile} />
         </div>
