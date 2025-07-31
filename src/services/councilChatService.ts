@@ -1,10 +1,11 @@
-import { supabase } from '../integrations/supabase/client';
 import { ChatSession, ChatMessage, CouncilAgent } from '../types/council';
 import { OpenRouterService } from './openRouterService';
 import { UserProfile } from '../engine/userProfile';
 
 export class CouncilChatService {
   private openRouterService: OpenRouterService | null = null;
+  private readonly STORAGE_KEY_SESSIONS = 'cosmic_council_sessions';
+  private readonly STORAGE_KEY_MESSAGES = 'cosmic_council_messages';
 
   constructor(openRouterApiKey?: string) {
     if (openRouterApiKey) {
@@ -12,75 +13,87 @@ export class CouncilChatService {
     }
   }
 
-  // Session management
-  async createSession(userId: string, intention?: string): Promise<ChatSession> {
-    const sessionData = {
-      user_id: userId,
-      start_time: new Date().toISOString(),
-      intention: intention || null,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
-    };
-
-    const { data, error } = await supabase
-      .from('chat_sessions' as any)
-      .insert(sessionData)
-      .select()
-      .single();
-
-    if (error) {
-      throw new Error(`Failed to create chat session: ${error.message}`);
+  // Local storage helpers
+  private getSessions(): ChatSession[] {
+    try {
+      const sessions = localStorage.getItem(this.STORAGE_KEY_SESSIONS);
+      return sessions ? JSON.parse(sessions) : [];
+    } catch (error) {
+      console.error('Failed to load sessions from localStorage:', error);
+      return [];
     }
-
-    const session = data as any;
-    return {
-      session_id: session.session_id,
-      user_id: session.user_id,
-      start_time: session.start_time,
-      end_time: session.end_time,
-      intention: session.intention,
-      summary: session.summary,
-      created_at: session.created_at,
-      updated_at: session.updated_at
-    };
   }
 
-  async endSession(sessionId: string, summary?: string): Promise<void> {
-    const { error } = await supabase
-      .from('chat_sessions' as any)
-      .update({
-        end_time: new Date().toISOString(),
-        summary: summary || null,
-        updated_at: new Date().toISOString()
-      })
-      .eq('session_id', sessionId);
+  private saveSessions(sessions: ChatSession[]): void {
+    try {
+      localStorage.setItem(this.STORAGE_KEY_SESSIONS, JSON.stringify(sessions));
+    } catch (error) {
+      console.error('Failed to save sessions to localStorage:', error);
+    }
+  }
 
-    if (error) {
-      throw new Error(`Failed to end chat session: ${error.message}`);
+  private getMessages(): ChatMessage[] {
+    try {
+      const messages = localStorage.getItem(this.STORAGE_KEY_MESSAGES);
+      return messages ? JSON.parse(messages) : [];
+    } catch (error) {
+      console.error('Failed to load messages from localStorage:', error);
+      return [];
+    }
+  }
+
+  private saveMessages(messages: ChatMessage[]): void {
+    try {
+      localStorage.setItem(this.STORAGE_KEY_MESSAGES, JSON.stringify(messages));
+    } catch (error) {
+      console.error('Failed to save messages to localStorage:', error);
+    }
+  }
+
+  private generateId(): string {
+    return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+  }
+
+  // Session management
+  async createSession(userId: string, intention?: string): Promise<ChatSession> {
+    const sessionId = this.generateId();
+    const now = new Date().toISOString();
+    
+    const session: ChatSession = {
+      session_id: sessionId,
+      user_id: userId,
+      start_time: now,
+      end_time: null,
+      intention: intention || null,
+      summary: null,
+      created_at: now,
+      updated_at: now
+    };
+
+    const sessions = this.getSessions();
+    sessions.push(session);
+    this.saveSessions(sessions);
+
+    return session;
+  }
+
+  async endSession(sessionId: string, summary?: string, userId?: string): Promise<void> {
+    const sessions = this.getSessions();
+    const sessionIndex = sessions.findIndex(s => s.session_id === sessionId);
+    
+    if (sessionIndex !== -1) {
+      sessions[sessionIndex].end_time = new Date().toISOString();
+      sessions[sessionIndex].summary = summary || null;
+      sessions[sessionIndex].updated_at = new Date().toISOString();
+      this.saveSessions(sessions);
     }
   }
 
   async getUserSessions(userId: string): Promise<ChatSession[]> {
-    const { data, error } = await supabase
-      .from('chat_sessions' as any)
-      .select('*')
-      .eq('user_id', userId)
-      .order('created_at', { ascending: false });
-
-    if (error) {
-      throw new Error(`Failed to fetch user sessions: ${error.message}`);
-    }
-
-    return data.map((session: any) => ({
-      session_id: session.session_id,
-      user_id: session.user_id,
-      start_time: session.start_time,
-      end_time: session.end_time,
-      intention: session.intention,
-      summary: session.summary,
-      created_at: session.created_at,
-      updated_at: session.updated_at
-    }));
+    const sessions = this.getSessions();
+    return sessions
+      .filter(session => session.user_id === userId)
+      .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
   }
 
   // Message management
@@ -88,59 +101,34 @@ export class CouncilChatService {
     sessionId: string,
     content: string,
     author: 'user' | 'agent',
-    agentId?: CouncilAgent
+    agentId?: CouncilAgent,
+    userId?: string
   ): Promise<ChatMessage> {
-    const messageData = {
+    const messageId = this.generateId();
+    const now = new Date().toISOString();
+
+    const message: ChatMessage = {
+      message_id: messageId,
       session_id: sessionId,
       agent_id: agentId || null,
       author,
       content,
-      timestamp: new Date().toISOString(),
-      created_at: new Date().toISOString()
+      timestamp: now,
+      created_at: now
     };
 
-    const { data, error } = await supabase
-      .from('chat_messages' as any)
-      .insert(messageData)
-      .select()
-      .single();
+    const messages = this.getMessages();
+    messages.push(message);
+    this.saveMessages(messages);
 
-    if (error) {
-      throw new Error(`Failed to add message: ${error.message}`);
-    }
-
-    const message = data as any;
-    return {
-      message_id: message.message_id,
-      session_id: message.session_id,
-      agent_id: message.agent_id,
-      author: message.author,
-      content: message.content,
-      timestamp: message.timestamp,
-      created_at: message.created_at
-    };
+    return message;
   }
 
-  async getSessionMessages(sessionId: string): Promise<ChatMessage[]> {
-    const { data, error } = await supabase
-      .from('chat_messages' as any)
-      .select('*')
-      .eq('session_id', sessionId)
-      .order('timestamp', { ascending: true });
-
-    if (error) {
-      throw new Error(`Failed to fetch session messages: ${error.message}`);
-    }
-
-    return data.map((message: any) => ({
-      message_id: message.message_id,
-      session_id: message.session_id,
-      agent_id: message.agent_id,
-      author: message.author,
-      content: message.content,
-      timestamp: message.timestamp,
-      created_at: message.created_at
-    }));
+  async getSessionMessages(sessionId: string, userId?: string): Promise<ChatMessage[]> {
+    const messages = this.getMessages();
+    return messages
+      .filter(message => message.session_id === sessionId)
+      .sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
   }
 
   // AI Integration
@@ -149,18 +137,19 @@ export class CouncilChatService {
     userMessage: string,
     userProfile: UserProfile,
     selectedAgent?: CouncilAgent,
-    model?: string
+    model?: string,
+    userId?: string
   ): Promise<{ userMessage: ChatMessage; agentResponse: ChatMessage }> {
     if (!this.openRouterService) {
       throw new Error('OpenRouter API key not configured');
     }
 
     // Save user message
-    const userMsg = await this.addMessage(sessionId, userMessage, 'user');
+    const userMsg = await this.addMessage(sessionId, userMessage, 'user', undefined, userId);
 
     try {
       // Get chat history for context
-      const messages = await this.getSessionMessages(sessionId);
+      const messages = await this.getSessionMessages(sessionId, userId);
       const chatHistory = messages
         .slice(-10) // Last 10 messages
         .map(msg => ({
@@ -178,7 +167,7 @@ export class CouncilChatService {
       );
 
       // Save agent response
-      const agentMsg = await this.addMessage(sessionId, content, 'agent', agent);
+      const agentMsg = await this.addMessage(sessionId, content, 'agent', agent, userId);
 
       return {
         userMessage: userMsg,
@@ -191,7 +180,9 @@ export class CouncilChatService {
       const errorMsg = await this.addMessage(
         sessionId,
         'Przepraszam, wystąpił błąd podczas łączenia z Radą Kosmiczną. Spróbuj ponownie.',
-        'agent'
+        'agent',
+        undefined,
+        userId
       );
 
       return {
@@ -224,7 +215,7 @@ export class CouncilChatService {
     // Get all messages for user sessions
     const allMessages: ChatMessage[] = [];
     for (const session of sessions) {
-      const messages = await this.getSessionMessages(session.session_id);
+      const messages = await this.getSessionMessages(session.session_id, userId);
       allMessages.push(...messages);
     }
 
@@ -256,12 +247,12 @@ export class CouncilChatService {
       totalMessages: allMessages.length,
       averageSessionLength: Math.round(averageSessionLength),
       mostActiveAgent,
-      commonTopics: [] // TODO: Implement topic extraction
+      commonTopics: this.extractTopics(allMessages)
     };
   }
 
-  async generateSessionSummary(sessionId: string): Promise<string> {
-    const messages = await this.getSessionMessages(sessionId);
+  async generateSessionSummary(sessionId: string, userId?: string): Promise<string> {
+    const messages = await this.getSessionMessages(sessionId, userId);
     
     if (messages.length === 0) {
       return 'Brak wiadomości w tej sesji.';
@@ -283,6 +274,40 @@ export class CouncilChatService {
     const content = messages.map(m => m.content.toLowerCase()).join(' ');
     
     return keywords.filter(keyword => content.includes(keyword));
+  }
+
+  // Data management
+  async exportChatData(userId: string): Promise<{
+    sessions: ChatSession[];
+    messages: ChatMessage[];
+  }> {
+    const sessions = await this.getUserSessions(userId);
+    const allMessages: ChatMessage[] = [];
+    
+    for (const session of sessions) {
+      const messages = await this.getSessionMessages(session.session_id, userId);
+      allMessages.push(...messages);
+    }
+
+    return {
+      sessions,
+      messages: allMessages
+    };
+  }
+
+  async clearChatData(userId: string): Promise<void> {
+    const sessions = this.getSessions();
+    const messages = this.getMessages();
+
+    // Remove user's sessions and messages
+    const filteredSessions = sessions.filter(s => s.user_id !== userId);
+    const userSessionIds = sessions
+      .filter(s => s.user_id === userId)
+      .map(s => s.session_id);
+    const filteredMessages = messages.filter(m => !userSessionIds.includes(m.session_id));
+
+    this.saveSessions(filteredSessions);
+    this.saveMessages(filteredMessages);
   }
 
   // Utility methods

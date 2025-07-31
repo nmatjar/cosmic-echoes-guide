@@ -12,7 +12,7 @@ import { CouncilChatService } from '../services/councilChatService';
 import { COUNCIL_AGENTS, OPENROUTER_MODELS } from '../config/councilAgents';
 import { ChatSession, ChatMessage, CouncilAgent } from '../types/council';
 import { UserProfile } from '../engine/userProfile';
-import { Loader2, Send, Settings, History, BarChart3, MessageSquare, Sparkles } from 'lucide-react';
+import { Loader2, Send, Settings, History, BarChart3, MessageSquare, Sparkles, Download, Trash2 } from 'lucide-react';
 
 interface CouncilChatProps {
   userProfile: UserProfile;
@@ -107,7 +107,7 @@ export const CouncilChat: React.FC<CouncilChatProps> = ({ userProfile, userId })
 
     try {
       setCurrentSession(session);
-      const sessionMessages = await chatService.getSessionMessages(session.session_id);
+      const sessionMessages = await chatService.getSessionMessages(session.session_id, userId);
       setMessages(sessionMessages);
     } catch (error) {
       console.error('Failed to load session:', error);
@@ -127,7 +127,8 @@ export const CouncilChat: React.FC<CouncilChatProps> = ({ userProfile, userId })
         userMessage,
         userProfile,
         selectedAgent,
-        selectedModel
+        selectedModel,
+        userId
       );
 
       setMessages(prev => [...prev, savedUserMsg, agentResponse]);
@@ -152,8 +153,8 @@ export const CouncilChat: React.FC<CouncilChatProps> = ({ userProfile, userId })
     if (!chatService || !currentSession) return;
 
     try {
-      const summary = await chatService.generateSessionSummary(currentSession.session_id);
-      await chatService.endSession(currentSession.session_id, summary);
+      const summary = await chatService.generateSessionSummary(currentSession.session_id, userId);
+      await chatService.endSession(currentSession.session_id, summary, userId);
       setCurrentSession(null);
       setMessages([]);
       await loadUserSessions(chatService);
@@ -165,12 +166,23 @@ export const CouncilChat: React.FC<CouncilChatProps> = ({ userProfile, userId })
   const formatMessage = (message: ChatMessage) => {
     if (message.author === 'user') {
       return (
-        <div key={message.message_id} className="flex justify-end mb-4">
-          <div className="bg-blue-500 text-white rounded-lg px-4 py-2 max-w-[80%]">
-            <p className="text-sm">{message.content}</p>
-            <span className="text-xs opacity-70">
-              {new Date(message.timestamp).toLocaleTimeString('pl-PL')}
-            </span>
+        <div key={message.message_id} className="flex justify-end mb-6">
+          <div className="relative max-w-[80%]">
+            {/* Cosmic glow effect */}
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 to-purple-500/20 rounded-2xl blur-sm"></div>
+            <div className="relative bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-2xl px-6 py-4 shadow-lg">
+              <div className="flex items-start gap-3">
+                <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-sm">
+                  🧙‍♂️
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm leading-relaxed">{message.content}</p>
+                  <span className="text-xs opacity-80 mt-2 block">
+                    {new Date(message.timestamp).toLocaleTimeString('pl-PL')}
+                  </span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       );
@@ -179,25 +191,43 @@ export const CouncilChat: React.FC<CouncilChatProps> = ({ userProfile, userId })
     const agent = message.agent_id ? COUNCIL_AGENTS[message.agent_id] : null;
     
     return (
-      <div key={message.message_id} className="flex justify-start mb-4">
-        <div className="bg-gray-100 dark:bg-gray-800 rounded-lg px-4 py-2 max-w-[80%]">
-          {agent && (
-            <div className="flex items-center gap-2 mb-2">
-              <span className="text-lg">{agent.avatar}</span>
-              <Badge variant="secondary" className="text-xs">
-                {agent.name}
-              </Badge>
+      <div key={message.message_id} className="flex justify-start mb-6">
+        <div className="relative max-w-[80%]">
+          {/* Mystical glow effect */}
+          <div className="absolute inset-0 bg-gradient-to-r from-purple-400/10 to-pink-400/10 rounded-2xl blur-sm"></div>
+          <div className="relative bg-gradient-to-br from-gray-900/95 to-purple-900/95 backdrop-blur-sm border border-purple-500/20 rounded-2xl px-6 py-4 shadow-xl">
+            {agent && (
+              <div className="flex items-center gap-3 mb-3 pb-2 border-b border-purple-500/20">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-r from-purple-500/20 to-pink-500/20 flex items-center justify-center text-xl border border-purple-400/30">
+                  {agent.avatar}
+                </div>
+                <div>
+                  <Badge variant="secondary" className="bg-purple-500/20 text-purple-200 border-purple-400/30 text-xs font-medium">
+                    {agent.name}
+                  </Badge>
+                  <p className="text-xs text-purple-300/70 mt-1">{agent.description}</p>
+                </div>
+              </div>
+            )}
+            <div 
+              className="text-sm leading-relaxed text-gray-100 prose prose-sm prose-invert max-w-none"
+              dangerouslySetInnerHTML={{ 
+                __html: message.content
+                  .replace(/\*\*(.*?)\*\*/g, '<strong class="text-purple-200 font-semibold">$1</strong>')
+                  .replace(/\*(.*?)\*/g, '<em class="text-purple-300">$1</em>')
+              }}
+            />
+            <div className="flex items-center justify-between mt-3 pt-2 border-t border-purple-500/10">
+              <span className="text-xs text-purple-300/60">
+                {new Date(message.timestamp).toLocaleTimeString('pl-PL')}
+              </span>
+              <div className="flex gap-1">
+                <div className="w-1 h-1 rounded-full bg-purple-400/40 animate-pulse"></div>
+                <div className="w-1 h-1 rounded-full bg-pink-400/40 animate-pulse" style={{animationDelay: '0.2s'}}></div>
+                <div className="w-1 h-1 rounded-full bg-blue-400/40 animate-pulse" style={{animationDelay: '0.4s'}}></div>
+              </div>
             </div>
-          )}
-          <div 
-            className="text-sm prose prose-sm dark:prose-invert max-w-none"
-            dangerouslySetInnerHTML={{ 
-              __html: message.content.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') 
-            }}
-          />
-          <span className="text-xs opacity-70 mt-2 block">
-            {new Date(message.timestamp).toLocaleTimeString('pl-PL')}
-          </span>
+          </div>
         </div>
       </div>
     );
@@ -236,9 +266,9 @@ export const CouncilChat: React.FC<CouncilChatProps> = ({ userProfile, userId })
   }
 
   return (
-    <div className="w-full max-w-4xl mx-auto space-y-4">
+    <div className="w-full max-w-7xl mx-auto">
       {/* Header */}
-      <Card>
+      <Card className="mb-4">
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle className="flex items-center gap-2">
@@ -300,7 +330,7 @@ export const CouncilChat: React.FC<CouncilChatProps> = ({ userProfile, userId })
                   <Tabs defaultValue="model">
                     <TabsList>
                       <TabsTrigger value="model">Model AI</TabsTrigger>
-                      <TabsTrigger value="agent">Agent</TabsTrigger>
+                      <TabsTrigger value="data">Dane</TabsTrigger>
                     </TabsList>
                     <TabsContent value="model" className="space-y-4">
                       <div>
@@ -319,24 +349,59 @@ export const CouncilChat: React.FC<CouncilChatProps> = ({ userProfile, userId })
                         </Select>
                       </div>
                     </TabsContent>
-                    <TabsContent value="agent" className="space-y-4">
-                      <div>
-                        <label className="text-sm font-medium">Preferowany Agent</label>
-                        <Select value={selectedAgent || 'auto'} onValueChange={(value) => 
-                          setSelectedAgent(value === 'auto' ? undefined : value as CouncilAgent)
-                        }>
-                          <SelectTrigger>
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="auto">Automatyczny wybór</SelectItem>
-                            {Object.values(COUNCIL_AGENTS).map((agent) => (
-                              <SelectItem key={agent.id} value={agent.id}>
-                                {agent.avatar} {agent.name}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
+                    <TabsContent value="data" className="space-y-4">
+                      <div className="space-y-3">
+                        <div>
+                          <h4 className="text-sm font-medium mb-2">Zarządzanie danymi</h4>
+                          <p className="text-xs text-gray-600 dark:text-gray-400 mb-3">
+                            Twoje czaty są zapisywane lokalnie w przeglądarce
+                          </p>
+                        </div>
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          className="w-full"
+                          onClick={async () => {
+                            if (!chatService) return;
+                            try {
+                              const data = await chatService.exportChatData(userId);
+                              const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                              const url = URL.createObjectURL(blob);
+                              const a = document.createElement('a');
+                              a.href = url;
+                              a.download = `cosmic-council-chat-${new Date().toISOString().split('T')[0]}.json`;
+                              a.click();
+                              URL.revokeObjectURL(url);
+                            } catch (error) {
+                              console.error('Failed to export data:', error);
+                            }
+                          }}
+                        >
+                          <Download className="h-4 w-4 mr-2" />
+                          Eksportuj czaty
+                        </Button>
+                        <Button 
+                          variant="destructive" 
+                          size="sm" 
+                          className="w-full"
+                          onClick={async () => {
+                            if (!chatService) return;
+                            if (confirm('Czy na pewno chcesz usunąć wszystkie swoje czaty? Ta operacja jest nieodwracalna.')) {
+                              try {
+                                await chatService.clearChatData(userId);
+                                setSessions([]);
+                                setCurrentSession(null);
+                                setMessages([]);
+                                alert('Wszystkie czaty zostały usunięte.');
+                              } catch (error) {
+                                console.error('Failed to clear data:', error);
+                              }
+                            }
+                          }}
+                        >
+                          <Trash2 className="h-4 w-4 mr-2" />
+                          Usuń wszystkie czaty
+                        </Button>
                       </div>
                     </TabsContent>
                   </Tabs>
@@ -347,24 +412,104 @@ export const CouncilChat: React.FC<CouncilChatProps> = ({ userProfile, userId })
         </CardHeader>
       </Card>
 
-      {/* Chat Area */}
-      {!currentSession ? (
-        <Card>
-          <CardContent className="p-6 text-center space-y-4">
-            <div className="space-y-2">
-              <h3 className="text-lg font-semibold">Rozpocznij nową sesję z Radą Kosmiczną</h3>
+      {/* Main Chat Layout */}
+      <div className="flex gap-4 h-[700px]">
+        {/* Left Sidebar - Agents */}
+        <Card className="w-80 flex-shrink-0">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-lg">Rada Kosmiczna</CardTitle>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              Wybierz przewodnika lub pozwól na automatyczny wybór
+            </p>
+          </CardHeader>
+          <CardContent className="p-0">
+            <ScrollArea className="h-[580px] px-4">
+              <div className="space-y-2 pb-4">
+                {/* Auto selection */}
+                <Button
+                  variant={selectedAgent === undefined ? "default" : "outline"}
+                  className={`w-full justify-start h-auto p-3 ${
+                    selectedAgent === undefined 
+                      ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white" 
+                      : ""
+                  }`}
+                  onClick={() => setSelectedAgent(undefined)}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-r from-purple-500/20 to-pink-500/20 flex items-center justify-center text-xl border border-purple-400/30">
+                      ✨
+                    </div>
+                    <div className="text-left">
+                      <div className="font-medium">Automatyczny wybór</div>
+                      <div className="text-xs opacity-80">Rada wybierze najlepszego agenta</div>
+                    </div>
+                  </div>
+                </Button>
+
+                {/* Individual agents */}
+                {Object.values(COUNCIL_AGENTS).map((agent) => (
+                  <Button
+                    key={agent.id}
+                    variant={selectedAgent === agent.id ? "default" : "outline"}
+                    className={`w-full justify-start h-auto p-3 ${
+                      selectedAgent === agent.id 
+                        ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white" 
+                        : ""
+                    }`}
+                    onClick={() => setSelectedAgent(agent.id as CouncilAgent)}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-gradient-to-r from-purple-500/20 to-pink-500/20 flex items-center justify-center text-xl border border-purple-400/30">
+                        {agent.avatar}
+                      </div>
+                      <div className="text-left">
+                        <div className="font-medium">{agent.name}</div>
+                        <div className="text-xs opacity-80 line-clamp-2">{agent.description}</div>
+                      </div>
+                    </div>
+                  </Button>
+                ))}
+              </div>
+            </ScrollArea>
+          </CardContent>
+        </Card>
+
+        {/* Center - Chat Area */}
+        <div className="flex-1">
+          {/* Chat Area */}
+          {!currentSession ? (
+        <Card className="relative overflow-hidden">
+          {/* Mystical background */}
+          <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-blue-900/10 to-pink-900/20"></div>
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(120,119,198,0.1),transparent_50%)]"></div>
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(255,119,198,0.1),transparent_50%)]"></div>
+          
+          <CardContent className="relative p-8 text-center space-y-6">
+            <div className="space-y-3">
+              <div className="flex items-center justify-center gap-2 mb-4">
+                <div className="w-2 h-2 rounded-full bg-purple-400 animate-pulse"></div>
+                <div className="w-2 h-2 rounded-full bg-pink-400 animate-pulse" style={{animationDelay: '0.5s'}}></div>
+                <div className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" style={{animationDelay: '1s'}}></div>
+              </div>
+              <h3 className="text-xl font-semibold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                Rozpocznij nową sesję z Radą Kosmiczną
+              </h3>
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                Ustaw intencję dla swojej sesji (opcjonalnie)
+                Ustaw intencję dla swojej sesji i pozwól kosmicznej mądrości Cię poprowadzić
               </p>
             </div>
-            <div className="max-w-md mx-auto space-y-3">
+            <div className="max-w-md mx-auto space-y-4">
               <Textarea
                 placeholder="Np. 'Chcę zrozumieć mój cel życiowy' lub 'Potrzebuję wskazówek w relacjach'"
                 value={intention}
                 onChange={(e) => setIntention(e.target.value)}
                 rows={3}
+                className="bg-white/50 dark:bg-gray-900/50 backdrop-blur-sm border-purple-200/50 dark:border-purple-700/50"
               />
-              <Button onClick={startNewSession} className="w-full">
+              <Button 
+                onClick={startNewSession} 
+                className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white border-0"
+              >
                 <MessageSquare className="h-4 w-4 mr-2" />
                 Rozpocznij Sesję
               </Button>
@@ -372,49 +517,77 @@ export const CouncilChat: React.FC<CouncilChatProps> = ({ userProfile, userId })
           </CardContent>
         </Card>
       ) : (
-        <Card className="h-[600px] flex flex-col">
-          <CardHeader className="flex-shrink-0">
+        <Card className="h-[600px] flex flex-col relative overflow-hidden">
+          {/* Mystical chat background */}
+          <div className="absolute inset-0 bg-gradient-to-br from-gray-900/95 via-purple-900/30 to-gray-900/95"></div>
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_50%,rgba(120,119,198,0.1),transparent_70%)]"></div>
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(255,119,198,0.1),transparent_70%)]"></div>
+          
+          <CardHeader className="relative flex-shrink-0 border-b border-purple-500/20">
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle className="text-lg">Sesja z Radą Kosmiczną</CardTitle>
+                <CardTitle className="text-lg bg-gradient-to-r from-purple-300 to-pink-300 bg-clip-text text-transparent">
+                  Sesja z Radą Kosmiczną
+                </CardTitle>
                 {currentSession.intention && (
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                  <p className="text-sm text-purple-300/70 mt-1">
                     Intencja: {currentSession.intention}
                   </p>
                 )}
               </div>
-              <Button variant="outline" size="sm" onClick={endSession}>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={endSession}
+                className="border-purple-400/30 text-purple-300 hover:bg-purple-500/20"
+              >
                 Zakończ Sesję
               </Button>
             </div>
           </CardHeader>
           
-          <CardContent className="flex-1 flex flex-col p-0">
-            <ScrollArea className="flex-1 p-4">
+          <CardContent className="relative flex-1 flex flex-col p-0">
+            <div 
+              className="flex-1 overflow-y-auto p-4" 
+              style={{
+                background: 'linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.1) 100%)',
+                maxHeight: 'calc(600px - 120px)' // Subtract header and input heights
+              }}
+            >
               <div className="space-y-4">
                 {messages.map(formatMessage)}
                 {isLoading && (
-                  <div className="flex justify-start mb-4">
-                    <div className="bg-gray-100 dark:bg-gray-800 rounded-lg px-4 py-2">
-                      <Loader2 className="h-4 w-4 animate-spin" />
+                  <div className="flex justify-start mb-6">
+                    <div className="relative">
+                      <div className="absolute inset-0 bg-gradient-to-r from-purple-400/10 to-pink-400/10 rounded-2xl blur-sm"></div>
+                      <div className="relative bg-gradient-to-br from-gray-900/95 to-purple-900/95 backdrop-blur-sm border border-purple-500/20 rounded-2xl px-6 py-4">
+                        <div className="flex items-center gap-3">
+                          <Loader2 className="h-5 w-5 animate-spin text-purple-400" />
+                          <span className="text-sm text-purple-300">Rada Kosmiczna myśli...</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 )}
                 <div ref={messagesEndRef} />
               </div>
-            </ScrollArea>
+            </div>
             
-            <div className="border-t p-4 flex-shrink-0">
-              <div className="flex gap-2">
+            <div className="relative border-t border-purple-500/20 p-4 flex-shrink-0 bg-gradient-to-r from-gray-900/50 to-purple-900/30 backdrop-blur-sm">
+              <div className="flex gap-3">
                 <Input
                   placeholder="Zadaj pytanie Radzie Kosmicznej..."
                   value={inputMessage}
                   onChange={(e) => setInputMessage(e.target.value)}
                   onKeyPress={(e) => e.key === 'Enter' && !e.shiftKey && sendMessage()}
                   disabled={isLoading}
-                  className="flex-1"
+                  className="flex-1 bg-white/10 dark:bg-gray-900/50 border-purple-400/30 text-gray-100 placeholder:text-purple-300/60 focus:border-purple-400/60"
                 />
-                <Button onClick={sendMessage} disabled={isLoading || !inputMessage.trim()}>
+                <Button 
+                  onClick={sendMessage} 
+                  disabled={isLoading || !inputMessage.trim()}
+                  className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white border-0"
+                >
                   <Send className="h-4 w-4" />
                 </Button>
               </div>
@@ -422,31 +595,38 @@ export const CouncilChat: React.FC<CouncilChatProps> = ({ userProfile, userId })
           </CardContent>
         </Card>
       )}
+        </div>
 
-      {/* Agents Info */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg">Poznaj Radę Kosmiczną</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {Object.values(COUNCIL_AGENTS).map((agent) => (
-              <div key={agent.id} className="p-3 border rounded-lg space-y-2">
-                <div className="flex items-center gap-2">
-                  <span className="text-2xl">{agent.avatar}</span>
-                  <h4 className="font-semibold">{agent.name}</h4>
-                </div>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  {agent.description}
-                </p>
-                <p className="text-xs text-gray-500 italic">
-                  "{agent.exampleQuestion}"
-                </p>
+        {/* Right Sidebar - Agents Info */}
+        <Card className="w-80 flex-shrink-0">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-lg">Poznaj Radę</CardTitle>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              Każdy agent ma swoją specjalizację
+            </p>
+          </CardHeader>
+          <CardContent className="p-0">
+            <ScrollArea className="h-[580px] px-4">
+              <div className="space-y-3 pb-4">
+                {Object.values(COUNCIL_AGENTS).map((agent) => (
+                  <div key={agent.id} className="p-3 border rounded-lg space-y-2 bg-gradient-to-br from-purple-50/50 to-pink-50/50 dark:from-purple-900/20 dark:to-pink-900/20">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xl">{agent.avatar}</span>
+                      <h4 className="font-semibold text-sm">{agent.name}</h4>
+                    </div>
+                    <p className="text-xs text-gray-600 dark:text-gray-400">
+                      {agent.description}
+                    </p>
+                    <p className="text-xs text-gray-500 italic">
+                      "{agent.exampleQuestion}"
+                    </p>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+            </ScrollArea>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 };

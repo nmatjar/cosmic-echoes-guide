@@ -14,6 +14,77 @@ export type Database = {
   }
   public: {
     Tables: {
+      chat_sessions: {
+        Row: {
+          session_id: string
+          user_id: string
+          start_time: string
+          end_time: string | null
+          intention: string | null
+          summary: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          session_id?: string
+          user_id: string
+          start_time?: string
+          end_time?: string | null
+          intention?: string | null
+          summary?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          session_id?: string
+          user_id?: string
+          start_time?: string
+          end_time?: string | null
+          intention?: string | null
+          summary?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      chat_messages: {
+        Row: {
+          message_id: string
+          session_id: string
+          agent_id: string | null
+          author: string
+          content: string
+          timestamp: string
+          created_at: string
+        }
+        Insert: {
+          message_id?: string
+          session_id: string
+          agent_id?: string | null
+          author: string
+          content: string
+          timestamp?: string
+          created_at?: string
+        }
+        Update: {
+          message_id?: string
+          session_id?: string
+          agent_id?: string | null
+          author?: string
+          content?: string
+          timestamp?: string
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_messages_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "chat_sessions"
+            referencedColumns: ["session_id"]
+          }
+        ]
+      }
       profiles: {
         Row: {
           analysis_results: Json | null
@@ -102,6 +173,14 @@ export type Database = {
           ref_source?: string
         }
         Returns: void
+      }
+      set_config: {
+        Args: {
+          setting_name: string
+          setting_value: string
+          is_local?: boolean
+        }
+        Returns: string
       }
     }
     Enums: {

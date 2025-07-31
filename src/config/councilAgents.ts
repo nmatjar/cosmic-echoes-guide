@@ -71,16 +71,82 @@ export const OPENROUTER_MODELS = [
     contextLength: 128000
   },
   {
+    id: 'google/gemini-2.5-pro',
+    name: 'Gemini 2.5 Pro',
+    description: 'Najnowszy model Google z zaawansowanymi możliwościami',
+    contextLength: 1000000
+  },
+  {
+    id: 'google/gemini-2.5-flash-lite',
+    name: 'Gemini 2.5 Flash Lite',
+    description: 'Szybka wersja Gemini 2.5 do prostych zadań',
+    contextLength: 1000000
+  },
+  {
     id: 'google/gemini-pro-1.5',
     name: 'Gemini Pro 1.5',
     description: 'Model Google z ogromnym oknem kontekstowym',
     contextLength: 1000000
   },
   {
+    id: 'x-ai/grok-4',
+    name: 'Grok 4',
+    description: 'Najnowszy model xAI z unikalną perspektywą',
+    contextLength: 128000
+  },
+  {
     id: 'meta-llama/llama-3.1-405b-instruct',
     name: 'Llama 3.1 405B',
     description: 'Największy open-source model Meta',
     contextLength: 32768
+  },
+  {
+    id: 'moonshotai/kimi-k2',
+    name: 'Kimi K2',
+    description: 'Zaawansowany model Moonshot AI',
+    contextLength: 200000
+  },
+  {
+    id: 'moonshotai/kimi-k2:free',
+    name: 'Kimi K2 Free',
+    description: 'Darmowa wersja modelu Kimi K2',
+    contextLength: 200000
+  },
+  {
+    id: 'tencent/hunyuan-a13b-instruct',
+    name: 'Hunyuan A13B',
+    description: 'Model Tencent do instrukcji i rozmów',
+    contextLength: 32768
+  },
+  {
+    id: 'baidu/ernie-4.5-300b-a47b',
+    name: 'ERNIE 4.5 300B',
+    description: 'Potężny model Baidu do złożonych zadań',
+    contextLength: 128000
+  },
+  {
+    id: 'qwen/qwen3-30b-a3b-instruct-2507',
+    name: 'Qwen3 30B Instruct',
+    description: 'Model Alibaba do instrukcji i analiz',
+    contextLength: 32768
+  },
+  {
+    id: 'z-ai/glm-4.5',
+    name: 'GLM 4.5',
+    description: 'Model GLM do zaawansowanych rozmów',
+    contextLength: 128000
+  },
+  {
+    id: 'openrouter/horizon-alpha',
+    name: 'Horizon Alpha',
+    description: 'Eksperymentalny model OpenRouter',
+    contextLength: 128000
+  },
+  {
+    id: 'switchpoint/router',
+    name: 'Switchpoint Router',
+    description: 'Inteligentny router wybierający najlepszy model',
+    contextLength: 128000
   },
   {
     id: 'anthropic/claude-3-haiku',
