@@ -7,6 +7,8 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import PublicProfile from "./pages/PublicProfile";
+import CouncilChat from "./pages/CouncilChat";
+import Landing from "./pages/Landing";
 import { CosmicWelcome } from "./components/CosmicWelcome";
 import { CosmicLogin } from "./components/CosmicLogin";
 import { UserProfile } from "@/engine/userProfile";
@@ -30,13 +32,13 @@ const AppContent = () => {
   const { toast } = useToast();
   const location = useLocation();
 
-  // Check if current route is a public profile
-  const isPublicProfile = location.pathname.startsWith('/profile/');
+  // Check if current route is a public route (no auth required)
+  const isPublicRoute = location.pathname.startsWith('/profile/') || location.pathname === '/landing';
 
   // Handle auth state and profile loading
   useEffect(() => {
-    // If it's a public profile route, skip app initialization and go directly to app state
-    if (isPublicProfile) {
+    // If it's a public route, skip app initialization and go directly to app state
+    if (isPublicRoute) {
       setAppState('app');
       return;
     }
@@ -91,7 +93,7 @@ const AppContent = () => {
 
     // Add a small delay for better UX
     setTimeout(initializeApp, 1000);
-  }, [user, authLoading, toast, isPublicProfile]);
+  }, [user, authLoading, toast, isPublicRoute]);
 
   const handleProfileCreated = async (profile: UserProfile) => {
     // Save locally first
@@ -224,6 +226,10 @@ const AppContent = () => {
   return (
     <Routes>
       <Route 
+        path="/landing" 
+        element={<Landing />} 
+      />
+      <Route 
         path="/" 
         element={
           <Index 
@@ -235,6 +241,10 @@ const AppContent = () => {
       <Route 
         path="/profile/:profileId" 
         element={<PublicProfile />} 
+      />
+      <Route 
+        path="/council-chat" 
+        element={<CouncilChat />} 
       />
       <Route path="*" element={<NotFound />} />
     </Routes>
