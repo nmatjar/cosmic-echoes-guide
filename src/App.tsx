@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import PublicProfile from "./pages/PublicProfile";
 import CouncilChat from "./pages/CouncilChat";
+import { CouncilPage } from "./pages/CouncilPage";
 import Landing from "./pages/Landing";
 import { CosmicWelcome } from "./components/CosmicWelcome";
 import { CosmicLogin } from "./components/CosmicLogin";
@@ -33,7 +34,7 @@ const AppContent = () => {
   const location = useLocation();
 
   // Check if current route is a public route (no auth required)
-  const isPublicRoute = location.pathname.startsWith('/profile/') || location.pathname === '/landing';
+  const isPublicRoute = location.pathname.startsWith('/profile/') || location.pathname === '/landing' || location.pathname === '/welcome';
 
   // Handle auth state and profile loading
   useEffect(() => {
@@ -237,6 +238,18 @@ const AppContent = () => {
         element={<Landing />} 
       />
       <Route 
+        path="/welcome" 
+        element={
+          <CosmicWelcome 
+            onProfileCreated={(profile) => {
+              handleProfileCreated(profile);
+              // Force navigation to main app after profile creation
+              window.location.href = '/';
+            }} 
+          />
+        } 
+      />
+      <Route 
         path="/" 
         element={
           <Index 
@@ -252,6 +265,10 @@ const AppContent = () => {
       <Route 
         path="/council-chat" 
         element={<CouncilChat />} 
+      />
+      <Route 
+        path="/council" 
+        element={<CouncilPage />} 
       />
       <Route path="*" element={<NotFound />} />
     </Routes>

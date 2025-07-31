@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Play, Pause, Volume2, VolumeX, RotateCcw } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { getProfiles } from "@/services/profileManager";
 
 const Landing = () => {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -79,10 +80,15 @@ const Landing = () => {
   const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
 
   const handleStartJourney = () => {
-    // Scroll to features section instead of navigating away
-    const featuresSection = document.getElementById('features-section');
-    if (featuresSection) {
-      featuresSection.scrollIntoView({ behavior: 'smooth' });
+    // Check if there are existing profiles
+    const existingProfiles = getProfiles();
+    
+    if (existingProfiles.length > 0) {
+      // User has existing profiles - go to profile selection
+      navigate('/');
+    } else {
+      // No existing profiles - go to profile creation
+      navigate('/welcome');
     }
   };
 
