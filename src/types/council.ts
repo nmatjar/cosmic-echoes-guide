@@ -98,3 +98,94 @@ export interface OpenRouterResponse {
     total_tokens: number;
   };
 }
+
+// Streaming response types
+export interface OpenRouterStreamChunk {
+  id: string;
+  object: string;
+  created: number;
+  model: string;
+  choices: Array<{
+    index: number;
+    delta: {
+      role?: string;
+      content?: string;
+    };
+    finish_reason?: string;
+  }>;
+}
+
+// Enhanced request with Level 1 features
+export interface EnhancedOpenRouterRequest extends OpenRouterRequest {
+  metadata?: {
+    user_id?: string;
+    session_id?: string;
+    task_complexity?: 'low' | 'medium' | 'high';
+    priority?: 'speed' | 'quality' | 'cost';
+    budget_limit?: number;
+    cache_key?: string;
+  };
+}
+
+// Cost tracking types
+export interface CostTracker {
+  total_tokens: number;
+  total_cost: number;
+  requests_count: number;
+  session_cost: number;
+  budget_limit?: number;
+  cost_per_model: Record<string, number>;
+}
+
+// Model selection types
+export interface ModelSelectionCriteria {
+  task_type: 'reasoning' | 'creative' | 'analytical' | 'conversational' | 'planning';
+  complexity: 'low' | 'medium' | 'high';
+  priority: 'speed' | 'quality' | 'cost';
+  context_length_needed: number;
+  budget_remaining?: number;
+}
+
+export interface ModelConfig {
+  id: string;
+  name: string;
+  cost_per_token: number;
+  context_length: number;
+  strengths: string[];
+  speed_score: number; // 1-10
+  quality_score: number; // 1-10
+  cost_score: number; // 1-10 (higher = cheaper)
+}
+
+// Cache types
+export interface CacheEntry {
+  key: string;
+  response: string;
+  agent: CouncilAgent;
+  timestamp: number;
+  ttl: number;
+  usage_count: number;
+}
+
+// Error handling types
+export interface RetryConfig {
+  max_attempts: number;
+  base_delay: number;
+  max_delay: number;
+  backoff_factor: number;
+}
+
+export interface OpenRouterError {
+  type: 'rate_limit' | 'model_unavailable' | 'insufficient_quota' | 'network' | 'unknown';
+  message: string;
+  retry_after?: number;
+  suggested_model?: string;
+}
+
+// Streaming generator type
+export type StreamingResponse = AsyncGenerator<{
+  content: string;
+  agent: CouncilAgent;
+  isComplete: boolean;
+  error?: OpenRouterError;
+}, void, unknown>;

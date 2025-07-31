@@ -1,6 +1,16 @@
-import { OpenRouterRequest, OpenRouterResponse, CouncilAgent, OpenRouterModel } from '../types/council';
+import { 
+  OpenRouterRequest, 
+  OpenRouterResponse, 
+  CouncilAgent, 
+  OpenRouterModel,
+  EnhancedOpenRouterRequest,
+  ModelSelectionCriteria,
+  StreamingResponse,
+  OpenRouterStreamChunk
+} from '../types/council';
 import { COUNCIL_AGENTS } from '../config/councilAgents';
 import { UserProfile } from '../engine/userProfile';
+import { openRouterOptimizer } from './openRouterOptimizer';
 
 export class OpenRouterService {
   private apiKey: string;
@@ -15,9 +25,39 @@ export class OpenRouterService {
     userProfile: UserProfile,
     chatHistory: Array<{ role: 'user' | 'assistant'; content: string }>,
     selectedAgent?: CouncilAgent,
-    model = 'anthropic/claude-3.5-sonnet'
+    model?: string
   ): Promise<{ agent: CouncilAgent; content: string }> {
     
+    // Determine responding agent first
+    const respondingAgent = selectedAgent || this.selectBestAgent(userMessage, userProfile);
+    
+    // Auto-select optimal model if not specified
+    if (!model) {
+      const criteria: ModelSelectionCriteria = {
+        task_type: this.getTaskType(userMessage, respondingAgent),
+        complexity: this.getComplexity(userMessage),
+        priority: 'quality', // Default to quality for council responses
+        context_length_needed: this.estimateContextLength(userMessage, chatHistory)
+      };
+      model = openRouterOptimizer.selectOptimalModel(criteria);
+    }
+
+    // Check cache first
+    const cacheKey = openRouterOptimizer.generateCacheKey(
+      userMessage + JSON.stringify(userProfile.analysis), 
+      model, 
+      respondingAgent
+    );
+    
+    const cachedResponse = openRouterOptimizer.getCachedResponse(cacheKey);
+    if (cachedResponse) {
+      console.log('Using cached response for', respondingAgent);
+      return {
+        agent: respondingAgent,
+        content: cachedResponse.response
+      };
+    }
+
     const systemPrompt = this.buildSystemPrompt(userProfile, selectedAgent);
     const messages = [
       { role: 'system' as const, content: systemPrompt },
@@ -34,35 +74,195 @@ export class OpenRouterService {
     };
 
     try {
-      const response = await fetch(`${this.baseUrl}/chat/completions`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${this.apiKey}`,
-          'Content-Type': 'application/json',
-          'HTTP-Referer': window.location.origin,
-          'X-Title': 'Cosmic Echoes Guide - Council Chat'
-        },
-        body: JSON.stringify(request)
-      });
+      const response = await openRouterOptimizer.withRetry(async () => {
+        const res = await fetch(`${this.baseUrl}/chat/completions`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${this.apiKey}`,
+            'Content-Type': 'application/json',
+            'HTTP-Referer': window.location.origin,
+            'X-Title': 'Cosmic Echoes Guide - Council Chat'
+          },
+          body: JSON.stringify(request)
+        });
 
-      if (!response.ok) {
-        throw new Error(`OpenRouter API error: ${response.status}`);
-      }
+        if (!res.ok) {
+          throw new Error(`OpenRouter API error: ${res.status}`);
+        }
 
-      const data: OpenRouterResponse = await response.json();
+        return res.json();
+      }, `Council response for ${respondingAgent}`);
+
+      const data: OpenRouterResponse = response;
       const content = data.choices[0]?.message?.content || 'Przepraszam, nie mogę teraz odpowiedzieć.';
       
-      // Determine which agent should respond
-      const respondingAgent = selectedAgent || this.selectBestAgent(userMessage, userProfile);
+      // Track usage and costs
+      if (data.usage) {
+        const estimatedCost = this.calculateCost(model, data.usage.total_tokens);
+        openRouterOptimizer.trackUsage(model, data.usage.total_tokens, estimatedCost);
+      }
+
+      const formattedContent = this.formatAgentResponse(respondingAgent, content);
+      
+      // Cache the response
+      openRouterOptimizer.setCachedResponse(cacheKey, formattedContent, respondingAgent);
       
       return {
         agent: respondingAgent,
-        content: this.formatAgentResponse(respondingAgent, content)
+        content: formattedContent
       };
     } catch (error) {
       console.error('OpenRouter API error:', error);
       throw new Error('Nie udało się połączyć z Radą Kosmiczną. Spróbuj ponownie.');
     }
+  }
+
+  // NEW LEVEL 1 METHODS
+
+  async generateEnhancedResponse(
+    userMessage: string,
+    userProfile: UserProfile,
+    chatHistory: Array<{ role: 'user' | 'assistant'; content: string }>,
+    options: {
+      selectedAgent?: CouncilAgent;
+      priority?: 'speed' | 'quality' | 'cost';
+      budgetLimit?: number;
+      useStreaming?: boolean;
+    } = {}
+  ): Promise<{ agent: CouncilAgent; content: string; metadata: Record<string, any> }> {
+    
+    const { selectedAgent, priority = 'quality', budgetLimit, useStreaming = false } = options;
+    
+    // Set budget limit if provided
+    if (budgetLimit) {
+      openRouterOptimizer.setBudgetLimit(budgetLimit);
+    }
+
+    const respondingAgent = selectedAgent || this.selectBestAgent(userMessage, userProfile);
+    
+    // Enhanced model selection
+    const criteria: ModelSelectionCriteria = {
+      task_type: this.getTaskType(userMessage, respondingAgent),
+      complexity: this.getComplexity(userMessage),
+      priority,
+      context_length_needed: this.estimateContextLength(userMessage, chatHistory),
+      budget_remaining: budgetLimit ? budgetLimit - openRouterOptimizer.getCostTracker().session_cost : undefined
+    };
+
+    const selectedModel = openRouterOptimizer.selectOptimalModel(criteria);
+    
+    // Check budget before proceeding
+    const estimatedCost = this.estimateCost(selectedModel, criteria.context_length_needed);
+    if (!openRouterOptimizer.checkBudgetLimit(estimatedCost)) {
+      throw new Error('Przekroczono limit budżetu dla tej sesji.');
+    }
+
+    if (useStreaming) {
+      // For now, fall back to regular response - streaming will be implemented in Level 2
+      const result = await this.generateCouncilResponse(userMessage, userProfile, chatHistory, selectedAgent, selectedModel);
+      return {
+        ...result,
+        metadata: {
+          model: selectedModel,
+          cost_tracker: openRouterOptimizer.getCostTracker(),
+          estimated_cost: estimatedCost
+        }
+      };
+    }
+
+    const result = await this.generateCouncilResponse(userMessage, userProfile, chatHistory, selectedAgent, selectedModel);
+    
+    return {
+      ...result,
+      metadata: {
+        model: selectedModel,
+        cost_tracker: openRouterOptimizer.getCostTracker(),
+        estimated_cost: estimatedCost,
+        selection_criteria: criteria
+      }
+    };
+  }
+
+  // UTILITY METHODS FOR LEVEL 1
+
+  private getTaskType(message: string, agent: CouncilAgent): ModelSelectionCriteria['task_type'] {
+    const msg = message.toLowerCase();
+    
+    if (agent === 'architect' || msg.includes('plan') || msg.includes('struktur')) {
+      return 'planning';
+    }
+    if (agent === 'oracle' || msg.includes('przyszł') || msg.includes('wizj')) {
+      return 'creative';
+    }
+    if (agent === 'chronicler' || msg.includes('analiz') || msg.includes('wzorz')) {
+      return 'analytical';
+    }
+    if (agent === 'echo' || msg.includes('?')) {
+      return 'conversational';
+    }
+    
+    return 'reasoning';
+  }
+
+  private getComplexity(message: string): ModelSelectionCriteria['complexity'] {
+    const wordCount = message.split(' ').length;
+    const hasMultipleQuestions = (message.match(/\?/g) || []).length > 1;
+    const hasComplexConcepts = /astrolog|numerolog|human design|majańsk|biorhythm/i.test(message);
+    
+    if (wordCount > 50 || hasMultipleQuestions || hasComplexConcepts) {
+      return 'high';
+    }
+    if (wordCount > 20) {
+      return 'medium';
+    }
+    return 'low';
+  }
+
+  private estimateContextLength(message: string, history: Array<{ role: string; content: string }>): number {
+    const messageTokens = Math.ceil(message.length / 4); // Rough estimate: 4 chars per token
+    const historyTokens = history.slice(-10).reduce((sum, msg) => sum + Math.ceil(msg.content.length / 4), 0);
+    const systemPromptTokens = 1000; // Estimated system prompt size
+    
+    return messageTokens + historyTokens + systemPromptTokens;
+  }
+
+  private calculateCost(model: string, tokens: number): number {
+    // Simplified cost calculation - in real implementation, this would use actual pricing
+    const costPerToken = this.getModelCostPerToken(model);
+    return tokens * costPerToken;
+  }
+
+  private estimateCost(model: string, estimatedTokens: number): number {
+    const costPerToken = this.getModelCostPerToken(model);
+    return estimatedTokens * costPerToken * 1.2; // Add 20% buffer
+  }
+
+  private getModelCostPerToken(model: string): number {
+    // Simplified pricing - should be updated with real OpenRouter pricing
+    const pricing: Record<string, number> = {
+      'anthropic/claude-3.5-sonnet': 0.000003,
+      'openai/gpt-4o': 0.000005,
+      'openai/gpt-4o-mini': 0.00000015,
+      'anthropic/claude-3-haiku': 0.00000025,
+      'google/gemini-pro-1.5': 0.00000125,
+      'meta-llama/llama-3.1-8b-instruct:free': 0
+    };
+    
+    return pricing[model] || 0.000001; // Default fallback
+  }
+
+  // COST TRACKING METHODS
+
+  getCostTracker() {
+    return openRouterOptimizer.getCostTracker();
+  }
+
+  resetSessionCost() {
+    openRouterOptimizer.resetSessionCost();
+  }
+
+  setBudgetLimit(limit: number) {
+    openRouterOptimizer.setBudgetLimit(limit);
   }
 
   private buildSystemPrompt(userProfile: UserProfile, selectedAgent?: CouncilAgent): string {

@@ -150,6 +150,25 @@ npm run preview
 - Spersonalizowane interpretacje AI
 - Szczegółowe raporty i wykresy
 
+### **🤖 Council Chat - Rada Kosmiczna**
+- **6 specjalistycznych agentów AI** z unikalnymi perspektywami
+- **Inteligentny wybór agenta** dopasowany do typu pytania
+- **Zaawansowane funkcje Level 1:**
+  - Automatyczny wybór optymalnego modelu AI
+  - Cache'owanie odpowiedzi dla lepszej wydajności
+  - Śledzenie kosztów i limity budżetu
+  - Retry logic z obsługą błędów
+- **Personalizacja** oparta na pełnym profilu kosmicznym
+- **Kontekst czasowy** - uwzględnia biorytmy i energie dnia
+
+#### Członkowie Rady:
+- **🏗️ Architekt** - Planowanie strategiczne i struktura życia
+- **🔮 Wyrocznia** - Intuicyjne wglądy i przewodnictwo przyszłości
+- **⚗️ Alchemik** - Transformacja emocjonalna i relacje
+- **🚀 Pionier** - Wskazówki zorientowane na działanie i pracę z energią
+- **📚 Kronikarz** - Analiza wzorców i historyczna mądrość
+- **🌊 Echo** - Refleksyjne pytania i odkrywanie siebie
+
 ### **Dzienne Wglądy**
 - Codzienne wpływy Bio-Rytmów i Kalendarza Majów
 - Personalizowane wskazówki AI
@@ -220,10 +239,12 @@ cosmic-echoes-guide/
 - [x] Uwierzytelnianie użytkowników
 - [x] Synchronizacja profili
 
-### Faza 3: AI & Personalizacja 🚧
-- [ ] Zaawansowane interpretacje AI
-- [ ] Personalizowane rekomendacje
-- [ ] Adaptacyjny interfejs
+### Faza 3: AI & Personalizacja ✅
+- [x] Council Chat - Rada Kosmiczna z 6 agentami AI
+- [x] OpenRouter Level 1 Features (cache, cost tracking, auto-selection)
+- [x] Zaawansowane interpretacje AI
+- [x] Personalizowane rekomendacje
+- [x] Adaptacyjny interfejs
 
 ### Faza 4: Społeczność 📋
 - [ ] Udostępnianie profili
