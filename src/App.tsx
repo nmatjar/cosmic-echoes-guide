@@ -84,9 +84,11 @@ const AppContent = () => {
         const localProfiles = getProfiles();
         if (localProfiles.length > 0) {
           setProfiles(localProfiles);
-          setAppState('auth'); // Redirect to auth to sync profiles
+          setAppState('login'); // Show login for existing profiles
         } else {
-          setAppState('auth'); // Go to auth first
+          // New users - redirect to landing page
+          window.location.href = '/landing';
+          return;
         }
       }
     };
