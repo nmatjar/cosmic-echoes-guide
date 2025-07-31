@@ -3,29 +3,25 @@ import { useAuth } from '../hooks/useAuth';
 import { CouncilChat } from '../components/CouncilChat';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
-import { Sparkles, Users, MessageCircle, Brain, Heart, Compass } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Sparkles, Users, MessageCircle, Brain, Heart, Compass, ArrowLeft } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 import { UserProfile } from '../engine/userProfile';
 import { getProfiles } from '../services/profileManager';
 
 export const CouncilPage: React.FC = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (user) {
-      loadProfile();
-    } else {
-      setLoading(false);
-    }
-  }, [user]);
+    loadProfile();
+  }, []);
 
   const loadProfile = async () => {
     try {
       const profiles = getProfiles();
-      // Dla uproszczenia, bierzemy pierwszy profil
-      // W przyszłości można dodać logikę wyboru profilu dla użytkownika
+      // Bierzemy pierwszy dostępny profil (lokalny lub z chmury)
       const userProfile = profiles.length > 0 ? profiles[0] : null;
       setProfile(userProfile);
     } catch (error) {
@@ -37,40 +33,39 @@ export const CouncilPage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100 dark:from-gray-900 dark:via-purple-900 dark:to-indigo-900 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 flex items-center justify-center">
         <div className="text-center">
-          <Sparkles className="h-8 w-8 animate-spin mx-auto mb-4" />
-          <p>Ładowanie...</p>
+          <Sparkles className="h-8 w-8 animate-spin mx-auto mb-4 text-purple-400" />
+          <p className="text-white">Przygotowywanie spotkania z Radą Kosmiczną...</p>
         </div>
       </div>
     );
   }
 
-  if (!user || !profile) {
+  if (!profile) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100 dark:from-gray-900 dark:via-purple-900 dark:to-indigo-900 flex items-center justify-center p-4">
-        <Card className="w-full max-w-md">
+      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 flex items-center justify-center p-4">
+        <Card className="w-full max-w-md bg-black/20 backdrop-blur-sm border-purple-500/30">
           <CardHeader className="text-center">
             <div className="mx-auto w-16 h-16 bg-gradient-to-br from-purple-500 to-blue-600 rounded-full flex items-center justify-center mb-4">
               <Sparkles className="h-8 w-8 text-white" />
             </div>
-            <CardTitle className="text-2xl">Rada Kosmiczna</CardTitle>
+            <CardTitle className="text-2xl text-white">🌟 Rada Kosmiczna Czeka 🌟</CardTitle>
           </CardHeader>
           <CardContent className="text-center space-y-4">
-            <p className="text-gray-600 dark:text-gray-400">
-              Aby korzystać z Rady Kosmicznej, musisz być zalogowany i mieć utworzony profil kosmiczny.
+            <p className="text-gray-300">
+              Aby spotkać się z Radą Kosmiczną, musisz najpierw stworzyć swój kosmiczny portret duszy. 
+              Rada potrzebuje poznać Twoją duchową esencję, aby udzielić Ci najlepszych wskazówek.
             </p>
-            <div className="space-y-2">
-              <Link to="/auth">
-                <Button className="w-full">
-                  Zaloguj się
-                </Button>
-              </Link>
+            <div className="space-y-3">
               <Link to="/">
-                <Button variant="outline" className="w-full">
-                  Utwórz profil
+                <Button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
+                  ✨ Stwórz Swój Profil Kosmiczny
                 </Button>
               </Link>
+              <p className="text-xs text-gray-400">
+                Bezpłatne • 5 minut • Natychmiastowy dostęp do Rady
+              </p>
             </div>
           </CardContent>
         </Card>
@@ -148,7 +143,7 @@ export const CouncilPage: React.FC = () => {
         </div>
 
         {/* Main Chat Interface */}
-        <CouncilChat userProfile={profile} userId={user.id} />
+        <CouncilChat userProfile={profile} userId={user?.id || 'local-user'} />
 
         {/* How it Works */}
         <div className="mt-16">

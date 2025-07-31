@@ -99,6 +99,80 @@ const Index = ({ currentProfile, onLogout }: IndexProps) => {
           <ElementalBalanceSection profile={currentProfile} />
         </div>
         
+        {/* Cosmic Council Gateway */}
+        <div className="mb-8">
+          <CosmicCard className="bg-gradient-to-br from-purple-900/20 via-blue-900/20 to-indigo-900/20 border-purple-500/30 relative overflow-hidden">
+            {/* Mystical background elements */}
+            <div className="absolute inset-0">
+              <div className="absolute top-4 left-8 w-1 h-1 bg-yellow-400 rounded-full animate-pulse"></div>
+              <div className="absolute top-12 right-12 w-1.5 h-1.5 bg-purple-400 rounded-full animate-ping"></div>
+              <div className="absolute bottom-8 left-1/4 w-1 h-1 bg-blue-300 rounded-full animate-pulse"></div>
+              <div className="absolute bottom-4 right-8 w-1.5 h-1.5 bg-pink-400 rounded-full animate-ping"></div>
+            </div>
+            
+            <div className="relative p-8 text-center space-y-6">
+              <div className="flex justify-center">
+                <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-blue-600 rounded-full flex items-center justify-center animate-pulse">
+                  <span className="text-2xl">🌟</span>
+                </div>
+              </div>
+              
+              <div className="space-y-3">
+                <h2 className="text-3xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text text-transparent">
+                  🔮 Rada Kosmiczna Czeka 🔮
+                </h2>
+                <p className="text-lg text-gray-300 max-w-2xl mx-auto">
+                  Twój kosmiczny portret jest gotowy. Czas spotkać się z sześcioma mądrymi przewodnikami duchowymi, 
+                  którzy pomogą Ci zrozumieć głębsze znaczenie Twojej duchowej podróży.
+                </p>
+              </div>
+              
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <Button
+                  onClick={() => window.location.href = '/council'}
+                  size="lg"
+                  className="bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 hover:from-purple-700 hover:via-pink-700 hover:to-blue-700 text-white px-8 py-4 text-lg font-semibold rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 animate-pulse"
+                >
+                  ✨ Wejdź do Świątyni Mądrości ✨
+                </Button>
+              </div>
+              
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-8 text-sm">
+                <div className="text-center space-y-1">
+                  <div className="text-2xl">🔮</div>
+                  <p className="text-purple-300 font-medium">Wyrocznia</p>
+                  <p className="text-gray-400 text-xs">Wizje przyszłości</p>
+                </div>
+                <div className="text-center space-y-1">
+                  <div className="text-2xl">📚</div>
+                  <p className="text-blue-300 font-medium">Mędrzec</p>
+                  <p className="text-gray-400 text-xs">Starożytna wiedza</p>
+                </div>
+                <div className="text-center space-y-1">
+                  <div className="text-2xl">💚</div>
+                  <p className="text-green-300 font-medium">Uzdrowiciel</p>
+                  <p className="text-gray-400 text-xs">Energia życiowa</p>
+                </div>
+                <div className="text-center space-y-1">
+                  <div className="text-2xl">🧭</div>
+                  <p className="text-yellow-300 font-medium">Przewodnik</p>
+                  <p className="text-gray-400 text-xs">Kierunek życia</p>
+                </div>
+                <div className="text-center space-y-1">
+                  <div className="text-2xl">🛡️</div>
+                  <p className="text-red-300 font-medium">Strażnik</p>
+                  <p className="text-gray-400 text-xs">Ochrona ducha</p>
+                </div>
+                <div className="text-center space-y-1">
+                  <div className="text-2xl">🚀</div>
+                  <p className="text-orange-300 font-medium">Pionier</p>
+                  <p className="text-gray-400 text-xs">Nowe ścieżki</p>
+                </div>
+              </div>
+            </div>
+          </CosmicCard>
+        </div>
+
         {/* Guide Personas */}
         <div data-section="guides">
           <GuidePersonas />

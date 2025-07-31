@@ -238,6 +238,74 @@ const Landing = () => {
             </p>
           </div>
 
+          {/* Cosmic Council Teaser */}
+          <div className="mt-12 max-w-4xl mx-auto">
+            <Card className="bg-black/20 backdrop-blur-sm border-purple-500/30 relative overflow-hidden">
+              {/* Mystical background elements */}
+              <div className="absolute inset-0">
+                <div className="absolute top-4 left-8 w-1 h-1 bg-yellow-400 rounded-full animate-pulse"></div>
+                <div className="absolute top-12 right-12 w-1.5 h-1.5 bg-purple-400 rounded-full animate-ping"></div>
+                <div className="absolute bottom-8 left-1/4 w-1 h-1 bg-blue-300 rounded-full animate-pulse"></div>
+                <div className="absolute bottom-4 right-8 w-1.5 h-1.5 bg-pink-400 rounded-full animate-ping"></div>
+              </div>
+              
+              <div className="relative p-8 text-center space-y-6">
+                <div className="flex justify-center">
+                  <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-blue-600 rounded-full flex items-center justify-center animate-pulse">
+                    <span className="text-2xl">🔮</span>
+                  </div>
+                </div>
+                
+                <div className="space-y-3">
+                  <h3 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text text-transparent">
+                    🌟 Rada Kosmiczna Czeka 🌟
+                  </h3>
+                  <p className="text-lg text-gray-300 max-w-2xl mx-auto">
+                    Po stworzeniu swojego kosmicznego profilu, będziesz mógł spotkać się z sześcioma mądrymi przewodnikami duchowymi. 
+                    Każdy z nich oferuje unikalną perspektywę i wskazówki na Twojej duchowej podróży.
+                  </p>
+                </div>
+                
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-8 text-sm">
+                  <div className="text-center space-y-1">
+                    <div className="text-2xl">🔮</div>
+                    <p className="text-purple-300 font-medium">Wyrocznia</p>
+                    <p className="text-gray-400 text-xs">Wizje przyszłości</p>
+                  </div>
+                  <div className="text-center space-y-1">
+                    <div className="text-2xl">📚</div>
+                    <p className="text-blue-300 font-medium">Mędrzec</p>
+                    <p className="text-gray-400 text-xs">Starożytna wiedza</p>
+                  </div>
+                  <div className="text-center space-y-1">
+                    <div className="text-2xl">💚</div>
+                    <p className="text-green-300 font-medium">Uzdrowiciel</p>
+                    <p className="text-gray-400 text-xs">Energia życiowa</p>
+                  </div>
+                  <div className="text-center space-y-1">
+                    <div className="text-2xl">🧭</div>
+                    <p className="text-yellow-300 font-medium">Przewodnik</p>
+                    <p className="text-gray-400 text-xs">Kierunek życia</p>
+                  </div>
+                  <div className="text-center space-y-1">
+                    <div className="text-2xl">🛡️</div>
+                    <p className="text-red-300 font-medium">Strażnik</p>
+                    <p className="text-gray-400 text-xs">Ochrona ducha</p>
+                  </div>
+                  <div className="text-center space-y-1">
+                    <div className="text-2xl">🚀</div>
+                    <p className="text-orange-300 font-medium">Pionier</p>
+                    <p className="text-gray-400 text-xs">Nowe ścieżki</p>
+                  </div>
+                </div>
+                
+                <p className="text-sm text-gray-400 italic">
+                  "Stwórz swój profil, aby odblokować dostęp do Rady Kosmicznej"
+                </p>
+              </div>
+            </Card>
+          </div>
+
           {/* Features */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 max-w-4xl mx-auto">
             <div className="text-center space-y-2">
