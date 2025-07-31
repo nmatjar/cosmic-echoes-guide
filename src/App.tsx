@@ -86,9 +86,14 @@ const AppContent = () => {
           setProfiles(localProfiles);
           setAppState('login'); // Show login for existing profiles
         } else {
-          // New users - redirect to landing page
-          window.location.href = '/landing';
-          return;
+          // New users - check if already on landing page
+          if (location.pathname === '/landing') {
+            setAppState('app'); // Allow landing page to render
+          } else {
+            // Redirect to landing page
+            window.location.href = '/landing';
+            return;
+          }
         }
       }
     };
