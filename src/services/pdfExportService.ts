@@ -4,26 +4,31 @@ import { UserProfile } from '@/engine/userProfile';
 import { QRCodeService } from './qrCodeService';
 
 export class PDFExportService {
-  private static readonly PAGE_WIDTH = 210; // A4 width in mm
-  private static readonly PAGE_HEIGHT = 297; // A4 height in mm
-  private static readonly MARGIN = 20;
+  private static readonly PAGE_WIDTH = 210;
+  private static readonly PAGE_HEIGHT = 297;
+  private static readonly MARGIN = 15;
+  private static readonly FONT_COLOR_GOLD = [255, 215, 0];
+  private static readonly FONT_COLOR_LIGHT = [200, 200, 255];
+  private static readonly FONT_COLOR_DARK = [0, 0, 0];
+  private static readonly BRAND_COLOR_PURPLE = [75, 0, 130];
 
   static async generateProfilePDF(profile: UserProfile): Promise<void> {
     try {
-      // Create new PDF document
       const pdf = new jsPDF('p', 'mm', 'a4');
       
-      // Add title page
       this.addTitlePage(pdf, profile);
       
-      // Add profile sections
-      await this.addProfileSections(pdf, profile);
+      this.addAstrologySection(pdf, profile);
+      this.addNumerologySection(pdf, profile);
+      this.addChineseZodiacSection(pdf, profile);
+      this.addHumanDesignSection(pdf, profile);
+      this.addMayanSection(pdf, profile);
+      this.addBiorhythmsSection(pdf, profile);
+      this.addElementalBalanceSection(pdf, profile);
       
-      // Add QR code page
-      await this.addQRCodePage(pdf);
+      await this.addQRCodePage(pdf, profile);
       
-      // Save the PDF
-      const fileName = `CosmoFlow-${profile.name.replace(/\s+/g, '-')}-${new Date().toISOString().split('T')[0]}.pdf`;
+      const fileName = `CosmicEchoes-${profile.name.replace(/\s+/g, '-')}.pdf`;
       pdf.save(fileName);
       
     } catch (error) {
@@ -32,255 +37,228 @@ export class PDFExportService {
     }
   }
 
+  private static addHeader(pdf: jsPDF, title: string): void {
+    pdf.setFillColor(...this.BRAND_COLOR_PURPLE);
+    pdf.rect(0, 0, this.PAGE_WIDTH, 20, 'F');
+    pdf.setFontSize(14);
+    pdf.setTextColor(...this.FONT_COLOR_GOLD);
+    pdf.setFont('helvetica', 'bold');
+    pdf.text('✨ CosmoFlow by ARCĀNUM ✨', this.MARGIN, 13);
+    pdf.setTextColor(...this.FONT_COLOR_LIGHT);
+    pdf.setFontSize(12);
+    pdf.text(title, this.PAGE_WIDTH - this.MARGIN, 13, { align: 'right' });
+  }
+
+  private static addFooter(pdf: jsPDF): void {
+    const pageCount = pdf.getNumberOfPages();
+    pdf.setFontSize(8);
+    pdf.setTextColor(150, 150, 150);
+    for (let i = 1; i <= pageCount; i++) {
+      pdf.setPage(i);
+      pdf.text(`Strona ${i} z ${pageCount}`, this.PAGE_WIDTH / 2, this.PAGE_HEIGHT - 10, { align: 'center' });
+    }
+  }
+
   private static addTitlePage(pdf: jsPDF, profile: UserProfile): void {
-    // Background gradient effect (simulated with rectangles)
-    pdf.setFillColor(75, 0, 130); // Purple
+    pdf.setFillColor(...this.BRAND_COLOR_PURPLE);
     pdf.rect(0, 0, this.PAGE_WIDTH, this.PAGE_HEIGHT, 'F');
     
-    pdf.setFillColor(138, 43, 226); // Blue violet
-    pdf.rect(0, 0, this.PAGE_WIDTH, this.PAGE_HEIGHT / 2, 'F');
-    
-    // Title
-    pdf.setTextColor(255, 215, 0); // Gold
-    pdf.setFontSize(32);
+    pdf.setFontSize(36);
+    pdf.setTextColor(...this.FONT_COLOR_GOLD);
     pdf.setFont('helvetica', 'bold');
-    pdf.text('✨ CosmoFlow by ARCĀNUM ✨', this.PAGE_WIDTH / 2, 60, { align: 'center' });
-    
-    pdf.setFontSize(24);
-    pdf.setTextColor(255, 255, 255);
     pdf.text('Kosmiczny Portret Duszy', this.PAGE_WIDTH / 2, 80, { align: 'center' });
     
-    // Profile name
-    pdf.setFontSize(20);
-    pdf.setTextColor(255, 215, 0);
+    pdf.setFontSize(28);
+    pdf.setTextColor(255, 255, 255);
     pdf.text(profile.name, this.PAGE_WIDTH / 2, 110, { align: 'center' });
     
-    // Birth info
-    pdf.setFontSize(14);
-    pdf.setTextColor(200, 200, 255);
+    pdf.setFontSize(16);
+    pdf.setTextColor(...this.FONT_COLOR_LIGHT);
     const birthDate = new Date(profile.birthData.date).toLocaleDateString('pl-PL');
     const birthTime = profile.birthData.time || 'Nieznana godzina';
     const birthPlace = profile.birthData.place || 'Nieznane miejsce';
     pdf.text(`${birthDate} • ${birthTime} • ${birthPlace}`, this.PAGE_WIDTH / 2, 130, { align: 'center' });
     
-    // Systems overview
-    pdf.setFontSize(16);
-    pdf.setTextColor(255, 255, 255);
-    pdf.text('Systemy analizy:', this.PAGE_WIDTH / 2, 160, { align: 'center' });
-    
-    const systems = [
-      `♓ ${profile.analysis.astrology?.sunSign?.name || 'Astrologia'}`,
-      `🔢 Numerologia ${profile.analysis.numerology?.lifePathNumber || ''}`,
-      `${profile.analysis.chineseZodiac?.icon || '🐉'} ${profile.analysis.chineseZodiac?.animal || 'Zodiak Chiński'}`,
-      `⚡ ${profile.analysis.humanDesign?.type || 'Human Design'}`,
-      `🏛️ ${profile.analysis.mayan?.sign || 'Kalendarz Majów'}`,
-      '🧬⏰ Bio-Rytmy',
-      '☯️🌳 Równowaga Żywiołów'
-    ];
-    
-    let yPos = 180;
-    systems.forEach(system => {
-      pdf.setFontSize(12);
-      pdf.text(system, this.PAGE_WIDTH / 2, yPos, { align: 'center' });
-      yPos += 15;
-    });
-    
-    // Footer
-    pdf.setFontSize(10);
-    pdf.setTextColor(150, 150, 150);
-    pdf.text('Wygenerowano przez CosmoFlow by ARCĀNUM', this.PAGE_WIDTH / 2, 280, { align: 'center' });
-    pdf.text(new Date().toLocaleDateString('pl-PL'), this.PAGE_WIDTH / 2, 290, { align: 'center' });
+    pdf.setFontSize(12);
+    pdf.text('Wygenerowano przez CosmoFlow by ARCĀNUM', this.PAGE_WIDTH / 2, this.PAGE_HEIGHT - 30, { align: 'center' });
+    pdf.text(new Date().toLocaleDateString('pl-PL'), this.PAGE_WIDTH / 2, this.PAGE_HEIGHT - 20, { align: 'center' });
   }
 
-  private static async addProfileSections(pdf: jsPDF, profile: UserProfile): Promise<void> {
-    // Add new page for content
+  private static createNewPage(pdf: jsPDF, title: string): void {
     pdf.addPage();
-    
-    let yPos = this.MARGIN;
-    
-    // Page header
-    pdf.setFillColor(75, 0, 130);
-    pdf.rect(0, 0, this.PAGE_WIDTH, 25, 'F');
-    pdf.setTextColor(255, 215, 0);
-    pdf.setFontSize(16);
-    pdf.setFont('helvetica', 'bold');
-    pdf.text('Szczegółowa Analiza Profilu', this.PAGE_WIDTH / 2, 15, { align: 'center' });
-    
-    yPos = 40;
-    
-    // Astrologia
-    if (profile.analysis.astrology) {
-      yPos = this.addSection(pdf, yPos, '♓ Astrologia', [
-        `Znak Słońca: ${profile.analysis.astrology.sunSign?.name || 'N/A'}`,
-        `Ascendent: ${profile.analysis.astrology.ascendant?.name || 'N/A'}`,
-        `MC: ${profile.analysis.astrology.midheaven?.name || 'N/A'}`,
-        `Opis: ${profile.analysis.astrology.sunSign?.description || 'Brak opisu'}`
-      ]);
-    }
-    
-    // Numerologia
-    if (profile.analysis.numerology) {
-      yPos = this.addSection(pdf, yPos, '🔢 Numerologia', [
-        `Liczba Ścieżki Życia: ${profile.analysis.numerology.lifePathNumber || 'N/A'}`,
-        `Liczba Ekspresji: ${profile.analysis.numerology.expressionNumber || 'N/A'}`,
-        `Liczba Duszy: ${profile.analysis.numerology.soulNumber || 'N/A'}`,
-        `Opis: ${profile.analysis.numerology.description || 'Brak opisu'}`
-      ]);
-    }
-    
-    // Zodiak Chiński
-    if (profile.analysis.chineseZodiac) {
-      yPos = this.addSection(pdf, yPos, '🐉 Zodiak Chiński', [
-        `Zwierzę: ${profile.analysis.chineseZodiac.animal || 'N/A'}`,
-        `Element: ${profile.analysis.chineseZodiac.element || 'N/A'}`,
-        `Polarność: ${profile.analysis.chineseZodiac.polarity || 'N/A'}`,
-        `Opis: ${profile.analysis.chineseZodiac.description || 'Brak opisu'}`
-      ]);
-    }
-    
-    // Human Design
-    if (profile.analysis.humanDesign) {
-      yPos = this.addSection(pdf, yPos, '⚡ Human Design', [
-        `Typ: ${profile.analysis.humanDesign.type || 'N/A'}`,
-        `Profil: ${profile.analysis.humanDesign.profile || 'N/A'}`,
-        `Autorytet: ${profile.analysis.humanDesign.authority || 'N/A'}`,
-        `Opis: ${profile.analysis.humanDesign.description || 'Brak opisu'}`
-      ]);
-    }
+    this.addHeader(pdf, title);
   }
 
-  private static addSection(pdf: jsPDF, startY: number, title: string, content: string[]): number {
-    let yPos = startY;
-    
-    // Check if we need a new page
-    if (yPos > 250) {
-      pdf.addPage();
-      yPos = this.MARGIN;
-    }
-    
-    // Section title
-    pdf.setFontSize(14);
-    pdf.setFont('helvetica', 'bold');
-    pdf.setTextColor(255, 215, 0);
-    pdf.text(title, this.MARGIN, yPos);
-    yPos += 10;
-    
-    // Section content
-    pdf.setFontSize(10);
+  private static addSectionContent(pdf: jsPDF, yPos: number, content: { label: string; value: string }[]): number {
     pdf.setFont('helvetica', 'normal');
-    pdf.setTextColor(0, 0, 0);
-    
-    content.forEach(line => {
-      if (yPos > 280) {
-        pdf.addPage();
-        yPos = this.MARGIN;
-      }
+    content.forEach(item => {
+      pdf.setFontSize(12);
+      pdf.setTextColor(...this.FONT_COLOR_DARK);
+      pdf.text(item.label, this.MARGIN, yPos);
       
-      // Split long lines
-      const splitText = pdf.splitTextToSize(line, this.PAGE_WIDTH - 2 * this.MARGIN);
-      splitText.forEach((textLine: string) => {
-        pdf.text(textLine, this.MARGIN, yPos);
-        yPos += 5;
-      });
+      pdf.setFontSize(10);
+      pdf.setTextColor(80, 80, 80);
+      const splitText = pdf.splitTextToSize(item.value, this.PAGE_WIDTH - this.MARGIN * 2 - 30);
+      pdf.text(splitText, this.MARGIN + 30, yPos);
+      yPos += splitText.length * 5 + 5;
     });
-    
-    return yPos + 10; // Add spacing after section
+    return yPos;
   }
 
-  private static async addQRCodePage(pdf: jsPDF): Promise<void> {
-    pdf.addPage();
+  private static addAstrologySection(pdf: jsPDF, profile: UserProfile): void {
+    if (!profile.analysis.astrology) return;
+    this.createNewPage(pdf, '♓ Astrologia');
+    let yPos = 30;
     
-    // Page header
-    pdf.setFillColor(75, 0, 130);
-    pdf.rect(0, 0, this.PAGE_WIDTH, 25, 'F');
-    pdf.setTextColor(255, 215, 0);
-    pdf.setFontSize(16);
-    pdf.setFont('helvetica', 'bold');
-    pdf.text('Udostępnij Swój Profil', this.PAGE_WIDTH / 2, 15, { align: 'center' });
+    const data = profile.analysis.astrology;
+    this.addSectionContent(pdf, yPos, [
+      { label: 'Znak Słońca:', value: `${data.sunSign?.name} - ${data.sunSign?.description}` },
+      { label: 'Ascendent:', value: `${data.ascendant?.name} - ${data.ascendant?.description}` },
+      { label: 'MC (Medium Coeli):', value: `${data.midheaven?.name} - ${data.midheaven?.description}` },
+    ]);
+  }
+
+  private static addNumerologySection(pdf: jsPDF, profile: UserProfile): void {
+    if (!profile.analysis.numerology) return;
+    this.createNewPage(pdf, '🔢 Numerologia');
+    let yPos = 30;
+
+    const data = profile.analysis.numerology;
+    this.addSectionContent(pdf, yPos, [
+        { label: 'Liczba Ścieżki Życia:', value: `${data.lifePathNumber} - ${data.description}` },
+        { label: 'Liczba Ekspresji:', value: `${data.expressionNumber}` },
+        { label: 'Liczba Duszy:', value: `${data.soulNumber}` },
+    ]);
+  }
+
+  private static addChineseZodiacSection(pdf: jsPDF, profile: UserProfile): void {
+    if (!profile.analysis.chineseZodiac) return;
+    this.createNewPage(pdf, '🐉 Zodiak Chiński');
+    let yPos = 30;
+
+    const data = profile.analysis.chineseZodiac;
+    this.addSectionContent(pdf, yPos, [
+        { label: 'Zwierzę:', value: data.animal },
+        { label: 'Element:', value: data.element },
+        { label: 'Polarność:', value: data.polarity },
+        { label: 'Opis:', value: data.description },
+    ]);
+  }
+
+  private static addHumanDesignSection(pdf: jsPDF, profile: UserProfile): void {
+    if (!profile.analysis.humanDesign) return;
+    this.createNewPage(pdf, '⚡ Human Design');
+    let yPos = 30;
+
+    const data = profile.analysis.humanDesign;
+    this.addSectionContent(pdf, yPos, [
+        { label: 'Typ:', value: data.type },
+        { label: 'Profil:', value: data.profile },
+        { label: 'Autorytet:', value: data.authority },
+        { label: 'Opis:', value: data.description },
+    ]);
+  }
+
+  private static addMayanSection(pdf: jsPDF, profile: UserProfile): void {
+    if (!profile.analysis.mayan) return;
+    this.createNewPage(pdf, '🏛️ Kalendarz Majów');
+    let yPos = 30;
+
+    const data = profile.analysis.mayan;
+    this.addSectionContent(pdf, yPos, [
+        { label: 'Znak (Nagual):', value: data.sign },
+        { label: 'Ton:', value: data.tone.toString() },
+        { label: 'Opis znaku:', value: data.description },
+    ]);
+  }
+
+  private static addBiorhythmsSection(pdf: jsPDF, profile: UserProfile): void {
+    if (!profile.analysis.biorhythms) return;
+    this.createNewPage(pdf, '🧬⏰ Bio-Rytmy');
+    let yPos = 30;
+
+    const data = profile.analysis.biorhythms;
+    this.addSectionContent(pdf, yPos, [
+        { label: 'Fizyczny:', value: `${data.physical}%` },
+        { label: 'Emocjonalny:', value: `${data.emotional}%` },
+        { label: 'Intelektualny:', value: `${data.intellectual}%` },
+        { label: 'Duchowy:', value: `${data.spiritual}%` },
+        { label: 'Opis:', value: data.description },
+    ]);
+  }
+
+  private static addElementalBalanceSection(pdf: jsPDF, profile: UserProfile): void {
+    if (!profile.analysis.elementalBalance) return;
+    this.createNewPage(pdf, '☯️🌳 Równowaga Żywiołów');
+    let yPos = 30;
+
+    const data = profile.analysis.elementalBalance;
+    this.addSectionContent(pdf, yPos, [
+        { label: 'Ogień:', value: `${data.fire}%` },
+        { label: 'Woda:', value: `${data.water}%` },
+        { label: 'Ziemia:', value: `${data.earth}%` },
+        { label: 'Powietrze:', value: `${data.air}%` },
+        { label: 'Opis:', value: data.description },
+    ]);
+  }
+
+  private static async addQRCodePage(pdf: jsPDF, profile: UserProfile): Promise<void> {
+    this.createNewPage(pdf, 'Udostępnij Profil');
     
+    const appUrl = import.meta.env.VITE_APP_URL || 'https://cosmic-echoes.netlify.app';
+    const publicProfileUrl = `${appUrl}/profile/${profile.id}`;
+
     try {
-      // Generate actual QR code
-      const qrDataUrl = await QRCodeService.generateQRCode(window.location.href, {
+      const qrDataUrl = await QRCodeService.generateQRCode(publicProfileUrl, {
         size: 200,
-        color: {
-          dark: '#4B0082', // Cosmic purple
-          light: '#FFFFFF'
-        },
+        color: { dark: '#4B0082', light: '#FFFFFF' },
         margin: 2,
-        errorCorrectionLevel: 'M'
       });
       
-      // Add QR code image
-      const qrSize = 60;
+      const qrSize = 80;
       const qrX = (this.PAGE_WIDTH - qrSize) / 2;
-      const qrY = 80;
+      const qrY = 60;
       pdf.addImage(qrDataUrl, 'PNG', qrX, qrY, qrSize, qrSize);
       
-      // QR Code label
-      pdf.setTextColor(0, 0, 0);
+      pdf.setTextColor(...this.FONT_COLOR_DARK);
       pdf.setFontSize(12);
-      pdf.text('QR Code do Twojego profilu', this.PAGE_WIDTH / 2, qrY + qrSize + 15, { align: 'center' });
+      pdf.text('Zeskanuj kod, aby otworzyć publiczny profil', this.PAGE_WIDTH / 2, qrY + qrSize + 20, { align: 'center' });
       
-      // URL
       pdf.setFontSize(10);
-      pdf.text(window.location.href, this.PAGE_WIDTH / 2, qrY + qrSize + 25, { align: 'center' });
-      
-      // Instructions
-      pdf.setFontSize(12);
-      pdf.setTextColor(75, 0, 130);
-      pdf.text('Zeskanuj kod, aby otworzyć profil na telefonie', this.PAGE_WIDTH / 2, qrY + qrSize + 40, { align: 'center' });
+      pdf.setTextColor(0, 0, 255);
+      pdf.textWithLink(publicProfileUrl, this.PAGE_WIDTH / 2, qrY + qrSize + 30, { align: 'center', url: publicProfileUrl });
       
     } catch (error) {
       console.error('Error generating QR code for PDF:', error);
-      
-      // Fallback: draw placeholder rectangle
-      pdf.setFillColor(200, 200, 200);
-      const qrSize = 60;
-      const qrX = (this.PAGE_WIDTH - qrSize) / 2;
-      const qrY = 80;
-      pdf.rect(qrX, qrY, qrSize, qrSize, 'F');
-      
-      // Error message
       pdf.setTextColor(255, 0, 0);
-      pdf.setFontSize(10);
-      pdf.text('Błąd generowania QR kodu', this.PAGE_WIDTH / 2, qrY + qrSize + 15, { align: 'center' });
-      
-      // URL as fallback
-      pdf.setTextColor(0, 0, 0);
-      pdf.setFontSize(10);
-      pdf.text(window.location.href, this.PAGE_WIDTH / 2, qrY + qrSize + 25, { align: 'center' });
+      pdf.text('Błąd generowania kodu QR.', this.PAGE_WIDTH / 2, 100, { align: 'center' });
+      pdf.text(publicProfileUrl, this.PAGE_WIDTH / 2, 110, { align: 'center' });
     }
     
-    // Footer
-    pdf.setFontSize(8);
-    pdf.setTextColor(100, 100, 100);
-    pdf.text('🌟 CosmoFlow by ARCĀNUM - Odkryj rytm swojego życia', this.PAGE_WIDTH / 2, 280, { align: 'center' });
+    this.addFooter(pdf);
   }
 
   static async captureElementAsPDF(elementId: string, filename: string): Promise<void> {
     try {
       const element = document.getElementById(elementId);
-      if (!element) {
-        throw new Error(`Element with id "${elementId}" not found`);
-      }
+      if (!element) throw new Error(`Element with id "${elementId}" not found`);
 
-      // Capture element as canvas
       const canvas = await html2canvas(element, {
         scale: 2,
         useCORS: true,
-        allowTaint: true,
         backgroundColor: '#1a1a2e'
       });
 
-      // Create PDF
       const pdf = new jsPDF('p', 'mm', 'a4');
       const imgData = canvas.toDataURL('image/png');
       
-      // Calculate dimensions to fit page
       const imgWidth = this.PAGE_WIDTH - 2 * this.MARGIN;
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
       
-      pdf.addImage(imgData, 'PNG', this.MARGIN, this.MARGIN, imgWidth, imgHeight);
+      this.addHeader(pdf, 'Zrzut Ekranu');
+      pdf.addImage(imgData, 'PNG', this.MARGIN, this.MARGIN + 15, imgWidth, imgHeight);
+      this.addFooter(pdf);
+      
       pdf.save(filename);
       
     } catch (error) {

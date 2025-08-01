@@ -1,262 +1,106 @@
-# 🌟 CosmoFlow by ARCĀNUM
+# 🌟 Cosmic Echoes Guide
 
-## Find Your Life's Rhythm
-
-**CosmoFlow by ARCĀNUM** to innowacyjna aplikacja, która harmonijnie łączy starożytną mądrość z nowoczesną technologią i sztuczną inteligencją, aby pomóc młodym dorosłym (20-35 lat) odnaleźć swój wewnętrzny rytm, zrozumieć siebie i żyć w zgodzie z uniwersalnymi przepływami.
-
-### 🎯 Nasza Misja
-
-Dostarczenie użytkownikom osobistych wglądów i praktycznych wskazówek, które wspierają rozwój osobisty, samopoznanie i harmonijne życie poprzez połączenie 7 starożytnych systemów mądrości z zaawansowaną technologią AI.
-
-### ✨ Kluczowe Przesłania
-
-- **Find Your Life's Rhythm** - Odkryj swój osobisty rytm i harmonię
-- **Ancient Wisdom, AI Insights** - Unikalne połączenie tradycji i nowoczesności  
-- **Your Flow, Your Life** - Przejmij kontrolę nad swoim życiem
-- **Discover Your Blueprint** - Odkryj swój indywidualny plan życiowy
-
-## 🔮 Systemy Mądrości
-
-### **Numerologia**
-Analiza liczb życiowych i ich wpływu na Twoją ścieżkę
-
-### **Astrologia** 
-Interpretacja znaków zodiaku i wpływów planetarnych
-
-### **Chiński Zodiak**
-Starożytna mądrość zwierząt i żywiołów
-
-### **Human Design**
-Nowoczesny system typów energetycznych
-
-### **Kalendarz Majów**
-Cykliczna mądrość czasu i energii
-
-### **Bio-Rytmy**
-Analiza naturalnych cykli biologicznych
-
-### **Równowaga Żywiołów (Wu Xing)**
-Harmonia pięciu pierwiastków natury
-
-## 🚀 Technologie
-
-- **Frontend:** React 18 + TypeScript
-- **Build Tool:** Vite
-- **Styling:** Tailwind CSS + Shadcn/UI
-- **Database:** Supabase
-- **State Management:** React Query + React Hooks
-- **Forms:** React Hook Form + Zod
-- **Testing:** Vitest + JSDOM
-- **Charts:** Recharts
-- **Icons:** Lucide React
-
-## 🎨 Design System
-
-### Kolory Marki
-- **Primary Blue (Cosmo):** `#4A90E2` - Spokój, umysł, technologia
-- **Primary Green (Flow):** `#50E3C2` - Harmonia, wzrost, natura  
-- **Accent Gold (Arcanum):** `#D4AF37` - Elegancja, mądrość, jakość
-- **Soft Purple (Intuition):** `#B19CD9` - Intuicja, duchowość
-- **Warm Peach (Warmth):** `#FFDAB9` - Ciepło, przyjazność
-
-### Typografia
-- **Nagłówki:** Montserrat / Poppins
-- **Tekst główny:** Open Sans / Lato / Roboto
-
-### Styl UI/UX
-- Minimalistyczny design z dużą ilością białej przestrzeni
-- Płynne animacje i przejścia
-- Intuicyjna nawigacja oparta na ikonach
-- Personalizacja dopasowana do użytkownika
-
-## 📦 Instalacja
-
-```bash
-# Klonowanie repozytorium
-git clone https://github.com/nmatjar/cosmic-echoes-guide.git
-cd cosmic-echoes-guide
-
-# Instalacja zależności
-npm install
-
-# Uruchomienie serwera deweloperskiego
-npm run dev
-```
-
-## 🔧 Konfiguracja
-
-### Szybki start
-
-1. **Klonowanie i instalacja:**
-   ```bash
-   git clone https://github.com/nmatjar/cosmic-echoes-guide.git
-   cd cosmic-echoes-guide
-   npm install
-   ```
-
-2. **Konfiguracja zmiennych środowiskowych:**
-   ```bash
-   cp .env.example .env.local
-   # Edytuj .env.local z właściwymi kluczami Supabase
-   ```
-
-3. **Uruchomienie aplikacji:**
-   ```bash
-   npm run dev
-   ```
-   Aplikacja będzie dostępna pod `http://localhost:8083/`
-
-### 📚 Szczegółowa konfiguracja
-
-**Przeczytaj [CONFIGURATION.md](./CONFIGURATION.md)** dla kompletnych instrukcji dotyczących:
-- 🗄️ Konfiguracji bazy danych Supabase
-- 🔐 Zmiennych środowiskowych i bezpieczeństwa
-- 🔑 Uwierzytelniania i OAuth
-- 🚀 Deployment na Vercel/Netlify
-- 🔧 Troubleshooting i debugging
-
-### ⚠️ Wymagane zmienne środowiskowe
-
-```bash
-# Minimalna konfiguracja w .env.local
-VITE_SUPABASE_URL=https://your-project-id.supabase.co
-VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-```
-
-## 🧪 Testowanie
-
-```bash
-# Uruchomienie testów
-npm run test
-
-# Testy z pokryciem
-npm run test:coverage
-```
-
-## 🚀 Deployment
-
-```bash
-# Build produkcyjny
-npm run build
-
-# Podgląd buildu
-npm run preview
-```
-
-## 📱 Funkcje Aplikacji
-
-### **Analiza Profilu**
-- Kompleksowa analiza osobowości z 7 systemów
-- Spersonalizowane interpretacje AI
-- Szczegółowe raporty i wykresy
-
-### **🤖 Council Chat - Rada Kosmiczna**
-- **6 specjalistycznych agentów AI** z unikalnymi perspektywami
-- **Inteligentny wybór agenta** dopasowany do typu pytania
-- **Zaawansowane funkcje Level 1:**
-  - Automatyczny wybór optymalnego modelu AI
-  - Cache'owanie odpowiedzi dla lepszej wydajności
-  - Śledzenie kosztów i limity budżetu
-  - Retry logic z obsługą błędów
-- **Personalizacja** oparta na pełnym profilu kosmicznym
-- **Kontekst czasowy** - uwzględnia biorytmy i energie dnia
-
-#### Członkowie Rady:
-- **🏗️ Architekt** - Planowanie strategiczne i struktura życia
-- **🔮 Wyrocznia** - Intuicyjne wglądy i przewodnictwo przyszłości
-- **⚗️ Alchemik** - Transformacja emocjonalna i relacje
-- **🚀 Pionier** - Wskazówki zorientowane na działanie i pracę z energią
-- **📚 Kronikarz** - Analiza wzorców i historyczna mądrość
-- **🌊 Echo** - Refleksyjne pytania i odkrywanie siebie
-
-### **Dzienne Wglądy**
-- Codzienne wpływy Bio-Rytmów i Kalendarza Majów
-- Personalizowane wskazówki AI
-- Praktyczne porady na każdy dzień
-
-### **Zarządzanie Profilami**
-- Lokalne przechowywanie w localStorage
-- Synchronizacja z chmurą Supabase
-- Eksport i import profili
-
-### **Eksport Danych**
-- Format JSON zgodny z ProfileCoder 3.4
-- Udostępnianie wyników
-- Backup profili
-
-## 🏗️ Struktura Projektu
-
-```
-cosmic-echoes-guide/
-├── public/                 # Zasoby publiczne
-├── src/
-│   ├── components/         # Komponenty React
-│   │   ├── ui/            # Komponenty Shadcn UI
-│   │   ├── auth/          # Komponenty uwierzytelniania
-│   │   └── ...            # Sekcje analityczne
-│   ├── engine/            # Silnik analityczny
-│   │   ├── modules/       # Moduły systemów mądrości
-│   │   ├── data/          # Dane referencyjne
-│   │   └── types.ts       # Definicje typów
-│   ├── services/          # Serwisy aplikacji
-│   ├── hooks/             # Custom React hooks
-│   ├── pages/             # Strony aplikacji
-│   └── integrations/      # Integracje zewnętrzne
-├── supabase/              # Konfiguracja bazy danych
-└── ...                    # Pliki konfiguracyjne
-```
-
-## 🌟 Status Projektu
-
-✅ **Projekt w pełni funkcjonalny i gotowy do użycia!**
-
-### Ostatnie aktualizacje:
-- ✅ Integracja z bazą danych Supabase
-- ✅ System uwierzytelniania użytkowników  
-- ✅ Synchronizacja profili w chmurze
-- ✅ Wszystkie testy przechodzą pomyślnie
-- ✅ Build produkcyjny bez błędów
-- ✅ Rebranding na CosmoFlow by ARCĀNUM
-
-## 🎯 Grupa Docelowa
-
-**Młodzi dorośli (20-35 lat)** poszukujący:
-- Samopoznania i rozwoju osobistego
-- Harmonii w życiu codziennym
-- Praktycznych wskazówek opartych na mądrości
-- Nowoczesnych narzędzi do self-discovery
-- Inspiracji do świadomego życia
-
-## 🔮 Roadmapa
-
-### Faza 1: Podstawy ✅
-- [x] Implementacja 7 systemów mądrości
-- [x] Interfejs użytkownika
-- [x] Lokalne zarządzanie profilami
-
-### Faza 2: Chmura ✅  
-- [x] Integracja Supabase
-- [x] Uwierzytelnianie użytkowników
-- [x] Synchronizacja profili
-
-### Faza 3: AI & Personalizacja ✅
-- [x] Council Chat - Rada Kosmiczna z 6 agentami AI
-- [x] OpenRouter Level 1 Features (cache, cost tracking, auto-selection)
-- [x] Zaawansowane interpretacje AI
-- [x] Personalizowane rekomendacje
-- [x] Adaptacyjny interfejs
-
-### Faza 4: Społeczność 📋
-- [ ] Udostępnianie profili
-- [ ] Społeczność użytkowników
-- [ ] Porównania kompatybilności
-
-## 📄 Licencja
-
-MIT License - Zobacz [LICENSE](LICENSE) dla szczegółów.
+**Ancient Wisdom, Modern Insights. Your Journey to Self-Discovery.**
 
 ---
 
-**CosmoFlow by ARCĀNUM** - *Ancient Wisdom, AI Insights*
+**Cosmic Echoes Guide** is more than just an application; it's a sanctuary for self-exploration. We weave together the timeless wisdom of ancient esoteric systems with the power of modern technology to create a personalized guide for your life's journey. Our mission is to empower you to understand your unique blueprint, navigate life with intention, and unlock your true potential.
 
-© 2025 ARCĀNUM. Wszelkie prawa zastrzeżone.
+This project is built on the belief that self-knowledge is the key to a fulfilling life. We are creating a tool that is not only insightful but also beautiful, intuitive, and deeply personal.
+
+## ✨ The Philosophy: A Tool for Human Flourishing
+
+We believe that technology should serve humanity's highest aspirations. Cosmic Echoes Guide is an open-source project dedicated to this ideal. Our core principles are:
+
+*   **Empowerment through Insight:** We provide you with the knowledge and tools to understand your strengths, challenges, and life patterns.
+*   **Holistic Approach:** We integrate seven distinct wisdom systems to offer a comprehensive and nuanced view of your personality.
+*   **Ethical & Open:** This project is open-source, transparent, and community-driven. We are committed to ethical AI and data privacy. Your journey is your own.
+*   **A Call to Co-Creation:** This is a living project. We invite you to join us in building a tool that can help millions on their path of self-discovery.
+
+## 🔮 The Seven Wisdom Systems
+
+Our guide synthesizes insights from seven powerful systems:
+
+1.  **Astrology:** Uncover your cosmic signature through the positions of the planets.
+2.  **Numerology:** Decode the vibrational meaning of numbers in your life.
+3.  **Human Design:** Discover your unique energy type and decision-making strategy.
+4.  **Chinese Zodiac:** Explore the wisdom of the Eastern astrological traditions.
+5.  **Mayan Calendar:** Connect with the cyclical energies of the ancient Mayan cosmology.
+6.  **Bio-Rhythms:** Understand the natural cycles of your physical, emotional, and intellectual energy.
+7.  **Elemental Balance (Wu Xing):** Harmonize the five elements within you for greater well-being.
+
+## 🚀 Tech Stack
+
+*   **Frontend:** React 18 + TypeScript
+*   **Build Tool:** Vite
+*   **Styling:** Tailwind CSS + Shadcn/UI
+*   **Backend & Database:** Supabase
+*   **AI Integration:** OpenRouter API
+*   **State Management:** React Query + Zustand
+*   **Testing:** Vitest + React Testing Library
+
+## 📦 Getting Started
+
+### Prerequisites
+
+*   Node.js (v18 or higher)
+*   `bun` package manager (`npm install -g bun`)
+*   A Supabase account (for database and auth)
+*   An OpenRouter API key (for AI features)
+
+### Installation & Setup
+
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/your-username/cosmic-echoes-guide.git
+    cd cosmic-echoes-guide
+    ```
+
+2.  **Install dependencies:**
+    ```bash
+    bun install
+    ```
+
+3.  **Set up environment variables:**
+    *   Copy the example file: `cp .env.example .env.local`
+    *   Fill in your Supabase and OpenRouter credentials in `.env.local`.
+
+4.  **Run the development server:**
+    ```bash
+    bun run dev
+    ```
+    The application will be available at `http://localhost:5173`.
+
+## 💖 How to Contribute
+
+This is a community project, and we welcome contributions of all kinds! Whether you're a developer, a designer, a writer, or an enthusiast of esoteric systems, there's a place for you here.
+
+### Why Contribute?
+
+*   **Help Shape the Future of Self-Discovery:** Be part of a project that aims to make a real difference in people's lives.
+*   **Learn and Grow:** Work with a modern tech stack and a passionate community.
+*   **Share Your Wisdom:** If you have expertise in any of the wisdom systems, help us refine our interpretations and create more profound content.
+
+### Ways to Contribute
+
+*   **Code:** Fix bugs, add new features, or improve the existing codebase. Check out our open issues to get started.
+*   **Design:** Help us improve the UI/UX and create a more beautiful and intuitive experience.
+*   **Content:** Contribute to the interpretations of the wisdom systems, write documentation, or help with translations.
+*   **Feedback:** Use the application and share your thoughts and suggestions.
+
+### Contribution Guidelines
+
+1.  **Fork the repository** and create a new branch for your feature or bug fix.
+2.  **Follow the existing code style** and conventions.
+3.  **Write tests** for your changes.
+4.  **Submit a pull request** with a clear description of your changes.
+
+Please read our `CONTRIBUTING.md` file for more detailed guidelines.
+
+## 📜 License
+
+This project is licensed under the MIT License. See the `LICENSE` file for details.
+
+---
+
+**Join us on this journey to create a more conscious and enlightened world, one profile at a time.**
