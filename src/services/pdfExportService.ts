@@ -164,9 +164,9 @@ export class PDFExportService {
 
     const data = profile.analysis.numerology;
     const items = [
-        { title: 'Liczba Ścieżki Życia', value: data.lifePathNumber.toString(), desc: data.description || '' },
-        { title: 'Liczba Ekspresji', value: data.expressionNumber.toString(), desc: 'Jak wyrażasz siebie w świecie.' },
-        { title: 'Liczba Duszy', value: data.soulNumber.toString(), desc: 'Twoje najgłębsze pragnienia i motywacje.' },
+        { title: 'Liczba Ścieżki Życia', value: data.lifePathNumber?.toString() || 'N/A', desc: data.description || '' },
+        { title: 'Liczba Ekspresji', value: data.expressionNumber?.toString() || 'N/A', desc: 'Jak wyrażasz siebie w świecie.' },
+        { title: 'Liczba Duszy', value: data.soulNumber?.toString() || 'N/A', desc: 'Twoje najgłębsze pragnienia i motywacje.' },
     ];
 
     items.forEach(item => {
