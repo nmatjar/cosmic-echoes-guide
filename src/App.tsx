@@ -17,12 +17,13 @@ import { useAuth } from "@/hooks/useAuth";
 import AuthPage from "@/components/auth/AuthPage";
 import { CloudProfileManager } from "@/services/cloudProfileManager";
 import { useToast } from "@/hooks/use-toast";
+import { PricingPage } from "./pages/PricingPage"; // New import
 
 import { getProfiles, createProfile, saveProfiles } from "@/services/profileManager";
 
 const queryClient = new QueryClient();
 
-type AppState = 'loading' | 'auth' | 'welcome' | 'login' | 'app';
+type AppState = 'loading' | 'auth' | 'welcome' | 'login' | 'app' | 'pricing'; // Added 'pricing'
 
 // Component to handle main app logic
 const AppContent = () => {
@@ -34,7 +35,7 @@ const AppContent = () => {
   const location = useLocation();
 
   // Check if current route is a public route (no auth required)
-  const isPublicRoute = location.pathname.startsWith('/profile/') || location.pathname === '/landing' || location.pathname === '/welcome';
+  const isPublicRoute = location.pathname.startsWith('/profile/') || location.pathname === '/landing' || location.pathname === '/welcome' || location.pathname === '/pricing'; // Added '/pricing'
 
   // Handle auth state and profile loading
   useEffect(() => {
@@ -87,12 +88,12 @@ const AppContent = () => {
           setProfiles(localProfiles);
           setAppState('login'); // Show login for existing profiles
         } else {
-          // New users - check if already on landing page
-          if (location.pathname === '/landing') {
-            setAppState('app'); // Allow landing page to render
+          // New users - redirect to pricing page
+          if (location.pathname === '/pricing') {
+            setAppState('app'); // Allow pricing page to render
           } else {
-            // Redirect to landing page
-            window.location.href = '/landing';
+            // Redirect to pricing page
+            window.location.href = '/pricing';
             return;
           }
         }
@@ -101,7 +102,7 @@ const AppContent = () => {
 
     // Add a small delay for better UX
     setTimeout(initializeApp, 1000);
-  }, [user, authLoading, toast, isPublicRoute]);
+  }, [user, authLoading, toast, isPublicRoute, location.pathname]); // Added location.pathname to dependencies
 
   const handleProfileCreated = async (profile: UserProfile) => {
     // Save locally first
@@ -178,6 +179,14 @@ const AppContent = () => {
     setAppState('loading'); // Trigger re-initialization
   };
 
+  const handleChooseFreePlan = () => {
+    setAppState('welcome'); // Go to profile creation
+  };
+
+  const handleChoosePaidPlan = () => {
+    setAppState('auth'); // Go to authentication
+  };
+
   if (appState === 'loading') {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-cosmic">
@@ -230,6 +239,21 @@ const AppContent = () => {
     );
   }
 
+  if (appState === 'pricing') { // New pricing state rendering
+    return (
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <PricingPage 
+            onChooseFreePlan={handleChooseFreePlan}
+            onChoosePaidPlan={handleChoosePaidPlan}
+          />
+        </TooltipProvider>
+      </QueryClientProvider>
+    );
+  }
+
   // Main app with routing - always render router for public profiles
   return (
     <Routes>
@@ -269,6 +293,15 @@ const AppContent = () => {
       <Route 
         path="/council" 
         element={<CouncilPage />} 
+      />
+      <Route 
+        path="/pricing" 
+        element={
+          <PricingPage 
+            onChooseFreePlan={handleChooseFreePlan}
+            onChoosePaidPlan={handleChoosePaidPlan}
+          />
+        } 
       />
       <Route path="*" element={<NotFound />} />
     </Routes>
