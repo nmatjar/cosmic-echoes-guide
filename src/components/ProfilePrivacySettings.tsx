@@ -15,7 +15,7 @@ interface ProfilePrivacySettingsProps {
 }
 
 export function ProfilePrivacySettings({ currentProfile }: ProfilePrivacySettingsProps) {
-  const [isPublic, setIsPublic] = useState(true);
+  const [isPublic, setIsPublic] = useState(currentProfile?.isPublic ?? false);
   const [loading, setLoading] = useState(false);
   const [analytics, setAnalytics] = useState<{
     viewCount: number;
@@ -24,8 +24,11 @@ export function ProfilePrivacySettings({ currentProfile }: ProfilePrivacySetting
   const { toast } = useToast();
 
   useEffect(() => {
-    loadAnalytics();
-  }, []);
+    if (currentProfile) {
+      setIsPublic(currentProfile.isPublic ?? false);
+      loadAnalytics();
+    }
+  }, [currentProfile]);
 
   const loadAnalytics = async () => {
     try {

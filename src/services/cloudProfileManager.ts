@@ -54,6 +54,7 @@ export class CloudProfileManager {
         },
         analysis: (data.analysis_results as ComprehensiveAnalysis) || {},
         pin: '', // PIN is not stored in cloud for security
+        isPublic: data.is_public, // Map is_public from cloud to UserProfile
         createdAt: data.created_at,
         updatedAt: data.updated_at,
       };
@@ -214,6 +215,7 @@ export class CloudProfileManager {
         },
         analysis: (data.analysis_results as ComprehensiveAnalysis) || {},
         pin: '', // Never expose PIN
+        isPublic: data.is_public, // Map is_public from cloud to UserProfile
         createdAt: data.created_at,
         updatedAt: data.updated_at,
       };

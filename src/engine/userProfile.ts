@@ -11,6 +11,7 @@ export interface UserProfile {
   };
   analysis: ComprehensiveAnalysis;
   pin: string; // 4-6 digit PIN for profile security
+  isPublic?: boolean; // Added for public profile visibility
   createdAt: string; 
   updatedAt: string; 
 }
