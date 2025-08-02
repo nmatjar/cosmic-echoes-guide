@@ -12,6 +12,10 @@ export interface CloudProfile {
   analysis_results?: ComprehensiveAnalysis;
   is_public: boolean;
   view_count: number;
+  subscription_plan: string;
+  subscription_status: string;
+  subscription_ends_at?: string;
+  stripe_customer_id?: string;
   created_at: string;
   updated_at: string;
 }
@@ -55,6 +59,7 @@ export class CloudProfileManager {
         analysis: (data.analysis_results as ComprehensiveAnalysis) || {},
         pin: '', // PIN is not stored in cloud for security
         isPublic: data.is_public, // Map is_public from cloud to UserProfile
+        subscriptionPlan: data.subscription_plan as UserProfile['subscriptionPlan'],
         createdAt: data.created_at,
         updatedAt: data.updated_at,
       };
@@ -84,6 +89,8 @@ export class CloudProfileManager {
         birth_time: profile.birthData.time,
         birth_place: profile.birthData.place,
         analysis_results: JSON.parse(JSON.stringify(profile.analysis)),
+        is_public: profile.isPublic ?? false, // Ensure is_public is saved
+        subscription_plan: profile.subscriptionPlan ?? 'free',
       };
 
       // Try to update existing profile first
