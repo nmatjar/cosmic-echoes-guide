@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { CheckCircle, XCircle, Sparkles, Mail, Brain, Users, CalendarDays, BookOpen } from 'lucide-react';
+import { CheckCircle, XCircle, Sparkles, Mail, Brain, Users, CalendarDays, BookOpen, MessageSquareText, MemoryStick, Settings, BellRing, Award, Globe } from 'lucide-react';
 
 interface PricingPageProps {
   onChooseFreePlan: () => void;
@@ -12,34 +12,41 @@ interface PricingPageProps {
 export function PricingPage({ onChooseFreePlan, onChoosePaidPlan }: PricingPageProps) {
   const features = {
     free: [
-      "Podstawowa analiza profilu (lokalnie)",
-      "Ograniczony dostęp do asystentów AI (podstawowe modele)",
-      "Brak pamięci rozmów AI",
-      "Brak personalizacji i testów",
+      { text: "Podstawowa analiza profilu (lokalnie)", icon: Sparkles },
+      { text: "Ograniczony dostęp do asystentów AI (podstawowe modele)", icon: Brain },
+      { text: "Brak pamięci rozmów AI", icon: MemoryStick },
+      { text: "Brak personalizacji i testów", icon: Settings },
+      { text: "Brak codziennych powiadomień e-mail", icon: BellRing },
+      { text: "Brak dostępu do ekspertów", icon: Award },
     ],
     daily: [
-      "Pełna analiza profilu (chmura)",
-      "Dostęp do wszystkich asystentów AI (najlepsze modele)",
-      "Pamięć rozmów AI",
-      "Pełna personalizacja i testy",
-      "Codzienne powiadomienia e-mail (rytm dnia, zadania)",
+      { text: "Pełna analiza profilu (chmura)", icon: Globe },
+      { text: "Dostęp do wszystkich asystentów AI (najlepsze modele)", icon: Brain },
+      { text: "Pamięć rozmów AI", icon: MemoryStick },
+      { text: "Pełna personalizacja i testy", icon: Settings },
+      { text: "Codzienne powiadomienia e-mail (rytm dnia, zadania)", icon: BellRing },
+      { text: "Brak dostępu do ekspertów", icon: Award },
     ],
     monthly: [
-      "Wszystko z planu Dziennego",
-      "Priorytetowy dostęp do nowych funkcji",
-      "Dostęp do katalogu ekspertów i przewodników",
-      "Wsparcie premium",
+      { text: "Wszystko z planu Dziennego", icon: CheckCircle },
+      { text: "Priorytetowy dostęp do nowych funkcji", icon: Sparkles },
+      { text: "Dostęp do katalogu ekspertów i przewodników", icon: Users },
+      { text: "Wsparcie premium", icon: Mail },
     ],
   };
 
-  const renderFeature = (text: string, included: boolean) => (
-    <li key={text} className="flex items-center gap-2 text-sm">
-      {included ? <CheckCircle className="h-4 w-4 text-green-500" /> : <XCircle className="h-4 w-4 text-red-500" />}
-      <span className={included ? "text-cosmic-starlight" : "text-cosmic-starlight/50 line-through"}>
-        {text}
-      </span>
-    </li>
-  );
+  const renderFeature = (feature: { text: string; icon: React.ElementType }, included: boolean) => {
+    const IconComponent = feature.icon;
+    return (
+      <li key={feature.text} className="flex items-center gap-2 text-sm">
+        {included ? <CheckCircle className="h-4 w-4 text-green-500" /> : <XCircle className="h-4 w-4 text-red-500" />}
+        <IconComponent className={included ? "h-4 w-4 text-cosmic-gold" : "h-4 w-4 text-cosmic-starlight/50"} />
+        <span className={included ? "text-cosmic-starlight" : "text-cosmic-starlight/50 line-through"}>
+          {feature.text}
+        </span>
+      </li>
+    );
+  };
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-cosmic p-4">
@@ -64,8 +71,8 @@ export function PricingPage({ onChooseFreePlan, onChoosePaidPlan }: PricingPageP
             </div>
             <ul className="space-y-2">
               {features.free.map(f => renderFeature(f, true))}
-              {features.daily.filter(f => !features.free.includes(f)).map(f => renderFeature(f, false))}
-              {features.monthly.filter(f => !features.daily.includes(f) && !features.free.includes(f)).map(f => renderFeature(f, false))}
+              {features.daily.filter(f => !features.free.some(freeF => freeF.text === f.text)).map(f => renderFeature(f, false))}
+              {features.monthly.filter(f => !features.daily.some(dailyF => dailyF.text === f.text) && !features.free.some(freeF => freeF.text === f.text)).map(f => renderFeature(f, false))}
             </ul>
           </CardContent>
           <CardFooter className="pt-4">
@@ -90,7 +97,7 @@ export function PricingPage({ onChooseFreePlan, onChoosePaidPlan }: PricingPageP
             </div>
             <ul className="space-y-2">
               {features.daily.map(f => renderFeature(f, true))}
-              {features.monthly.filter(f => !features.daily.includes(f)).map(f => renderFeature(f, false))}
+              {features.monthly.filter(f => !features.daily.some(dailyF => dailyF.text === f.text)).map(f => renderFeature(f, false))}
             </ul>
           </CardContent>
           <CardFooter className="pt-4">
