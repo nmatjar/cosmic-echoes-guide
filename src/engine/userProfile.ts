@@ -13,6 +13,7 @@ export interface UserProfile {
   pin: string; // 4-6 digit PIN for profile security
   isPublic?: boolean; // Added for public profile visibility
   subscriptionPlan?: 'free' | 'daily' | 'monthly'; // Added for subscription plan
+  receiveDailyEmails?: boolean; // Added for email notifications opt-in
   createdAt: string; 
   updatedAt: string; 
 }
