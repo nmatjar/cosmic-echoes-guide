@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
@@ -12,7 +12,7 @@ import { CouncilChatService } from '../services/councilChatService';
 import { COUNCIL_AGENTS, OPENROUTER_MODELS } from '../config/councilAgents';
 import { ChatSession, ChatMessage, CouncilAgent } from '../types/council';
 import { UserProfile } from '../engine/userProfile';
-import { Loader2, Send, Settings, History, BarChart3, MessageSquare, Sparkles, Download, Trash2 } from 'lucide-react';
+import { Loader2, Send, Settings, History, BarChart3, MessageSquare, Sparkles, Download, Trash2, Lock } from 'lucide-react';
 
 interface CouncilChatProps {
   userProfile: UserProfile;
@@ -25,6 +25,8 @@ export const CouncilChat: React.FC<CouncilChatProps> = ({ userProfile, userId })
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [streamingMessage, setStreamingMessage] = useState('');
+  const [isStreaming, setIsStreaming] = useState(false);
   const [selectedAgent, setSelectedAgent] = useState<CouncilAgent | undefined>();
   const [selectedModel, setSelectedModel] = useState('anthropic/claude-3.5-sonnet');
   const [apiKey, setApiKey] = useState('');
@@ -35,6 +37,17 @@ export const CouncilChat: React.FC<CouncilChatProps> = ({ userProfile, userId })
   const [intention, setIntention] = useState('');
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const isFreePlan = userProfile.subscriptionPlan === 'free';
+
+  const availableModels = useMemo(() => {
+    if (isFreePlan) {
+      // Allow only specific free models for free plan users
+      return OPENROUTER_MODELS.filter(model => model.id.includes(':free') || model.id === 'google/gemini-2.5-flash-lite');
+    } else {
+      return OPENROUTER_MODELS;
+    }
+  }, [isFreePlan]);
 
   useEffect(() => {
     // Check for saved API key
@@ -118,8 +131,31 @@ export const CouncilChat: React.FC<CouncilChatProps> = ({ userProfile, userId })
     if (!chatService || !currentSession || !inputMessage.trim() || isLoading) return;
 
     setIsLoading(true);
+    setIsStreaming(true);
+    setStreamingMessage('');
     const userMessage = inputMessage;
     setInputMessage('');
+
+    // Add user message immediately
+    const userMsg: ChatMessage = {
+      message_id: `user-${Date.now()}`,
+      session_id: currentSession.session_id,
+      author: 'user',
+      content: userMessage,
+      timestamp: new Date().toISOString(),
+      created_at: new Date().toISOString()
+    };
+    setMessages(prev => [...prev, userMsg]);
+
+    // Create placeholder for streaming agent response
+    const streamingPlaceholder: ChatMessage = {
+      message_id: `streaming-${Date.now()}`,
+      session_id: currentSession.session_id,
+      author: 'agent',
+      content: '',
+      timestamp: new Date().toISOString(),
+      created_at: new Date().toISOString()
+    };
 
     try {
       const { userMessage: savedUserMsg, agentResponse } = await chatService.sendMessageToCouncil(
@@ -128,24 +164,56 @@ export const CouncilChat: React.FC<CouncilChatProps> = ({ userProfile, userId })
         userProfile,
         selectedAgent,
         selectedModel,
-        userId
+        userId,
+        (chunk: string) => {
+          // Handle streaming chunks - accumulate text
+          setStreamingMessage(prev => {
+            const newContent = prev + chunk;
+            // Update the placeholder message in real-time with accumulated content
+            setMessages(prevMessages => {
+              const updatedMessages = [...prevMessages];
+              const lastMessage = updatedMessages[updatedMessages.length - 1];
+              if (lastMessage && lastMessage.message_id === streamingPlaceholder.message_id) {
+                lastMessage.content = newContent;
+              } else {
+                // Add streaming placeholder if not exists
+                updatedMessages.push({
+                  ...streamingPlaceholder,
+                  content: newContent
+                });
+              }
+              return updatedMessages;
+            });
+            return newContent;
+          });
+        }
       );
 
-      setMessages(prev => [...prev, savedUserMsg, agentResponse]);
+      // Replace streaming placeholder with final response
+      setMessages(prev => {
+        const filtered = prev.filter(msg => msg.message_id !== streamingPlaceholder.message_id);
+        return [...filtered.slice(0, -1), savedUserMsg, agentResponse]; // Remove temp user msg, add real ones
+      });
+
     } catch (error) {
       console.error('Failed to send message:', error);
-      // Add error message to chat
-      const errorMessage: ChatMessage = {
-        message_id: `error-${Date.now()}`,
-        session_id: currentSession.session_id,
-        author: 'agent',
-        content: 'Przepraszam, wystąpił błąd. Spróbuj ponownie.',
-        timestamp: new Date().toISOString(),
-        created_at: new Date().toISOString()
-      };
-      setMessages(prev => [...prev, errorMessage]);
+      // Remove streaming placeholder and add error message
+      setMessages(prev => {
+        const filtered = prev.filter(msg => msg.message_id !== streamingPlaceholder.message_id);
+        const errorMessage: ChatMessage = {
+          message_id: `error-${Date.now()}`,
+          session_id: currentSession.session_id,
+          author: 'agent',
+          content: 'Przepraszam, wystąpił błąd. Spróbuj ponownie.',
+          timestamp: new Date().toISOString(),
+          created_at: new Date().toISOString()
+        };
+        return [...filtered, errorMessage];
+      });
     } finally {
       setIsLoading(false);
+      setIsStreaming(false);
+      setStreamingMessage('');
     }
   };
 
@@ -443,8 +511,7 @@ export const CouncilChat: React.FC<CouncilChatProps> = ({ userProfile, userId })
                       <div className="font-medium">Automatyczny wybór</div>
                       <div className="text-xs opacity-80">Rada wybierze najlepszego agenta</div>
                     </div>
-                  </div>
-                </Button>
+                  </Button>
 
                 {/* Individual agents */}
                 {Object.values(COUNCIL_AGENTS).map((agent) => (
