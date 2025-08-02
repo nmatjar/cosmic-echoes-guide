@@ -88,6 +88,17 @@ const Index = ({ currentProfile, onLogout }: IndexProps) => {
                   </Button>
                 </Link>
               )}
+              <div className="flex items-center gap-2">
+              {currentProfile.subscriptionPlan === 'free' && (
+                <Link to="/pricing">
+                  <Button
+                    variant="outline"
+                    className="border-cosmic-gold/30 text-cosmic-gold hover:bg-cosmic-gold/20"
+                  >
+                    Ulepsz Plan
+                  </Button>
+                </Link>
+              )}
               <Button 
                 onClick={onLogout}
                 variant="outline"
@@ -96,6 +107,7 @@ const Index = ({ currentProfile, onLogout }: IndexProps) => {
                 <LogOut className="h-4 w-4 mr-2" />
                 Wyloguj
               </Button>
+            </div>
             </div>
           </div>
         )}
