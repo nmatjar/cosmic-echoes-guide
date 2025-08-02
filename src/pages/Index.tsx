@@ -15,6 +15,7 @@ import { CosmicCard } from "@/components/ui/cosmic-card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { LogOut, User } from "lucide-react";
+import { Link } from "react-router-dom";
 
 import { UserProfile } from "@/engine/userProfile";
 
@@ -76,14 +77,26 @@ const Index = ({ currentProfile, onLogout }: IndexProps) => {
                 {currentProfile.name}
               </h2>
             </div>
-            <Button 
-              onClick={onLogout}
-              variant="outline"
-              className="border-cosmic-purple/30 text-cosmic-purple hover:bg-cosmic-purple/20"
-            >
-              <LogOut className="h-4 w-4 mr-2" />
-              Wyloguj
-            </Button>
+            <div className="flex items-center gap-2">
+              {currentProfile.subscriptionPlan === 'free' && (
+                <Link to="/pricing">
+                  <Button
+                    variant="outline"
+                    className="border-cosmic-gold/30 text-cosmic-gold hover:bg-cosmic-gold/20"
+                  >
+                    Ulepsz Plan
+                  </Button>
+                </Link>
+              )}
+              <Button 
+                onClick={onLogout}
+                variant="outline"
+                className="border-cosmic-purple/30 text-cosmic-purple hover:bg-cosmic-purple/20"
+              >
+                <LogOut className="h-4 w-4 mr-2" />
+                Wyloguj
+              </Button>
+            </div>
           </div>
         )}
 
