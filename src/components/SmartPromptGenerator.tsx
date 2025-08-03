@@ -95,31 +95,28 @@ export function SmartPromptGenerator({ currentProfile }: SmartPromptGeneratorPro
   };
 
   return (
-    <Card className="cosmic-card bg-gradient-mystical border-cosmic-purple/30">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-cosmic-gold">
-          🤖 Generator Spersonalizowanego Promptu
-        </CardTitle>
-        <CardDescription className="text-cosmic-starlight">
-          Stwórz unikalny prompt dla AI, idealnie dostosowany do Twojego kosmicznego profilu.
-        </CardDescription>
-      </CardHeader>
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <h2 className="text-2xl font-bold text-foreground">🤖 Generator Spersonalizowanego Promptu</h2>
+      </div>
+      <p className="text-muted-foreground">
+        Stwórz unikalny prompt dla AI, idealnie dostosowany do Twojego kosmicznego profilu.
+      </p>
       
-      <CardContent className="space-y-6">
+      <div className="space-y-6 p-4 rounded-lg bg-background/20 backdrop-blur-sm border border-white/5">
         {/* Custom Question */}
         <div className="space-y-3">
-          <label className="text-sm font-medium text-cosmic-gold">Twoje Główne Pytanie</label>
+          <label className="text-sm font-medium text-primary">Twoje Główne Pytanie</label>
           <Textarea 
             value={config.question}
             onChange={(e) => setConfig(prev => ({ ...prev, question: e.target.value }))}
             placeholder="Np. Jakie kroki powinienem podjąć w najbliższym roku?"
-            className="bg-cosmic-purple/10 border-cosmic-purple/30 text-cosmic-starlight"
           />
         </div>
 
         {/* Detail Level Slider */}
         <div className="space-y-3">
-          <label className="text-sm font-medium text-cosmic-gold">
+          <label className="text-sm font-medium text-primary">
             Poziom szczegółowości: {config.detailLevel}/5
           </label>
           <Slider
@@ -133,7 +130,7 @@ export function SmartPromptGenerator({ currentProfile }: SmartPromptGeneratorPro
 
         {/* Focus Areas */}
         <div className="space-y-3">
-          <label className="text-sm font-medium text-cosmic-gold">Obszary zainteresowania</label>
+          <label className="text-sm font-medium text-primary">Obszary zainteresowania</label>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
             {focusAreaOptions.map((area) => (
               <div key={area.id} className="flex items-center space-x-2">
@@ -142,7 +139,7 @@ export function SmartPromptGenerator({ currentProfile }: SmartPromptGeneratorPro
                   checked={config.focusAreas.includes(area.id)}
                   onCheckedChange={(checked) => handleFocusAreaChange(area.id, !!checked)}
                 />
-                <label htmlFor={area.id} className="text-sm text-cosmic-starlight flex items-center gap-1 cursor-pointer">
+                <label htmlFor={area.id} className="text-sm flex items-center gap-1 cursor-pointer">
                   <span>{area.icon}</span>
                   {area.label}
                 </label>
@@ -153,11 +150,11 @@ export function SmartPromptGenerator({ currentProfile }: SmartPromptGeneratorPro
 
         {/* Personality Type */}
         <div className="space-y-3">
-          <label className="text-sm font-medium text-cosmic-gold">Preferowany styl odpowiedzi</label>
+          <label className="text-sm font-medium text-primary">Preferowany styl odpowiedzi</label>
           <Select value={config.personalityType} onValueChange={(value) => 
             setConfig(prev => ({ ...prev, personalityType: value }))
           }>
-            <SelectTrigger className="border-cosmic-purple/30 bg-cosmic-purple/10 text-cosmic-starlight">
+            <SelectTrigger>
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -173,15 +170,15 @@ export function SmartPromptGenerator({ currentProfile }: SmartPromptGeneratorPro
         <Button 
           onClick={generatePrompt}
           disabled={!currentProfile || config.focusAreas.length === 0}
-          className="w-full bg-gradient-to-r from-cosmic-purple to-cosmic-pink hover:from-cosmic-pink hover:to-cosmic-purple transition-all duration-300 text-white"
+          className="w-full"
         >
           ✨ Generuj Spersonalizowany Prompt
         </Button>
 
         {generatedPrompt && (
-          <div className="space-y-3 pt-4 border-t border-cosmic-purple/20">
+          <div className="space-y-3 pt-4 border-t border-border/20">
             <div className="flex items-center justify-between">
-              <label className="text-sm font-medium text-cosmic-gold">
+              <label className="text-sm font-medium text-primary">
                 Gotowy do wklejenia do AI:
               </label>
               <Button onClick={copyPrompt} variant="ghost" size="sm">
@@ -191,12 +188,12 @@ export function SmartPromptGenerator({ currentProfile }: SmartPromptGeneratorPro
             <Textarea
               value={generatedPrompt}
               readOnly
-              className="min-h-[200px] font-mono text-xs bg-cosmic-dark/50 border-cosmic-purple/30 text-cosmic-starlight resize-none"
+              className="min-h-[200px] font-mono text-xs resize-none"
             />
           </div>
         )}
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }
 

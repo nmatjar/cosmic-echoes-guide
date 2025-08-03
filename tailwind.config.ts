@@ -1,7 +1,6 @@
 import type { Config } from "tailwindcss";
 
 export default {
-	darkMode: ["class"],
 	content: [
 		"./pages/**/*.{ts,tsx}",
 		"./components/**/*.{ts,tsx}",
@@ -61,22 +60,13 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
-				},
-				cosmic: {
-					purple: 'hsl(var(--cosmic-purple))',
-					blue: 'hsl(var(--cosmic-blue))',
-					pink: 'hsl(var(--cosmic-pink))',
-					gold: 'hsl(var(--cosmic-gold))',
-					teal: 'hsl(var(--cosmic-teal))',
-					starlight: 'hsl(var(--starlight))',
-					nebula: 'hsl(var(--nebula))'
 				}
 			},
 			backgroundImage: {
-				'gradient-cosmic': 'var(--gradient-cosmic)',
-				'gradient-mystical': 'var(--gradient-mystical)',
-				'gradient-stellar': 'var(--gradient-stellar)',
-				'gradient-aurora': 'var(--gradient-aurora)'
+				'gradient-cosmic': 'linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)))',
+				'gradient-mystical': 'linear-gradient(45deg, hsl(var(--accent)), hsl(var(--primary)))',
+				'gradient-stellar': 'linear-gradient(180deg, hsl(var(--secondary)), hsl(var(--accent)))',
+				'gradient-aurora': 'linear-gradient(90deg, hsl(var(--accent)), hsl(var(--primary)), hsl(var(--secondary)))'
 			},
 			boxShadow: {
 				'cosmic': 'var(--shadow-cosmic)',

@@ -83,10 +83,10 @@ export function BioRhythmSection({ profile }: BioRhythmSectionProps) {
 
   const getPhaseColor = (phase: string) => {
     switch (phase) {
-      case 'high': return 'bg-cosmic-teal/20 text-cosmic-teal';
-      case 'low': return 'bg-cosmic-pink/20 text-cosmic-pink';
-      case 'critical': return 'bg-cosmic-gold/20 text-cosmic-gold';
-      default: return 'bg-cosmic-purple/20 text-cosmic-purple';
+      case 'high': return 'bg-secondary/20 text-secondary-foreground';
+      case 'low': return 'bg-accent/20 text-accent-foreground';
+      case 'critical': return 'bg-primary/20 text-primary-foreground';
+      default: return 'bg-muted';
     }
   };
 
@@ -95,8 +95,8 @@ export function BioRhythmSection({ profile }: BioRhythmSectionProps) {
     const cycleData = currentBioRhythms[cycleName];
     const cycleDesc = biorhythmData.cycleDescriptions[cycleName];
     return (
-      <div className="p-4 rounded-lg bg-background/50">
-        <h4 className="text-lg font-semibold text-cosmic-gold flex items-center gap-2">{icon} {cycleDesc.name}</h4>
+      <div className="p-4 rounded-lg bg-background/20 backdrop-blur-sm border border-white/5">
+        <h4 className="text-lg font-semibold text-foreground flex items-center gap-2">{icon} {cycleDesc.name}</h4>
         <p className="text-sm text-muted-foreground mt-1">{cycleDesc.description}</p>
         <Badge className={`mt-2 ${getPhaseColor(cycleData.phase)}`}>
           Faza: {cycleData.phase}
@@ -114,7 +114,7 @@ export function BioRhythmSection({ profile }: BioRhythmSectionProps) {
 
       {currentBioRhythms && (
         <div className="space-y-4">
-          <h3 className="text-xl font-bold text-cosmic-gold">Dzisiejsze Wpływy ({format(new Date(), 'dd.MM.yyyy')})</h3>
+          <h3 className="text-xl font-bold text-primary">Dzisiejsze Wpływy ({format(new Date(), 'dd.MM.yyyy')})</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {renderCycleInfo('physical', '💪')}
             {renderCycleInfo('emotional', '❤️')}
@@ -135,14 +135,13 @@ export function BioRhythmSection({ profile }: BioRhythmSectionProps) {
         </div>
         <ResponsiveContainer width="100%" height={300}>
           <LineChart data={chartData}>
-            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255, 255, 255, 0.1)" />
-            <XAxis dataKey="name" stroke="#888" />
-            <YAxis domain={[-1, 1]} stroke="#888" />
-            <Tooltip contentStyle={{ backgroundColor: '#1a1a1a', border: '1px solid #4A90E2' }} />
-            <Line type="monotone" dataKey="physical" name="Fizyczny" stroke="#8884d8" dot={false} />
-            <Line type="monotone" dataKey="emotional" name="Emocjonalny" stroke="#82ca9d" dot={false} />
-            <Line type="monotone" dataKey="intellectual" name="Intelektualny" stroke="#ffc658" dot={false} />
-            {chartData.map(d => d.isToday && <YAxis key="today-line" yAxisId="today" orientation="left" stroke="gold" />)}
+            <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+            <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" />
+            <YAxis domain={[-1, 1]} stroke="hsl(var(--muted-foreground))" />
+            <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--background))', border: '1px solid hsl(var(--border))' }} />
+            <Line type="monotone" dataKey="physical" name="Fizyczny" stroke="hsl(var(--primary))" dot={false} />
+            <Line type="monotone" dataKey="emotional" name="Emocjonalny" stroke="hsl(var(--secondary))" dot={false} />
+            <Line type="monotone" dataKey="intellectual" name="Intelektualny" stroke="hsl(var(--accent))" dot={false} />
           </LineChart>
         </ResponsiveContainer>
       </div>

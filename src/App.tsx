@@ -16,6 +16,7 @@ import { PricingPage } from "./pages/PricingPage";
 import { ProfileProvider, useProfile } from "./hooks/useProfile";
 import { AdminExpertsPage } from "./pages/admin/AdminExpertsPage";
 import { useAuth } from "./hooks/useAuth";
+import { ThemeProvider } from "./hooks/useTheme";
 
 const queryClient = new QueryClient();
 
@@ -116,11 +117,13 @@ const App = () => {
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <BrowserRouter>
-          <ProfileProvider>
-            <AppContent />
-          </ProfileProvider>
-        </BrowserRouter>
+        <ThemeProvider defaultTheme="theme-cosmic-default" storageKey="cosmic-echoes-theme">
+          <BrowserRouter>
+            <ProfileProvider>
+              <AppContent />
+            </ProfileProvider>
+          </BrowserRouter>
+        </ThemeProvider>
       </TooltipProvider>
     </QueryClientProvider>
   );

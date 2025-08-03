@@ -2,132 +2,138 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
-
 @layer base {
-  :root {
-    /* Cosmic Background */
-    --background: 245 50% 6%;
-    --foreground: 270 15% 95%;
+  /* --- THEME DEFINITIONS --- */
 
-    /* Mystical Cards */
-    --card: 245 45% 8%;
+  /* 1. Cosmic Default (Original, but with higher contrast) */
+  .theme-cosmic-default {
+    --background: 245 50% 6%; /* Deep space blue */
+    --foreground: 270 15% 95%; /* Off-white */
+    --card: 245 45% 10%; /* Slightly lighter card */
     --card-foreground: 270 15% 95%;
-
     --popover: 245 45% 8%;
     --popover-foreground: 270 15% 95%;
-
-    /* Primary - Deep Cosmic Purple */
-    --primary: 270 60% 45%;
+    --primary: 270 60% 55%; /* Brighter Purple */
     --primary-foreground: 270 15% 95%;
-
-    /* Secondary - Celestial Blue */
-    --secondary: 240 70% 35%;
+    --secondary: 240 70% 45%; /* Brighter Blue */
     --secondary-foreground: 270 15% 95%;
-
-    /* Muted - Starlight */
-    --muted: 245 30% 15%;
+    --muted: 245 30% 20%;
     --muted-foreground: 270 10% 70%;
-
-    /* Accent - Aurora Pink */
-    --accent: 320 70% 50%;
+    --accent: 320 70% 60%; /* Brighter Pink */
     --accent-foreground: 270 15% 95%;
-
-    /* Destructive - Warning Red */
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 270 15% 95%;
-
-    /* Borders and Inputs */
-    --border: 245 25% 20%;
-    --input: 245 25% 15%;
-    --ring: 270 60% 45%;
-
-    /* Custom Mystical Colors */
-    --cosmic-purple: 270 60% 45%;
-    --cosmic-blue: 240 70% 35%;
-    --cosmic-pink: 320 70% 50%;
-    --cosmic-gold: 45 90% 65%;
-    --cosmic-teal: 180 70% 40%;
-    --starlight: 270 10% 70%;
-    --nebula: 280 80% 30%;
-
-    /* Gradients */
-    --gradient-cosmic: linear-gradient(135deg, hsl(var(--cosmic-purple)), hsl(var(--cosmic-blue)));
-    --gradient-mystical: linear-gradient(45deg, hsl(var(--cosmic-pink)), hsl(var(--cosmic-purple)));
-    --gradient-stellar: linear-gradient(180deg, hsl(var(--cosmic-blue)), hsl(var(--cosmic-teal)));
-    --gradient-aurora: linear-gradient(90deg, hsl(var(--cosmic-pink)), hsl(var(--cosmic-gold)), hsl(var(--cosmic-teal)));
-
-    /* Shadows */
-    --shadow-cosmic: 0 25px 50px -12px hsl(var(--cosmic-purple) / 0.4);
-    --shadow-mystical: 0 20px 40px -8px hsl(var(--cosmic-pink) / 0.3);
-    --shadow-glow: 0 0 30px hsl(var(--cosmic-purple) / 0.5);
-
+    --border: 245 25% 25%;
+    --input: 245 25% 20%;
+    --ring: 270 60% 55%;
     --radius: 1rem;
-
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+  /* 2. Starlight (Light Theme) */
+  .theme-starlight {
+    --background: 0 0% 100%; /* White */
+    --foreground: 240 10% 3.9%; /* Almost black */
+    --card: 0 0% 96%; /* Light grey card */
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 262 82% 56%; /* Strong purple */
+    --primary-foreground: 0 0% 98%;
+    --secondary: 220 75% 50%; /* Strong blue */
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 90%;
+    --muted-foreground: 240 4% 46%;
+    --accent: 310 75% 50%; /* Strong pink */
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 89%;
+    --input: 0 0% 92%;
+    --ring: 262 82% 56%;
+    --radius: 1rem;
   }
+
+  /* 3. Nebula (High Contrast Dark) */
+  .theme-nebula {
+    --background: 240 10% 3.9%; /* Almost black */
+    --foreground: 0 0% 98%; /* Almost white */
+    --card: 240 5% 8%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 190 95% 60%; /* Neon Cyan */
+    --primary-foreground: 240 10% 3.9%;
+    --secondary: 275 95% 65%; /* Neon Purple */
+    --secondary-foreground: 240 10% 3.9%;
+    --muted: 240 4% 12%;
+    --muted-foreground: 240 4% 65%;
+    --accent: 330 95% 65%; /* Neon Pink */
+    --accent-foreground: 240 10% 3.9%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 4% 15%;
+    --input: 240 4% 12%;
+    --ring: 190 95% 60%;
+    --radius: 1rem;
+  }
+
+  /* 4. Solar Flare (Warm Dark) */
+  .theme-solar-flare {
+    --background: 20 15% 8%; /* Charcoal black */
+    --foreground: 30 20% 95%; /* Warm off-white */
+    --card: 20 12% 12%;
+    --card-foreground: 30 20% 95%;
+    --popover: 20 15% 8%;
+    --popover-foreground: 30 20% 95%;
+    --primary: 35 90% 60%; /* Bright Orange */
+    --primary-foreground: 20 15% 8%;
+    --secondary: 50 95% 60%; /* Gold */
+    --secondary-foreground: 20 15% 8%;
+    --muted: 20 10% 20%;
+    --muted-foreground: 30 15% 70%;
+    --accent: 15 85% 55%; /* Fiery Red */
+    --accent-foreground: 30 20% 95%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 30 20% 95%;
+    --border: 20 10% 25%;
+    --input: 20 10% 20%;
+    --ring: 35 90% 60%;
+    --radius: 1rem;
+  }
+
+  /* 5. Aurora (Cool Dark) */
+  .theme-aurora {
+    --background: 210 20% 8%; /* Slate black */
+    --foreground: 180 15% 95%; /* Cool off-white */
+    --card: 210 18% 12%;
+    --card-foreground: 180 15% 95%;
+    --popover: 210 20% 8%;
+    --popover-foreground: 180 15% 95%;
+    --primary: 160 90% 45%; /* Emerald Green */
+    --primary-foreground: 180 15% 95%;
+    --secondary: 200 95% 55%; /* Sky Blue */
+    --secondary-foreground: 210 20% 8%;
+    --muted: 210 15% 20%;
+    --muted-foreground: 180 10% 70%;
+    --accent: 250 85% 70%; /* Indigo */
+    --accent-foreground: 180 15% 95%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 180 15% 95%;
+    --border: 210 15% 25%;
+    --input: 210 15% 20%;
+    --ring: 160 90% 45%;
+    --radius: 1rem;
+  }
+
+  /* Fallback to cosmic-default is handled by ThemeProvider */
 }
 
 @layer base {
   * {
     @apply border-border;
   }
-
   body {
     @apply bg-background text-foreground;
+    transition: background-color 0.3s, color 0.3s;
   }
 }

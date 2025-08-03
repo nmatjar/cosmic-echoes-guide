@@ -2,19 +2,35 @@ import { useScrollProgress } from "@/hooks/useScrollProgress";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowUp } from "lucide-react";
+import { ArrowUp, Palette, Check } from "lucide-react";
+import { useTheme } from "@/hooks/useTheme";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const sections = [
-  { id: 'astro', icon: '♓', label: 'Astrologia', color: 'cosmic-pink' },
-  { id: 'numerology', icon: '🔢', label: 'Numerologia', color: 'cosmic-gold' },
-  { id: 'chinese', icon: '🐕', label: 'Zodiak Chiński', color: 'cosmic-purple' },
-  { id: 'human-design', icon: '⚡', label: 'Human Design', color: 'cosmic-teal' },
-  { id: 'mayan', icon: '🏛️', label: 'Majowie', color: 'cosmic-blue' },
-  { id: 'guides', icon: '🌟', label: 'Przewodnicy', color: 'cosmic-starlight' }
+  { id: 'astro', icon: '♓', label: 'Astrologia' },
+  { id: 'numerology', icon: '🔢', label: 'Numerologia' },
+  { id: 'chinese', icon: '🐕', label: 'Zodiak Chiński' },
+  { id: 'human-design', icon: '⚡', label: 'Human Design' },
+  { id: 'mayan', icon: '🏛️', label: 'Majowie' },
+  { id: 'guides', icon: '🌟', label: 'Przewodnicy' }
 ];
+
+const themes = [
+    { value: "theme-cosmic-default", label: "Cosmic Default" },
+    { value: "theme-starlight", label: "Starlight" },
+    { value: "theme-nebula", label: "Nebula" },
+    { value: "theme-solar-flare", label: "Solar Flare" },
+    { value: "theme-aurora", label: "Aurora" },
+]
 
 export function SmartNavigation() {
   const { progress, activeSection, scrollToSection } = useScrollProgress();
+  const { theme, setTheme } = useTheme();
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -28,7 +44,7 @@ export function SmartNavigation() {
           {/* Progress Bar */}
           <Progress 
             value={progress} 
-            className="h-1 bg-cosmic-purple/20"
+            className="h-1 bg-primary/20"
           />
           
           {/* Navigation Items */}
@@ -42,8 +58,8 @@ export function SmartNavigation() {
                   onClick={() => scrollToSection(section.id)}
                   className={`flex items-center gap-1 px-2 py-1 rounded-full transition-all duration-300 ${
                     activeSection === section.id 
-                      ? `bg-${section.color}/20 text-${section.color} border border-${section.color}/30` 
-                      : 'hover:bg-cosmic-purple/10'
+                      ? `bg-primary/20 text-primary border border-primary/30` 
+                      : 'hover:bg-primary/10'
                   }`}
                 >
                   <span className="text-sm">{section.icon}</span>
@@ -52,21 +68,37 @@ export function SmartNavigation() {
               ))}
             </div>
             
-            {/* Progress Indicator */}
+            {/* Progress Indicator & Theme Switcher */}
             <div className="flex items-center gap-2">
-              <Badge variant="outline" className="bg-cosmic-purple/20 border-cosmic-purple/30 text-cosmic-purple text-xs">
+              <Badge variant="outline" className="border-primary/30 text-primary text-xs">
                 {Math.round(progress)}%
               </Badge>
               
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="icon" className="h-8 w-8">
+                    <Palette className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  {themes.map((item) => (
+                    <DropdownMenuItem key={item.value} onClick={() => setTheme(item.value as any)}>
+                      <span className="flex-grow">{item.label}</span>
+                      {theme === item.value && <Check className="h-4 w-4 ml-2" />}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+
               {/* Back to Top Button */}
               {progress > 10 && (
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={scrollToTop}
-                  className="p-2 bg-cosmic-gold/20 border-cosmic-gold/30 hover:bg-cosmic-gold/30 transition-all duration-300"
+                  className="p-2"
                 >
-                  <ArrowUp className="h-3 w-3 text-cosmic-gold" />
+                  <ArrowUp className="h-3 w-3" />
                 </Button>
               )}
             </div>
@@ -75,7 +107,7 @@ export function SmartNavigation() {
       </div>
       
       {/* Spacer to prevent content overlap */}
-      <div className="h-16"></div>
+      <div className="h-20"></div>
     </>
   );
 }

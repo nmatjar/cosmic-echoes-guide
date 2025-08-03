@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { CosmicCard } from "@/components/ui/cosmic-card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CopyButton } from "@/components/ui/copy-button";
@@ -94,7 +93,7 @@ Prowadź rozmowę jak doświadczony mentor duchowy, który rozumie złożoność
   };
 
   return (
-    <CosmicCard variant="aurora" className="space-y-6">
+    <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold text-foreground">🧭 Przewodnicy Duchowi</h2>
         <CopyButton text={createMetaPrompt()} label="Meta-prompt" />
@@ -118,7 +117,7 @@ Prowadź rozmowę jak doświadczony mentor duchowy, który rozumie złożoność
         ))}
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-4 p-4 rounded-lg bg-background/20 backdrop-blur-sm border border-white/5">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <span className="text-3xl">{guides[selectedGuide].avatar}</span>
@@ -138,12 +137,12 @@ Prowadź rozmowę jak doświadczony mentor duchowy, który rozumie złożoność
         </p>
 
         <div className="space-y-2">
-          <h4 className="text-sm font-semibold text-cosmic-gold">Specjalność:</h4>
+          <h4 className="text-sm font-semibold text-primary">Specjalność:</h4>
           <p className="text-sm text-muted-foreground">{guides[selectedGuide].specialty}</p>
         </div>
 
         <div className="space-y-2">
-          <h4 className="text-sm font-semibold text-cosmic-gold">Podejście:</h4>
+          <h4 className="text-sm font-semibold text-secondary">Podejście:</h4>
           <p className="text-sm text-muted-foreground">{guides[selectedGuide].approach}</p>
         </div>
 
@@ -151,14 +150,14 @@ Prowadź rozmowę jak doświadczony mentor duchowy, który rozumie złożoność
           <Badge variant="secondary" className={`bg-${guides[selectedGuide].color}/20 text-${guides[selectedGuide].color}`}>
             Przewodnik
           </Badge>
-          <Badge variant="secondary" className="bg-cosmic-purple/20 text-cosmic-purple">
+          <Badge variant="secondary" className="bg-primary/20 text-primary-foreground">
             Mentor
           </Badge>
-          <Badge variant="secondary" className="bg-cosmic-gold/20 text-cosmic-gold">
+          <Badge variant="secondary" className="bg-secondary/20 text-secondary-foreground">
             Eksperta
           </Badge>
         </div>
       </div>
-    </CosmicCard>
+    </div>
   );
 }

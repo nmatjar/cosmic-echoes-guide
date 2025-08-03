@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { CosmicCard } from "@/components/ui/cosmic-card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -76,26 +75,28 @@ Twoja interpretacja:`;
 
   const getPhaseColor = (phase: string) => {
     switch (phase) {
-      case 'high': return 'bg-cosmic-teal/20 text-cosmic-teal';
-      case 'low': return 'bg-cosmic-pink/20 text-cosmic-pink';
-      case 'critical': return 'bg-cosmic-gold/20 text-cosmic-gold';
-      default: return 'bg-cosmic-purple/20 text-cosmic-purple';
+      case 'high': return 'bg-secondary/20 text-secondary-foreground';
+      case 'low': return 'bg-accent/20 text-accent-foreground';
+      case 'critical': return 'bg-primary/20 text-primary-foreground';
+      default: return 'bg-muted';
     }
   };
 
   return (
-    <CosmicCard variant="stellar" className="space-y-6">
-      <h2 className="text-2xl font-bold text-foreground flex items-center gap-2">
-        ✨ Dzisiejsze Wpływy ({format(new Date(), 'dd.MM.yyyy')})
-      </h2>
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <h2 className="text-2xl font-bold text-foreground flex items-center gap-2">
+          ✨ Dzisiejsze Wpływy ({format(new Date(), 'dd.MM.yyyy')})
+        </h2>
+      </div>
 
       {!profile?.birthData.date && (
         <p className="text-muted-foreground">Brak danych urodzeniowych. Utwórz profil, aby zobaczyć dzisiejsze wpływy.</p>
       )}
 
       {profile?.birthData.date && (
-        <div className="space-y-4">
-          <h3 className="text-xl font-bold text-cosmic-gold">Bio-Rytmy</h3>
+        <div className="space-y-4 p-4 rounded-lg bg-background/20 backdrop-blur-sm border border-white/5">
+          <h3 className="text-xl font-bold text-primary">Bio-Rytmy</h3>
           {todayBioRhythms ? (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <Badge className={`flex flex-col items-center justify-center p-4 h-auto ${getPhaseColor(todayBioRhythms.physical.phase)}`}>
@@ -118,14 +119,14 @@ Twoja interpretacja:`;
       )}
 
       {profile?.birthData.date && (
-        <div className="space-y-4">
-          <h3 className="text-xl font-bold text-cosmic-gold">Kalendarz Majów</h3>
+        <div className="space-y-4 p-4 rounded-lg bg-background/20 backdrop-blur-sm border border-white/5">
+          <h3 className="text-xl font-bold text-primary">Kalendarz Majów</h3>
           {todayMayan ? (
             <div className="flex flex-wrap gap-2">
-              <Badge variant="outline" className="bg-cosmic-blue/20 border-cosmic-blue/30 text-cosmic-blue p-3">
+              <Badge variant="outline" className="border-primary/30 bg-primary/20 text-primary p-3">
                 <span className="font-semibold">Znak (Kin):</span> {todayMayan.sign}
               </Badge>
-              <Badge variant="outline" className="bg-cosmic-blue/20 border-cosmic-blue/30 text-cosmic-blue p-3">
+              <Badge variant="outline" className="border-primary/30 bg-primary/20 text-primary p-3">
                 <span className="font-semibold">Ton:</span> {todayMayan.tone}
               </Badge>
               {/* Add more Mayan insights here if available */}
@@ -137,18 +138,18 @@ Twoja interpretacja:`;
       )}
 
       {profile?.birthData.date && (
-        <div className="space-y-4">
-          <Button onClick={generateAiPrompt} className="w-full bg-gradient-to-r from-cosmic-purple to-cosmic-pink hover:from-cosmic-pink hover:to-cosmic-purple">
+        <div className="space-y-4 p-4 rounded-lg bg-background/20 backdrop-blur-sm border border-white/5">
+          <Button onClick={generateAiPrompt} className="w-full">
             Wygeneruj Spersonalizowaną Interpretację Dnia (AI)
           </Button>
           {aiPrompt && (
             <div className="space-y-2">
-              <h4 className="text-lg font-semibold text-cosmic-gold">Prompt dla AI:</h4>
+              <h4 className="text-lg font-semibold text-primary">Prompt dla AI:</h4>
               <Textarea
                 value={aiPrompt}
                 readOnly
                 rows={15}
-                className="bg-cosmic-dark/50 border-cosmic-purple/30 text-cosmic-starlight font-mono"
+                className="font-mono"
               />
               <p className="text-sm text-muted-foreground">
                 Powyższy tekst to prompt, który zostałby wysłany do modelu AI w celu wygenerowania spersonalizowanej interpretacji dnia.
@@ -157,6 +158,6 @@ Twoja interpretacja:`;
           )}
         </div>
       )}
-    </CosmicCard>
+    </div>
   );
 }
