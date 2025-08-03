@@ -62,6 +62,7 @@ export class CloudProfileManager {
         isPublic: data.is_public, // Map is_public from cloud to UserProfile
         subscriptionPlan: data.subscription_plan as UserProfile['subscriptionPlan'],
         receiveDailyEmails: data.receive_daily_emails, // Map receive_daily_emails
+        role: data.role as UserProfile['role'], // Map role from cloud
         createdAt: data.created_at,
         updatedAt: data.updated_at,
       };
@@ -94,6 +95,7 @@ export class CloudProfileManager {
         is_public: profile.isPublic ?? false, // Ensure is_public is saved
         subscription_plan: profile.subscriptionPlan ?? 'free',
         receive_daily_emails: profile.receiveDailyEmails ?? false, // Ensure receive_daily_emails is saved
+        role: profile.role ?? 'user', // Ensure role is saved
       };
 
       // Try to update existing profile first

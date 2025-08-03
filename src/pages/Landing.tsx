@@ -80,16 +80,7 @@ const Landing = () => {
   const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
 
   const handleStartJourney = () => {
-    // Check if there are existing profiles
-    const existingProfiles = getProfiles();
-    
-    if (existingProfiles.length > 0) {
-      // User has existing profiles - go to profile selection
-      navigate('/');
-    } else {
-      // No existing profiles - go to profile creation
-      navigate('/welcome');
-    }
+    navigate('/pricing');
   };
 
   const handleCreateProfile = () => {

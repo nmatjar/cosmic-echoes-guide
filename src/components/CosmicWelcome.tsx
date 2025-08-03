@@ -3,12 +3,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
-import { CalendarIcon, Sparkles, User, Lock } from "lucide-react";
+import { Sparkles, User, Lock } from "lucide-react";
 import { format } from "date-fns";
-import { pl } from "date-fns/locale";
 import { toast } from "sonner";
 import { AnalysisEngine } from "@/engine";
 import { NumerologyModule } from "@/engine/modules/numerology";
@@ -21,6 +19,7 @@ interface BirthData {
   place: string;
   name: string;
   pin: string;
+  isTimeUnknown: boolean;
 }
 
 interface CosmicWelcomeProps {
@@ -34,7 +33,8 @@ export function CosmicWelcome({ onProfileCreated }: CosmicWelcomeProps) {
     time: '',
     place: '',
     name: '',
-    pin: ''
+    pin: '',
+    isTimeUnknown: false,
   });
   const [isGenerating, setIsGenerating] = useState(false);
 
@@ -158,28 +158,12 @@ export function CosmicWelcome({ onProfileCreated }: CosmicWelcomeProps) {
 
             <div className="space-y-2">
               <Label className="text-cosmic-gold">Data urodzenia *</Label>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className="w-full justify-start text-left font-normal border-cosmic-purple/30 bg-cosmic-purple/10"
-                  >
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {birthData.date ? format(birthData.date, "PPP", { locale: pl }) : "Wybierz datę"}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0">
-                  <Calendar
-                    mode="single"
-                    selected={birthData.date}
-                    onSelect={(date) => setBirthData(prev => ({ ...prev, date }))}
-                    initialFocus
-                    captionLayout="dropdown"
-                    fromYear={1900} // Optional: Set a reasonable start year
-                    toYear={new Date().getFullYear()} // Optional: Set current year as end year
-                  />
-                </PopoverContent>
-              </Popover>
+              <Input
+                type="date"
+                value={birthData.date ? format(birthData.date, 'yyyy-MM-dd') : ''}
+                onChange={(e) => setBirthData(prev => ({ ...prev, date: e.target.value ? new Date(e.target.value) : undefined }))}
+                className="border-cosmic-purple/30 bg-cosmic-purple/10"
+              />
             </div>
 
             <div className="space-y-2">
@@ -189,9 +173,19 @@ export function CosmicWelcome({ onProfileCreated }: CosmicWelcomeProps) {
                 type="time"
                 value={birthData.time}
                 onChange={(e) => setBirthData(prev => ({ ...prev, time: e.target.value }))}
+                disabled={birthData.isTimeUnknown}
                 className="border-cosmic-purple/30 bg-cosmic-purple/10"
               />
-              <p className="text-xs text-cosmic-starlight">Dla dokładniejszego Human Design</p>
+               <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="unknownTime"
+                  checked={birthData.isTimeUnknown}
+                  onCheckedChange={(checked) => setBirthData(prev => ({ ...prev, isTimeUnknown: !!checked, time: checked ? '' : prev.time }))}
+                />
+                <Label htmlFor="unknownTime" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-cosmic-starlight">
+                  Nie znam dokładnej godziny
+                </Label>
+              </div>
             </div>
 
             <div className="space-y-2">

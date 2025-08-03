@@ -1,191 +1,68 @@
-import { useState, useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation, Navigate, Outlet } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import PublicProfile from "./pages/PublicProfile";
-import CouncilChat from "./pages/CouncilChat";
 import { CouncilPage } from "./pages/CouncilPage";
+import CouncilChat from "./pages/CouncilChat";
 import Landing from "./pages/Landing";
 import { CosmicWelcome } from "./components/CosmicWelcome";
 import { CosmicLogin } from "./components/CosmicLogin";
-import { UserProfile } from "@/engine/userProfile";
-import { useAuth } from "@/hooks/useAuth";
-import AuthPage from "@/components/auth/AuthPage";
-import { CloudProfileManager } from "@/services/cloudProfileManager";
-import { useToast } from "@/hooks/use-toast";
-import { PricingPage } from "./pages/PricingPage"; // New import
-
-import { getProfiles, createProfile, saveProfiles } from "@/services/profileManager";
+import AuthPage from "./pages/AuthPage";
+import { PricingPage } from "./pages/PricingPage";
+import { ProfileProvider, useProfile } from "./hooks/useProfile";
+import { AdminExpertsPage } from "./pages/admin/AdminExpertsPage";
+import { useAuth } from "./hooks/useAuth";
 
 const queryClient = new QueryClient();
 
-type AppState = 'loading' | 'auth' | 'welcome' | 'login' | 'app' | 'pricing'; // Added 'pricing'
-
-// Component to handle main app logic
-const AppContent = () => {
-  const [appState, setAppState] = useState<AppState>('loading');
-  const [profiles, setProfiles] = useState<UserProfile[]>([]);
-  const [currentProfile, setCurrentProfile] = useState<UserProfile | null>(null);
-  const { user, loading: authLoading, signOut } = useAuth();
-  const { toast } = useToast();
+// A wrapper component to protect routes that require admin privileges
+const ProtectedRoute = () => {
+  const { currentProfile, isInitialized } = useProfile();
+  const { user, loading } = useAuth();
   const location = useLocation();
 
-  // Check if current route is a public route (no auth required)
-  const isPublicRoute = location.pathname.startsWith('/profile/') || location.pathname === '/landing' || location.pathname === '/welcome' || location.pathname === '/pricing'; // Added '/pricing'
+  if (!isInitialized || loading) {
+    // Show a loading screen while we check auth status and initialize the profile
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-cosmic">
+        <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-cosmic-purple"></div>
+      </div>
+    );
+  }
 
-  // Handle auth state and profile loading
-  useEffect(() => {
-    // If it's a public route, skip app initialization and go directly to app state
-    if (isPublicRoute) {
-      setAppState('app');
-      return;
-    }
+  if (!user) {
+    // If not logged in, redirect to the new login page
+    // Pass the original destination so we can redirect back after login
+    return <Navigate to="/auth" state={{ from: location }} replace />;
+  }
 
-    if (authLoading) return;
+  if (currentProfile?.role !== 'admin') {
+    // If logged in but not an admin, redirect to the home page
+    return <Navigate to="/" replace />;
+  }
 
-    const initializeApp = async () => {
-      if (user) {
-        // User is authenticated - try to load cloud profile
-        try {
-          const cloudProfile = await CloudProfileManager.fetchUserProfile();
-          if (cloudProfile) {
-            setCurrentProfile(cloudProfile);
-            setAppState('app');
-          } else {
-            // No cloud profile - check local profiles or go to welcome
-            const localProfiles = getProfiles();
-            if (localProfiles.length > 0) {
-              setProfiles(localProfiles);
-              setAppState('login');
-            } else {
-              setAppState('welcome');
-            }
-          }
-        } catch (error) {
-          console.error('Error loading cloud profile:', error);
-          toast({
-            title: "Błąd synchronizacji",
-            description: "Nie udało się załadować profilu z chmury.",
-            variant: "destructive",
-          });
-          // Fallback to local profiles
-          const localProfiles = getProfiles();
-          if (localProfiles.length > 0) {
-            setProfiles(localProfiles);
-            setAppState('login');
-          } else {
-            setAppState('welcome');
-          }
-        }
-      } else {
-        // Not authenticated - check for local profiles
-        const localProfiles = getProfiles();
-        if (localProfiles.length > 0) {
-          setProfiles(localProfiles);
-          setAppState('login'); // Show login for existing profiles
-        } else {
-          // New users - redirect to pricing page
-          if (location.pathname === '/pricing') {
-            setAppState('app'); // Allow pricing page to render
-          } else {
-            // Redirect to pricing page
-            window.location.href = '/pricing';
-            return;
-          }
-        }
-      }
-    };
+  return <Outlet />; // If all checks pass, render the admin page
+};
 
-    // Add a small delay for better UX
-    setTimeout(initializeApp, 1000);
-  }, [user, authLoading, toast, isPublicRoute, location.pathname]); // Added location.pathname to dependencies
-
-  const handleProfileCreated = async (profile: UserProfile) => {
-    // Save locally first
-    const allProfiles = getProfiles();
-    setProfiles(allProfiles);
-    setCurrentProfile(profile);
-
-    // If user is authenticated, sync to cloud
-    if (user) {
-      try {
-        await CloudProfileManager.saveUserProfile(profile);
-        toast({
-          title: "Profil zsynchronizowany",
-          description: "Twój profil został zapisany w chmurze.",
-        });
-      } catch (error) {
-        console.error('Error syncing profile to cloud:', error);
-        toast({
-          title: "Błąd synchronizacji",
-          description: "Profil zapisano lokalnie, ale nie udało się zsynchronizować z chmurą.",
-          variant: "destructive",
-        });
-      }
-    }
-
-    setAppState('app');
-  };
-
-  const handleProfileSelected = async (profile: UserProfile) => {
-    setCurrentProfile(profile);
-
-    // If user is authenticated, sync selected profile to cloud
-    if (user) {
-      try {
-        await CloudProfileManager.saveUserProfile(profile);
-      } catch (error) {
-        console.error('Error syncing profile to cloud:', error);
-      }
-    }
-
-    setAppState('app');
-  };
-
-  const handleCreateNew = () => {
-    setAppState('welcome');
-  };
-
-  const handleDeleteProfile = async (profileId: string) => {
-    setProfiles(prev => prev.filter(p => p.id !== profileId));
-    
-    // If user is authenticated and this is the current profile, delete from cloud
-    if (user && currentProfile?.id === profileId) {
-      try {
-        await CloudProfileManager.deleteUserProfile();
-      } catch (error) {
-        console.error('Error deleting profile from cloud:', error);
-      }
-    }
-
-    if (profiles.length === 1) {
-      setAppState('welcome');
-    }
-  };
-
-  const handleLogout = async () => {
-    if (user) {
-      await signOut();
-    }
-    setCurrentProfile(null);
-    setAppState(profiles.length > 0 ? 'login' : 'auth');
-  };
-
-  const handleAuthSuccess = () => {
-    setAppState('loading'); // Trigger re-initialization
-  };
-
-  const handleChooseFreePlan = () => {
-    setAppState('welcome'); // Go to profile creation
-  };
-
-  const handleChoosePaidPlan = () => {
-    setAppState('auth'); // Go to authentication
-  };
+const AppContent = () => {
+  const {
+    appState,
+    profiles,
+    currentProfile,
+    isInitialized,
+    handleProfileCreated,
+    handleProfileSelected,
+    handleCreateNew,
+    handleDeleteProfile,
+    handleLogout,
+    handleAuthSuccess,
+    handleChooseFreePlan,
+    handleChoosePaidPlan,
+  } = useProfile();
 
   if (appState === 'loading') {
     return (
@@ -198,111 +75,36 @@ const AppContent = () => {
     );
   }
 
-  if (appState === 'auth') {
-    return (
-      <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <AuthPage onAuthSuccess={handleAuthSuccess} />
-        </TooltipProvider>
-      </QueryClientProvider>
-    );
-  }
-
-  if (appState === 'welcome') {
-    return (
-      <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <CosmicWelcome onProfileCreated={handleProfileCreated} />
-        </TooltipProvider>
-      </QueryClientProvider>
-    );
-  }
-
-  if (appState === 'login') {
-    return (
-      <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <CosmicLogin 
-            profiles={profiles}
-            onProfileSelected={handleProfileSelected}
-            onCreateNew={handleCreateNew}
-            onDeleteProfile={handleDeleteProfile}
-          />
-        </TooltipProvider>
-      </QueryClientProvider>
-    );
-  }
-
-  if (appState === 'pricing') { // New pricing state rendering
-    return (
-      <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <PricingPage 
-            onChooseFreePlan={handleChooseFreePlan}
-            onChoosePaidPlan={handleChoosePaidPlan}
-          />
-        </TooltipProvider>
-      </QueryClientProvider>
-    );
-  }
-
-  // Main app with routing - always render router for public profiles
+  // The main router logic
   return (
     <Routes>
-      <Route 
-        path="/landing" 
-        element={<Landing />} 
-      />
-      <Route 
-        path="/welcome" 
-        element={
-          <CosmicWelcome 
-            onProfileCreated={(profile) => {
-              handleProfileCreated(profile);
-              // Force navigation to main app after profile creation
-              window.location.href = '/';
-            }} 
-          />
-        } 
-      />
+      {/* Public and semi-public routes */}
+      <Route path="/landing" element={<Landing />} />
+      <Route path="/profile/:profileId" element={<PublicProfile />} />
+      <Route path="/pricing" element={<PricingPage onChooseFreePlan={handleChooseFreePlan} onChoosePaidPlan={handleChoosePaidPlan} />} />
+      <Route path="/auth" element={<AuthPage onAuthSuccess={handleAuthSuccess} />} />
+      <Route path="/welcome" element={<CosmicWelcome onProfileCreated={handleProfileCreated} />} />
+      <Route path="/login" element={<CosmicLogin profiles={profiles} onProfileSelected={handleProfileSelected} onCreateNew={handleCreateNew} onDeleteProfile={handleDeleteProfile} />} />
+
+      {/* Application core routes - protected by appState */}
       <Route 
         path="/" 
-        element={
-          <Index 
-            currentProfile={currentProfile} 
-            onLogout={handleLogout}
-          />
-        } 
-      />
-      <Route 
-        path="/profile/:profileId" 
-        element={<PublicProfile />} 
-      />
-      <Route 
-        path="/council-chat" 
-        element={<CouncilChat />} 
+        element={appState === 'app' ? <Index currentProfile={currentProfile} onLogout={handleLogout} /> : <Navigate to="/landing" replace />}
       />
       <Route 
         path="/council" 
-        element={<CouncilPage />} 
+        element={appState === 'app' ? <CouncilPage currentProfile={currentProfile} /> : <Navigate to="/landing" replace />}
       />
       <Route 
-        path="/pricing" 
-        element={
-          <PricingPage 
-            onChooseFreePlan={handleChooseFreePlan}
-            onChoosePaidPlan={handleChoosePaidPlan}
-          />
-        } 
+        path="/council-chat" 
+        element={appState === 'app' ? <CouncilChat userProfile={currentProfile!} userId={currentProfile?.id || ''} /> : <Navigate to="/landing" replace />}
       />
+
+      {/* Protected Admin Route */}
+      <Route path="/admin/experts" element={<ProtectedRoute />}>
+        <Route index element={<AdminExpertsPage />} />
+      </Route>
+
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
@@ -315,7 +117,9 @@ const App = () => {
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <AppContent />
+          <ProfileProvider>
+            <AppContent />
+          </ProfileProvider>
         </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>

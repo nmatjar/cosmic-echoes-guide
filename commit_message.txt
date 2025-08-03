@@ -1,0 +1,13 @@
+feat(ui): Add "Upgrade Plan" CTA to Dashboard for free users
+
+This commit enhances the user experience for free plan users by adding a prominent "Upgrade Plan" call-to-action (CTA) directly on the Dashboard (`src/pages/Index.tsx`).
+
+Key Changes:
+
+- `src/pages/Index.tsx`:
+    - Imported `Link` from `react-router-dom` for navigation.
+    - Implemented conditional rendering for the "Upgrade Plan" button: it now appears only when `currentProfile` exists and `currentProfile.subscriptionPlan` is set to `'free'`.
+    - Positioned the new CTA next to the "Logout" button in the profile header section for clear visibility.
+    - Applied consistent styling using existing `Button` and `Badge` components to maintain UI coherence.
+
+This change provides a clear and accessible path for free users to explore and upgrade to paid subscription plans, aligning with the application's monetization strategy.

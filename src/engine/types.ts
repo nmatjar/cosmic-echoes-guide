@@ -1,4 +1,6 @@
 
+import { UserProfile } from "./userProfile";
+
 // Definiuje dane wejściowe dla silnika analitycznego
 export interface BirthData {
   date: Date;
@@ -66,4 +68,19 @@ export interface ElementalBalanceAnalysis extends AnalysisResult {
   wood: number;
   dominantElements: string[];
   weakElements: string[];
+}
+
+export interface Expert {
+  id: string;
+  name: string;
+  specialization: string[];
+  bio: string;
+  contact_email?: string;
+  profile_picture_url?: string;
+  external_link?: string;
+  is_active: boolean;
+  tier?: string;
+  meta_prompt: string;
+  created_at: string;
+  updated_at: string;
 }

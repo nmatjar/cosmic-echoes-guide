@@ -70,3 +70,17 @@ export const deleteProfile = (profileId: string): void => {
   profiles = profiles.filter(p => p.id !== profileId);
   saveProfiles(profiles);
 };
+
+const ACTIVE_PROFILE_ID_KEY = 'cosmic-echoes-active-profile-id';
+
+export const setActiveProfileId = (id: string | null): void => {
+  if (id) {
+    localStorage.setItem(ACTIVE_PROFILE_ID_KEY, id);
+  } else {
+    localStorage.removeItem(ACTIVE_PROFILE_ID_KEY);
+  }
+};
+
+export const getActiveProfileId = (): string | null => {
+  return localStorage.getItem(ACTIVE_PROFILE_ID_KEY);
+};

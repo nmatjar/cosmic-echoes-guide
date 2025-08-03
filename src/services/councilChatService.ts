@@ -3,17 +3,15 @@ import { OpenRouterService } from './openRouterService';
 import { UserProfile } from '../engine/userProfile';
 
 export class CouncilChatService {
-  private openRouterService: OpenRouterService | null = null;
+  private openRouterService: OpenRouterService;
   private readonly STORAGE_KEY_SESSIONS = 'cosmic_council_sessions';
   private readonly STORAGE_KEY_MESSAGES = 'cosmic_council_messages';
 
-  constructor(openRouterApiKey?: string) {
-    if (openRouterApiKey) {
-      this.openRouterService = new OpenRouterService(openRouterApiKey);
-    }
+  constructor() {
+    this.openRouterService = new OpenRouterService();
   }
 
-  // Local storage helpers
+  // ... (local storage helpers remain the same)
   private getSessions(): ChatSession[] {
     try {
       const sessions = localStorage.getItem(this.STORAGE_KEY_SESSIONS);
@@ -53,6 +51,7 @@ export class CouncilChatService {
   private generateId(): string {
     return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
   }
+
 
   // Session management
   async createSession(userId: string, intention?: string): Promise<ChatSession> {
@@ -137,13 +136,12 @@ export class CouncilChatService {
     userMessage: string,
     userProfile: UserProfile,
     selectedAgent?: CouncilAgent,
+    metaPrompt?: string, // New parameter for expert's meta_prompt
     model?: string,
-    userId?: string
+    userId?: string,
+    onStreamChunk?: (chunk: string) => void
   ): Promise<{ userMessage: ChatMessage; agentResponse: ChatMessage }> {
-    if (!this.openRouterService) {
-      throw new Error('OpenRouter API key not configured');
-    }
-
+    
     // Save user message
     const userMsg = await this.addMessage(sessionId, userMessage, 'user', undefined, userId);
 
@@ -157,17 +155,39 @@ export class CouncilChatService {
           content: msg.content
         }));
 
-      // Generate AI response
-      const { agent, content } = await this.openRouterService.generateCouncilResponse(
-        userMessage,
-        userProfile,
-        chatHistory,
-        selectedAgent,
-        model
-      );
+      // Generate AI response with streaming if callback provided
+      const { agent, content } = onStreamChunk 
+        ? await this.openRouterService.generateCouncilResponseStream(
+            userMessage,
+            userProfile,
+            chatHistory,
+            selectedAgent,
+            metaPrompt, // Pass meta_prompt to the service
+            model,
+            onStreamChunk
+          )
+        : await this.openRouterService.generateCouncilResponse(
+            userMessage,
+            userProfile,
+            chatHistory,
+            selectedAgent,
+            metaPrompt, // Pass meta_prompt to the service
+            model
+          );
+      
+      // The new logic will parse the agent from the response content
+      let finalAgent = agent;
+      let finalContent = content;
+
+      if (content.startsWith('agent:')) {
+        const parts = content.split('\n');
+        const agentLine = parts.shift() || '';
+        finalAgent = agentLine.replace('agent:', '').trim() as CouncilAgent;
+        finalContent = parts.join('\n');
+      }
 
       // Save agent response
-      const agentMsg = await this.addMessage(sessionId, content, 'agent', agent, userId);
+      const agentMsg = await this.addMessage(sessionId, finalContent, 'agent', finalAgent, userId);
 
       return {
         userMessage: userMsg,
@@ -192,7 +212,8 @@ export class CouncilChatService {
     }
   }
 
-  // Analytics and insights
+  // ... (Analytics and other methods remain the same)
+    // Analytics and insights
   async getSessionStats(userId: string): Promise<{
     totalSessions: number;
     totalMessages: number;
@@ -237,7 +258,7 @@ export class CouncilChatService {
     const averageSessionLength = completedSessions.length > 0
       ? completedSessions.reduce((sum, session) => {
           const start = new Date(session.start_time);
-          const end = new Date(session.end_time!);
+          const end = new Date(session.end_time!);;
           return sum + (end.getTime() - start.getTime());
         }, 0) / completedSessions.length / (1000 * 60) // Convert to minutes
       : 0;
@@ -308,14 +329,5 @@ export class CouncilChatService {
 
     this.saveSessions(filteredSessions);
     this.saveMessages(filteredMessages);
-  }
-
-  // Utility methods
-  isConfigured(): boolean {
-    return this.openRouterService !== null;
-  }
-
-  updateApiKey(apiKey: string): void {
-    this.openRouterService = new OpenRouterService(apiKey);
   }
 }
