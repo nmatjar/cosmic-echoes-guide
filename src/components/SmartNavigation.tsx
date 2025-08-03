@@ -2,8 +2,9 @@ import { useScrollProgress } from "@/hooks/useScrollProgress";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowUp, Palette, Check } from "lucide-react";
+import { ArrowUp, Palette, Check, Sparkles } from "lucide-react";
 import { useTheme } from "@/hooks/useTheme";
+import { Link } from "react-router-dom";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -70,6 +71,11 @@ export function SmartNavigation() {
             
             {/* Progress Indicator & Theme Switcher */}
             <div className="flex items-center gap-2">
+              <Link to="/pricing" className="text-xs text-primary hover:text-primary/80 transition-colors flex items-center gap-1">
+                <Sparkles className="h-3 w-3" />
+                Ulepsz do Wizjonera
+              </Link>
+
               <Badge variant="outline" className="border-primary/30 text-primary text-xs">
                 {Math.round(progress)}%
               </Badge>

@@ -92,7 +92,7 @@ export function PricingPage({ onChooseFreePlan, onChoosePaidPlan }: PricingPageP
           </CardHeader>
           <CardContent className="flex-grow space-y-4">
             <div className="text-center">
-              <span className="text-4xl font-bold text-cosmic-light">29 PLN</span>
+              <span className="text-4xl font-bold text-cosmic-light">3 PLN</span>
               <span className="text-cosmic-starlight">/ dzień</span>
             </div>
             <ul className="space-y-2">
@@ -101,9 +101,9 @@ export function PricingPage({ onChooseFreePlan, onChoosePaidPlan }: PricingPageP
             </ul>
           </CardContent>
           <CardFooter className="pt-4">
-            <Button onClick={onChoosePaidPlan} className="w-full bg-cosmic-gold hover:bg-cosmic-gold/80 text-cosmic-dark">
+            <Button onClick={onChoosePaidPlan} disabled className="w-full bg-cosmic-gold hover:bg-cosmic-gold/80 text-cosmic-dark">
               <Brain className="h-4 w-4 mr-2" />
-              Wybierz Plan Dzienny
+              Wybierz Plan Dzienny (Wkrótce)
             </Button>
           </CardFooter>
         </Card>
@@ -116,7 +116,7 @@ export function PricingPage({ onChooseFreePlan, onChoosePaidPlan }: PricingPageP
           </CardHeader>
           <CardContent className="flex-grow space-y-4">
             <div className="text-center">
-              <span className="text-4xl font-bold text-cosmic-light">130 PLN</span>
+              <span className="text-4xl font-bold text-cosmic-light">49 PLN</span>
               <span className="text-cosmic-starlight">/ miesiąc</span>
             </div>
             <ul className="space-y-2">
@@ -124,9 +124,9 @@ export function PricingPage({ onChooseFreePlan, onChoosePaidPlan }: PricingPageP
             </ul>
           </CardContent>
           <CardFooter className="pt-4">
-            <Button onClick={onChoosePaidPlan} className="w-full bg-cosmic-blue hover:bg-cosmic-blue/80">
+            <Button onClick={onChoosePaidPlan} disabled className="w-full bg-cosmic-blue hover:bg-cosmic-blue/80">
               <Users className="h-4 w-4 mr-2" />
-              Wybierz Plan Miesięczny
+              Wybierz Plan Miesięczny (Wkrótce)
             </Button>
           </CardFooter>
         </Card>

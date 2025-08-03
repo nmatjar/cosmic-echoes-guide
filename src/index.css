@@ -137,3 +137,18 @@
     transition: background-color 0.3s, color 0.3s;
   }
 }
+
+@layer components {
+  .input {
+    @apply bg-white text-black;
+  }
+  .date-input-fix {
+    color-scheme: light;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+  }
+  .date-input-fix::-webkit-calendar-picker-indicator {
+    filter: invert(0);
+  }
+}

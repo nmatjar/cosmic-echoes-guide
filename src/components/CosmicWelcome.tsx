@@ -133,9 +133,7 @@ export function CosmicWelcome({ onProfileCreated }: CosmicWelcomeProps) {
       <div className="min-h-screen flex items-center justify-center bg-gradient-cosmic p-4">
         <Card className="w-full max-w-md cosmic-card bg-gradient-mystical border-cosmic-purple/30">
           <CardHeader className="text-center">
-            <div className="mx-auto mb-4 w-16 h-16 bg-gradient-to-r from-cosmic-gold to-cosmic-teal rounded-full flex items-center justify-center">
-              <User className="h-8 w-8 text-white" />
-            </div>
+            <img src="/logo_full.png" alt="Cosmic Echoes Guide Logo" className="w-48 mx-auto mb-4" />
             <CardTitle className="text-xl text-cosmic-gold">
               📅 Dane Urodzenia
             </CardTitle>
@@ -146,35 +144,35 @@ export function CosmicWelcome({ onProfileCreated }: CosmicWelcomeProps) {
           
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="name" className="text-cosmic-gold">Imię (opcjonalne)</Label>
+              <Label htmlFor="name">Imię (opcjonalne)</Label>
               <Input
                 id="name"
                 placeholder="Jak mamy się do Ciebie zwracać?"
                 value={birthData.name}
                 onChange={(e) => setBirthData(prev => ({ ...prev, name: e.target.value }))}
-                className="border-cosmic-purple/30 bg-cosmic-purple/10"
+                className="bg-white text-black"
               />
             </div>
 
             <div className="space-y-2">
-              <Label className="text-cosmic-gold">Data urodzenia *</Label>
+              <Label>Data urodzenia *</Label>
               <Input
                 type="date"
                 value={birthData.date ? format(birthData.date, 'yyyy-MM-dd') : ''}
                 onChange={(e) => setBirthData(prev => ({ ...prev, date: e.target.value ? new Date(e.target.value) : undefined }))}
-                className="border-cosmic-purple/30 bg-cosmic-purple/10"
+                className="date-input-fix bg-white text-black"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="time" className="text-cosmic-gold">Godzina urodzenia (opcjonalne)</Label>
+              <Label htmlFor="time">Godzina urodzenia (opcjonalne)</Label>
               <Input
                 id="time"
                 type="time"
                 value={birthData.time}
                 onChange={(e) => setBirthData(prev => ({ ...prev, time: e.target.value }))}
                 disabled={birthData.isTimeUnknown}
-                className="border-cosmic-purple/30 bg-cosmic-purple/10"
+                className="date-input-fix bg-white text-black"
               />
                <div className="flex items-center space-x-2">
                 <Checkbox
@@ -182,25 +180,25 @@ export function CosmicWelcome({ onProfileCreated }: CosmicWelcomeProps) {
                   checked={birthData.isTimeUnknown}
                   onCheckedChange={(checked) => setBirthData(prev => ({ ...prev, isTimeUnknown: !!checked, time: checked ? '' : prev.time }))}
                 />
-                <Label htmlFor="unknownTime" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-cosmic-starlight">
+                <Label htmlFor="unknownTime" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                   Nie znam dokładnej godziny
                 </Label>
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="place" className="text-cosmic-gold">Miejsce urodzenia (opcjonalne)</Label>
+              <Label htmlFor="place">Miejsce urodzenia (opcjonalne)</Label>
               <Input
                 id="place"
                 placeholder="Miasto, kraj"
                 value={birthData.place}
                 onChange={(e) => setBirthData(prev => ({ ...prev, place: e.target.value }))}
-                className="border-cosmic-purple/30 bg-cosmic-purple/10"
+                className="bg-white text-black"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="pin" className="text-cosmic-gold flex items-center gap-2">
+              <Label htmlFor="pin" className="flex items-center gap-2">
                 <Lock className="h-4 w-4" />
                 PIN zabezpieczający (4-6 cyfr) *
               </Label>
@@ -210,10 +208,10 @@ export function CosmicWelcome({ onProfileCreated }: CosmicWelcomeProps) {
                 placeholder="••••"
                 value={birthData.pin}
                 onChange={(e) => setBirthData(prev => ({ ...prev, pin: e.target.value.replace(/\D/g, '').slice(0, 6) }))}
-                className="border-cosmic-purple/30 bg-cosmic-purple/10 text-center text-lg tracking-widest"
+                className="text-center text-lg tracking-widest bg-white text-black"
                 maxLength={6}
               />
-              <p className="text-xs text-cosmic-starlight">
+              <p className="text-xs text-muted-foreground">
                 🔒 PIN będzie wymagany do dostępu do Twojego profilu
               </p>
             </div>
