@@ -13,6 +13,7 @@ import { CosmicWelcome } from "./components/CosmicWelcome";
 import { CosmicLogin } from "./components/CosmicLogin";
 import AuthPage from "./pages/AuthPage";
 import { PricingPage } from "./pages/PricingPage";
+import NeosGarden from "./pages/NeosGarden";
 import { ProfileProvider, useProfile } from "./hooks/useProfile";
 import { AdminExpertsPage } from "./pages/admin/AdminExpertsPage";
 import { useAuth } from "./hooks/useAuth";
@@ -98,7 +99,11 @@ const AppContent = () => {
       />
       <Route 
         path="/council-chat" 
-        element={appState === 'app' ? <CouncilChat userProfile={currentProfile!} userId={currentProfile?.id || ''} /> : <Navigate to="/landing" replace />}
+        element={appState === 'app' ? <CouncilChat /> : <Navigate to="/landing" replace />}
+      />
+      <Route 
+        path="/neos-garden" 
+        element={appState === 'app' ? <NeosGarden currentProfile={currentProfile} /> : <Navigate to="/landing" replace />}
       />
 
       {/* Protected Admin Route */}

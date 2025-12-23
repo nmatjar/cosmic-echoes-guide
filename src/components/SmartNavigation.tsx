@@ -2,7 +2,7 @@ import { useScrollProgress } from "@/hooks/useScrollProgress";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowUp, Palette, Check, Sparkles } from "lucide-react";
+import { ArrowUp, Palette, Check, Sparkles, TreePine } from "lucide-react";
 import { useTheme } from "@/hooks/useTheme";
 import { Link } from "react-router-dom";
 import {
@@ -21,7 +21,7 @@ const sections = [
   { id: 'guides', icon: '🌟', label: 'Przewodnicy' }
 ];
 
-const themes = [
+const themes: Array<{ value: "theme-cosmic-default" | "theme-starlight" | "theme-nebula" | "theme-solar-flare" | "theme-aurora"; label: string }> = [
     { value: "theme-cosmic-default", label: "Cosmic Default" },
     { value: "theme-starlight", label: "Starlight" },
     { value: "theme-nebula", label: "Nebula" },
@@ -71,9 +71,17 @@ export function SmartNavigation() {
             
             {/* Progress Indicator & Theme Switcher */}
             <div className="flex items-center gap-2">
+              <Link 
+                to="/neos-garden" 
+                className="text-xs text-green-400 hover:text-green-300 transition-colors flex items-center gap-1 bg-green-400/10 px-2 py-1 rounded-full border border-green-400/20 hover:border-green-400/40"
+              >
+                <TreePine className="h-3 w-3 animate-pulse" />
+                <span className="hidden sm:inline">NEOS Garden</span>
+              </Link>
+
               <Link to="/pricing" className="text-xs text-primary hover:text-primary/80 transition-colors flex items-center gap-1">
                 <Sparkles className="h-3 w-3" />
-                Ulepsz do Wizjonera
+                <span className="hidden sm:inline">Ulepsz do Wizjonera</span>
               </Link>
 
               <Badge variant="outline" className="border-primary/30 text-primary text-xs">
@@ -88,7 +96,7 @@ export function SmartNavigation() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   {themes.map((item) => (
-                    <DropdownMenuItem key={item.value} onClick={() => setTheme(item.value as any)}>
+                    <DropdownMenuItem key={item.value} onClick={() => setTheme(item.value)}>
                       <span className="flex-grow">{item.label}</span>
                       {theme === item.value && <Check className="h-4 w-4 ml-2" />}
                     </DropdownMenuItem>

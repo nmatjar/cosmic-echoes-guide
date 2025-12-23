@@ -4,9 +4,10 @@ import { UserProfile } from "./userProfile";
 // Definiuje dane wejściowe dla silnika analitycznego
 export interface BirthData {
   date: Date;
-  // W przyszłości można dodać więcej danych, np. imiona, miejsce urodzenia
+  time?: string;
+  place?: string;
+  // W przyszłości można dodać więcej danych, np. imiona
   // name?: string;
-  // birthPlace?: { latitude: number; longitude: number };
 }
 
 // Ogólny interfejs dla wyniku analizy z dowolnego modułu
@@ -47,6 +48,9 @@ export interface HumanDesignAnalysis extends AnalysisResult {
   type: string;
   profile: string;
   authority: string;
+  centers: { [key: string]: { defined: boolean } };
+  channels: { [key: string]: { defined: boolean } };
+  gates: { [key: string]: { defined: boolean } };
 }
 
 export interface MayanAnalysis extends AnalysisResult {

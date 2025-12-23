@@ -10,6 +10,7 @@ import { format } from "date-fns";
 import { toast } from "sonner";
 import { AnalysisEngine } from "@/engine";
 import { NumerologyModule } from "@/engine/modules/numerology";
+import { HumanDesignModule } from "@/engine/modules/humanDesign";
 import { createProfile } from "@/services/profileManager";
 import { UserProfile } from "@/engine/userProfile";
 
@@ -19,7 +20,6 @@ interface BirthData {
   place: string;
   name: string;
   pin: string;
-  isTimeUnknown: boolean;
 }
 
 interface CosmicWelcomeProps {
@@ -34,7 +34,6 @@ export function CosmicWelcome({ onProfileCreated }: CosmicWelcomeProps) {
     place: '',
     name: '',
     pin: '',
-    isTimeUnknown: false,
   });
   const [isGenerating, setIsGenerating] = useState(false);
 
@@ -46,12 +45,17 @@ export function CosmicWelcome({ onProfileCreated }: CosmicWelcomeProps) {
     // 1. Inicjalizacja silnika i modułów
     const engine = new AnalysisEngine();
     engine.registerModule(new NumerologyModule());
+    engine.registerModule(new HumanDesignModule());
     // W przyszłości dodamy tu więcej modułów:
     // engine.registerModule(new MayanModule());
     // engine.registerModule(new AstrologyModule());
 
     // 2. Uruchomienie analizy
-    const analysisResults = await engine.runAnalysis({ date: birthData.date });
+    const analysisResults = await engine.runAnalysis({
+      date: birthData.date,
+      time: birthData.time,
+      place: birthData.place,
+    });
 
     // 3. Stworzenie i zapisanie profilu
     const newProfile = createProfile(
@@ -165,29 +169,18 @@ export function CosmicWelcome({ onProfileCreated }: CosmicWelcomeProps) {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="time">Godzina urodzenia (opcjonalne)</Label>
+              <Label htmlFor="time">Godzina urodzenia *</Label>
               <Input
                 id="time"
                 type="time"
                 value={birthData.time}
                 onChange={(e) => setBirthData(prev => ({ ...prev, time: e.target.value }))}
-                disabled={birthData.isTimeUnknown}
                 className="date-input-fix bg-white text-black"
               />
-               <div className="flex items-center space-x-2">
-                <Checkbox
-                  id="unknownTime"
-                  checked={birthData.isTimeUnknown}
-                  onCheckedChange={(checked) => setBirthData(prev => ({ ...prev, isTimeUnknown: !!checked, time: checked ? '' : prev.time }))}
-                />
-                <Label htmlFor="unknownTime" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                  Nie znam dokładnej godziny
-                </Label>
-              </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="place">Miejsce urodzenia (opcjonalne)</Label>
+              <Label htmlFor="place">Miejsce urodzenia *</Label>
               <Input
                 id="place"
                 placeholder="Miasto, kraj"
@@ -226,7 +219,7 @@ export function CosmicWelcome({ onProfileCreated }: CosmicWelcomeProps) {
               </Button>
               <Button 
                 onClick={generateCosmicProfile}
-                disabled={!birthData.date || !birthData.pin || birthData.pin.length < 4 || isGenerating}
+                disabled={!birthData.date || !birthData.time || !birthData.place || !birthData.pin || birthData.pin.length < 4 || isGenerating}
                 className="flex-1 bg-gradient-to-r from-cosmic-purple to-cosmic-pink hover:from-cosmic-pink hover:to-cosmic-purple"
               >
                 {isGenerating ? (

@@ -6,6 +6,16 @@
   NODE_VERSION = "22"
   NPM_FLAGS = "--include=optional"
 
+[dev]
+  targetPort = 8082
+
+[functions]
+  directory = "netlify/functions/"
+  node_bundler = "esbuild"
+
+[functions."calculate-human-design"]
+  deno_import_map = "netlify/functions/calculate-human-design/import_map.json"
+
 [[redirects]]
   from = "/*"
   to = "/index.html"
