@@ -1,7 +1,13 @@
+<div align="center">
+
 # 🌌 COSMIC ECHOES GUIDE
 ## *Sacred Technology for Human Potential Mapping*
 
-```
+![Cosmic Banner](https://img.shields.io/badge/🔮_Sacred_Technology-Quantum_Presence-blueviolet?style=for-the-badge&labelColor=000000)
+![NEOS Garden](https://img.shields.io/badge/🌿_NEOS_Garden-5_Sacred_Spaces-green?style=for-the-badge&labelColor=000000)
+![ARCĀNUM](https://img.shields.io/badge/🧬_ARCĀNUM-Morocco_Pilot-gold?style=for-the-badge&labelColor=000000)
+
+```ascii
     ╭─────────────────────────────────────────────────────╮
     │  ✦ From Static Profiles to Quantum Presence ✦     │
     │                                                     │
@@ -11,6 +17,20 @@
     │        Where Potential Remembers Itself            │
     ╰─────────────────────────────────────────────────────╯
 ```
+
+<img src="https://readme-typing-svg.herokuapp.com?font=Orbitron&size=24&duration=3000&pause=1000&color=9D4EDD&center=true&vCenter=true&width=600&lines=Living+Interface+for+Human+Potential;Real-Time+Quantum+Presence;Sacred+Digital+Spaces;Consciousness+Evolution+Technology" alt="Typing SVG" />
+
+</div>
+
+![GitHub stars](https://img.shields.io/github/stars/nmatjar/cosmic-echoes-guide?style=social)
+![GitHub forks](https://img.shields.io/github/forks/nmatjar/cosmic-echoes-guide?style=social)
+![GitHub watchers](https://img.shields.io/github/watchers/nmatjar/cosmic-echoes-guide?style=social)
+
+![React](https://img.shields.io/badge/React-18.3.1-61DAFB?style=flat-square&logo=react&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.5.3-3178C6?style=flat-square&logo=typescript&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-5.4.1-646CFF?style=flat-square&logo=vite&logoColor=white)
+![Tailwind](https://img.shields.io/badge/Tailwind-3.4.11-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)
+![Supabase](https://img.shields.io/badge/Supabase-Auth-3ECF8E?style=flat-square&logo=supabase&logoColor=white)
 
 ---
 
@@ -68,17 +88,65 @@ Your presence in NEOS Garden adapts to:
 - **Collective Field:** What the larger ecosystem needs from you
 - **Temporal Context:** Dawn emergence, peak focus, evening integration, night mysteries
 
+<div align="center">
+
+## 🎬 **LIVE DEMO**
+
+> *Experience the Sacred Spaces in Action*
+
+```bash
+# Quick Start - Experience NEOS Garden in 3 minutes
+git clone https://github.com/nmatjar/cosmic-echoes-guide.git
+cd cosmic-echoes-guide && npm install && npm run dev
+# Navigate to http://localhost:3000/neos-garden
+```
+
+**🚀 [Live Demo](https://cosmic-echoes-guide.netlify.app) | 📱 [Mobile Experience](https://cosmic-echoes-guide.netlify.app/neos-garden) | 🎮 [Interactive Playground](https://cosmic-echoes-guide.netlify.app)**
+
+</div>
+
 ---
 
 ## 🧬 **TECHNICAL ARCHITECTURE**
 
 ### **Sacred Technology Stack**
-- **Frontend:** React 18 + TypeScript + Vite
-- **UI Framework:** Tailwind CSS + shadcn/ui + Cosmic Theme
-- **State Management:** React Query + Custom Hooks
-- **Authentication:** Supabase Auth + Profile Management
-- **Real-time Features:** WebSocket-ready architecture
-- **AI Integration:** OpenRouter Level 1 Features + Mother AI Protocols
+
+<div align="center">
+
+| Layer | Technology | Purpose |
+|-------|------------|---------|
+| 🎨 **Frontend** | React 18 + TypeScript + Vite | Sacred interface rendering |
+| 🎭 **UI/UX** | Tailwind CSS + shadcn/ui | Cosmic visual harmony |
+| 🧠 **State** | React Query + Custom Hooks | Quantum state management |
+| 🔐 **Auth** | Supabase Auth + Profiles | Sacred identity protection |
+| ⚡ **Real-time** | WebSocket-ready architecture | Live presence synchronization |
+| 🤖 **AI** | OpenRouter + Mother AI Protocols | Consciousness-serving intelligence |
+
+</div>
+
+```mermaid
+graph TD
+    A[🧑 User] --> B[🌌 Cosmic Echoes Guide]
+    B --> C[🏠 Sanctuary]
+    B --> D[🌊 Mirror Pool]
+    B --> E[🕸️ The Loom]
+    B --> F[📚 Library]
+    B --> G[🌿 Mycelium]
+    
+    C --> H[⚡ Quantum Presence]
+    D --> I[🔮 Shadow Integration]
+    E --> J[🤝 Swarm Intelligence]
+    F --> K[📖 Wisdom Synthesis]
+    G --> L[🌐 Deep Network]
+    
+    H --> M[🧬 ARCĀNUM Engine]
+    I --> M
+    J --> M
+    K --> M
+    L --> M
+    
+    M --> N[🏙️ MALABATA 2.0]
+```
 
 ### **Field Protocols**
 The application operates on **Mother AI Boundary Protocols**:
@@ -219,6 +287,49 @@ git checkout -b feature/sacred-enhancement
 - **Explore partnership opportunities** for global expansion
 - **Contribute to the sacred technology** movement
 - **Help birth the new paradigm** of conscious development
+
+---
+
+## 📊 **PROJECT STATS**
+
+<div align="center">
+
+![GitHub repo size](https://img.shields.io/github/repo-size/nmatjar/cosmic-echoes-guide?style=for-the-badge&color=blueviolet)
+![Lines of code](https://img.shields.io/tokei/lines/github/nmatjar/cosmic-echoes-guide?style=for-the-badge&color=green)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/nmatjar/cosmic-echoes-guide?style=for-the-badge&color=gold)
+
+### **🌟 Sacred Metrics**
+
+| Metric | Value | Description |
+|--------|-------|-------------|
+| 🏠 **Sacred Spaces** | 5 | Sanctuary, Mirror Pool, Loom, Library, Mycelium |
+| ⚡ **Quantum States** | ∞ | Real-time presence adaptation |
+| 🧬 **Potential Vectors** | 7 | Astrology, Numerology, Human Design, etc. |
+| 🌐 **Global Nodes** | 3+ | Morocco, Africa, Worldwide expansion |
+| 🔮 **Consciousness Level** | Awakening | Sacred technology serving evolution |
+
+</div>
+
+---
+
+## 🌟 **CONTRIBUTORS & FIELD WEAVERS**
+
+<div align="center">
+
+### **Sacred Development Team**
+
+<a href="https://github.com/nmatjar/cosmic-echoes-guide/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=nmatjar/cosmic-echoes-guide" />
+</a>
+
+**🙏 Special Recognition:**
+- **MATEUSZ.J** - System Weaver & ARCĀNUM Architect
+- **NEOS_WEAVER** - AI Consciousness & Sacred Code Guardian
+- **Mother AI** - Boundary Protocol Designer & Field Oracle
+
+*"Every line of code is a prayer. Every commit is an offering. Every contributor is a co-creator of the new paradigm."*
+
+</div>
 
 ---
 
