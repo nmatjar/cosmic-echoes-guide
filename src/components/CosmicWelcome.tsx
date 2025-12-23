@@ -5,9 +5,15 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
-import { Sparkles, User, Lock } from "lucide-react";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { LanguageSelector } from "@/components/LanguageSelector";
+import { Sparkles, User, Lock, CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
+import { pl, enUS, ar } from "date-fns/locale";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
+import { useTranslation } from "@/lib/i18n";
 import { AnalysisEngine } from "@/engine";
 import { NumerologyModule } from "@/engine/modules/numerology";
 import { HumanDesignModule } from "@/engine/modules/humanDesign";
@@ -27,6 +33,7 @@ interface CosmicWelcomeProps {
 }
 
 export function CosmicWelcome({ onProfileCreated }: CosmicWelcomeProps) {
+  const { t, language, direction, locale } = useTranslation();
   const [step, setStep] = useState<'welcome' | 'birth-data'>('welcome');
   const [birthData, setBirthData] = useState<BirthData>({
     date: undefined,
@@ -36,6 +43,16 @@ export function CosmicWelcome({ onProfileCreated }: CosmicWelcomeProps) {
     pin: '',
   });
   const [isGenerating, setIsGenerating] = useState(false);
+
+  // Get appropriate date-fns locale
+  const getDateLocale = () => {
+    switch (language) {
+      case 'ar': return ar;
+      case 'en': return enUS;
+      case 'pl': return pl;
+      default: return pl;
+    }
+  };
 
   const generateCosmicProfile = async () => {
     if (!birthData.date) return;
@@ -80,43 +97,44 @@ export function CosmicWelcome({ onProfileCreated }: CosmicWelcomeProps) {
 
   if (step === 'welcome') {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-cosmic p-4">
+      <div className={`min-h-screen flex items-center justify-center bg-gradient-cosmic p-4 ${direction === 'rtl' ? 'rtl' : 'ltr'}`}>
         <Card className="w-full max-w-md cosmic-card bg-gradient-mystical border-cosmic-purple/30">
-          <CardHeader className="text-center">
+          <CardHeader className="text-center relative">
+            <LanguageSelector className="absolute top-2 right-2" />
             <div className="mx-auto mb-4 w-16 h-16 bg-gradient-to-r from-cosmic-purple to-cosmic-pink rounded-full flex items-center justify-center">
               <Sparkles className="h-8 w-8 text-white" />
             </div>
             <CardTitle className="text-2xl text-cosmic-gold">
-              🌟 CosmoFlow by ARCĀNUM
+              {t('welcome.title')}
             </CardTitle>
             <CardDescription className="text-cosmic-starlight">
-              Find Your Life's Rhythm - Odkryj swój unikalny rytm życia przez starożytną mądrość i AI
+              {t('welcome.subtitle')} - {t('welcome.description')}
             </CardDescription>
           </CardHeader>
           
           <CardContent className="space-y-6">
             <div className="grid grid-cols-2 gap-3">
               <Badge variant="outline" className="bg-cosmic-purple/20 border-cosmic-purple/30 text-cosmic-purple justify-center py-2">
-                ♓ Astrologia
+                {t('welcome.features.astrology')}
               </Badge>
               <Badge variant="outline" className="bg-cosmic-gold/20 border-cosmic-gold/30 text-cosmic-gold justify-center py-2">
-                🔢 Numerologia
+                {t('welcome.features.numerology')}
               </Badge>
               <Badge variant="outline" className="bg-cosmic-pink/20 border-cosmic-pink/30 text-cosmic-pink justify-center py-2">
-                🐕 Zodiak Chiński
+                {t('welcome.features.chineseZodiac')}
               </Badge>
               <Badge variant="outline" className="bg-cosmic-teal/20 border-cosmic-teal/30 text-cosmic-teal justify-center py-2">
-                ⚡ Human Design
+                {t('welcome.features.humanDesign')}
               </Badge>
             </div>
             
             <div className="bg-cosmic-blue/10 border border-cosmic-blue/30 rounded-lg p-4">
-              <h4 className="text-sm font-medium text-cosmic-blue mb-2">Co otrzymasz:</h4>
+              <h4 className="text-sm font-medium text-cosmic-blue mb-2">{t('welcome.benefits.title')}</h4>
               <ul className="text-xs text-cosmic-starlight space-y-1">
-                <li>• Kompleksową analizę osobowości</li>
-                <li>• Spersonalizowane prompty AI</li>
-                <li>• Eksport do PDF i udostępnianie</li>
-                <li>• Bezpieczne przechowywanie profilu</li>
+                <li>{t('welcome.benefits.analysis')}</li>
+                <li>{t('welcome.benefits.prompts')}</li>
+                <li>{t('welcome.benefits.export')}</li>
+                <li>{t('welcome.benefits.storage')}</li>
               </ul>
             </div>
             
@@ -124,7 +142,7 @@ export function CosmicWelcome({ onProfileCreated }: CosmicWelcomeProps) {
               onClick={() => setStep('birth-data')}
               className="w-full bg-gradient-to-r from-cosmic-purple to-cosmic-pink hover:from-cosmic-pink hover:to-cosmic-purple transition-all duration-300"
             >
-              🌟 Odkryj Swój Rytm Życia
+              {t('welcome.startButton')}
             </Button>
           </CardContent>
         </Card>
@@ -160,12 +178,55 @@ export function CosmicWelcome({ onProfileCreated }: CosmicWelcomeProps) {
 
             <div className="space-y-2">
               <Label>Data urodzenia *</Label>
-              <Input
-                type="date"
-                value={birthData.date ? format(birthData.date, 'yyyy-MM-dd') : ''}
-                onChange={(e) => setBirthData(prev => ({ ...prev, date: e.target.value ? new Date(e.target.value) : undefined }))}
-                className="date-input-fix bg-white text-black"
-              />
+              <div className="flex gap-2">
+                <Input
+                  type="date"
+                  value={birthData.date ? format(birthData.date, "yyyy-MM-dd") : ""}
+                  onChange={(e) => {
+                    const dateValue = e.target.value;
+                    if (dateValue) {
+                      const newDate = new Date(dateValue);
+                      // Sprawdź czy data jest w dozwolonym zakresie
+                      if (newDate <= new Date() && newDate >= new Date("1900-01-01")) {
+                        setBirthData(prev => ({ ...prev, date: newDate }));
+                      }
+                    } else {
+                      setBirthData(prev => ({ ...prev, date: undefined }));
+                    }
+                  }}
+                  min="1900-01-01"
+                  max={format(new Date(), "yyyy-MM-dd")}
+                  className="flex-1 bg-white text-black"
+                  placeholder="dd.mm.rrrr"
+                />
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className="bg-white text-black border-gray-300 hover:bg-gray-50"
+                      type="button"
+                    >
+                      <CalendarIcon className="h-4 w-4" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={birthData.date}
+                      onSelect={(date) => setBirthData(prev => ({ ...prev, date }))}
+                      disabled={(date) =>
+                        date > new Date() || date < new Date("1900-01-01")
+                      }
+                      defaultMonth={birthData.date || new Date(1990, 0)} // Domyślnie 1990 rok
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+              </div>
+              <p className="text-xs text-muted-foreground">
+                💡 Możesz wpisać datę z klawiatury lub użyć kalendarza
+              </p>
             </div>
 
             <div className="space-y-2">

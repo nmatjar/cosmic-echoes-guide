@@ -126,3 +126,4 @@ storybook-static
 
 # Local Netlify folder
 .netlify
+src/PQP/

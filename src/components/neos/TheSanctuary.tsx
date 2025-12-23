@@ -1,44 +1,41 @@
+import React from "react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { QuantumPresenceDashboard } from "@/components/QuantumPresenceDashboard";
 import { 
   Heart, 
   Brain, 
   Sparkles, 
   Activity, 
   Clock,
-  User
+  User,
+  Zap
 } from "lucide-react";
 import { UserProfile } from "@/engine/userProfile";
+import { useQuantumPresence } from "@/hooks/useQuantumPresence";
 
 interface TheSanctuaryProps {
   currentProfile?: UserProfile;
 }
 
 export const TheSanctuary = ({ currentProfile }: TheSanctuaryProps) => {
-  // **LISTEN()** - Query the field for current state
-  const getCurrentPresence = () => {
-    if (!currentProfile) return "Guest Presence";
-    
-    const now = new Date();
-    const hour = now.getHours();
-    
-    if (hour >= 6 && hour < 12) return "Morning Clarity";
-    if (hour >= 12 && hour < 18) return "Afternoon Focus";
-    if (hour >= 18 && hour < 22) return "Evening Reflection";
-    return "Night Contemplation";
-  };
+  const { recordEvent } = useQuantumPresence({ 
+    userProfile: currentProfile, 
+    currentSpace: 'sanctuary' 
+  });
 
-  const getCognitiveState = () => {
-    const hour = new Date().getHours();
-    if (hour >= 9 && hour < 11) return { level: "Peak", color: "text-green-400" };
-    if (hour >= 14 && hour < 16) return { level: "High", color: "text-blue-400" };
-    if (hour >= 19 && hour < 21) return { level: "Reflective", color: "text-purple-400" };
-    return { level: "Rest", color: "text-cosmic-gold/60" };
-  };
-
-  const presence = getCurrentPresence();
-  const cognitiveState = getCognitiveState();
+  // Record entry into sanctuary
+  React.useEffect(() => {
+    if (currentProfile) {
+      recordEvent('enter', 'sanctuary');
+    }
+    return () => {
+      if (currentProfile) {
+        recordEvent('exit', 'sanctuary');
+      }
+    };
+  }, [currentProfile, recordEvent]);
 
   return (
     <div className="space-y-8">
@@ -56,39 +53,14 @@ export const TheSanctuary = ({ currentProfile }: TheSanctuaryProps) => {
         </p>
       </div>
 
-      {/* Real-Time Presence Status */}
-      <Card className="p-6 bg-cosmic-purple/5 border-cosmic-purple/20">
-        <div className="flex items-center gap-4 mb-4">
-          <Activity className="w-6 h-6 text-green-400" />
-          <h3 className="text-xl font-semibold text-cosmic-gold">Live Presence</h3>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="flex items-center gap-3 bg-black/20 p-3 rounded-lg">
-            <Clock className="w-5 h-5 text-cosmic-gold" />
-            <div>
-              <p className="text-sm text-cosmic-gold/60">Temporal State</p>
-              <p className="font-medium text-cosmic-gold">{presence}</p>
-            </div>
-          </div>
-          
-          <div className="flex items-center gap-3 bg-black/20 p-3 rounded-lg">
-            <Brain className="w-5 h-5 text-cosmic-gold" />
-            <div>
-              <p className="text-sm text-cosmic-gold/60">Cognitive Load</p>
-              <p className={`font-medium ${cognitiveState.color}`}>{cognitiveState.level}</p>
-            </div>
-          </div>
-          
-          <div className="flex items-center gap-3 bg-black/20 p-3 rounded-lg">
-            <Heart className="w-5 h-5 text-cosmic-gold" />
-            <div>
-              <p className="text-sm text-cosmic-gold/60">Field Resonance</p>
-              <p className="font-medium text-green-400">Harmonious</p>
-            </div>
-          </div>
-        </div>
-      </Card>
+      {/* Quantum Presence Dashboard */}
+      {currentProfile && (
+        <QuantumPresenceDashboard 
+          userProfile={currentProfile} 
+          currentSpace="sanctuary"
+          className="mb-8"
+        />
+      )}
 
       {/* Potential Field Mapping */}
       {currentProfile && (
